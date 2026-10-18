@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0E1012">
+<meta name="theme-color" content="#E2ECEC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0B1317" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Krachtlogboek">
@@ -164,13 +165,120 @@ textarea{width:100%;background:var(--sunk);border:1px solid transparent;border-r
 .calc .tot{font-weight:700;border-top:2px solid var(--fg)}
 .ex-meals{display:grid;gap:10px}.ex-meals>div{display:grid;gap:2px}.ex-meals span{color:var(--muted);font-size:14px}
 .livespeed{background:var(--sunk);border-radius:8px;padding:10px 12px;font-family:var(--display);font-size:18px;font-variant-numeric:tabular-nums}
+.card.plan{display:grid;gap:6px;border-left:4px solid var(--accent)}
+.card.plan.late{border-left-color:var(--pr)}.card.plan.done{border-left-color:var(--line);opacity:.85}
+.plan .ph{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.plan .pd{font-family:var(--display);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.04em}
+.plan .pt{font-size:18px}
+.pdesc{white-space:pre-wrap;margin:0;font-size:15px;line-height:1.45;background:var(--sunk);border-radius:8px;padding:8px 10px}
+.pdone{font-weight:600;color:var(--ok,var(--accent))}
+.qbanner{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;justify-content:space-between;margin-top:12px}
+.coachrow .ok{color:var(--fg);font-weight:600}.coachrow .miss{color:var(--pr);font-weight:600}
+.adhead{display:flex;justify-content:space-between;align-items:center}
+.arow{display:grid;gap:1px;padding:7px 0;border-top:1px solid var(--line)}.arow:first-child{border-top:0}
 nav.tabs button{font-size:11px;padding:9px 2px 11px}
 nav.tabs button svg{width:21px;height:21px}
+
+:root{--sky1:#E2ECEC;--sky2:#ECEFE8;--sun:#F7E6C4;--m1:#D3DFDB;--m2:#C3D6CF;--m3:#B3CDC3;--trail:#EDE4D0;--water:#CFE2E3;--fig:#86A499;--glass:rgba(238,241,236,.82)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--sky1:#0B1317;--sky2:#0E1215;--sun:#1B262A;--m1:#142026;--m2:#17262C;--m3:#1B2D33;--trail:#243036;--water:#152A31;--fig:#35505A;--glass:rgba(14,16,18,.82)}}
+:root[data-theme="dark"]{--sky1:#0B1317;--sky2:#0E1215;--sun:#1B262A;--m1:#142026;--m2:#17262C;--m3:#1B2D33;--trail:#243036;--water:#152A31;--fig:#35505A;--glass:rgba(14,16,18,.82)}
+body{background:transparent}
+.scene{position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 60%,var(--bg) 100%)}
+.scene svg{position:absolute;left:0;bottom:0;width:100%;height:70vh;min-height:320px}
+header.top,body::before{background:var(--glass);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.qbtn{appearance:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-weight:700;font-size:14px;cursor:pointer;display:grid;place-items:center;padding:0}
+.folder{padding:0;overflow:hidden}
+.fhead{appearance:none;border:0;background:transparent;width:100%;display:flex;align-items:center;gap:10px;padding:14px;text-align:left;cursor:pointer;min-height:52px;color:var(--fg)}
+.fhead .ficon{width:22px;height:22px;color:var(--accent);flex:none}.fhead .ficon svg{width:22px;height:22px}
+.fhead .fname{font-family:var(--display);font-weight:700;font-size:19px;flex:1;line-height:1.15}
+.fcount{font-family:var(--display);font-weight:700;font-size:13px;color:var(--muted);background:var(--sunk);border-radius:10px;padding:1px 8px}
+.chev{color:var(--muted);width:14px;text-align:center}
+.fhead.plain{padding:6px 2px;min-height:40px}.fhead.plain .fname{font-size:16px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.fbody{padding:0 14px 12px;border-top:1px solid var(--line)}
+.fitem{padding:12px 0;border-top:1px solid var(--line);display:grid;gap:6px}.fbody>.fitem:first-child{border-top:0}
+.fi-n{font-family:var(--display);font-weight:700;font-size:18px;line-height:1.15}
+.fi-x{color:var(--muted);font-size:13px}
+.fitem .btnrow .btn{min-height:40px;padding:8px 10px}
+.factions{display:flex;flex-wrap:wrap;gap:4px 14px;padding-top:8px;border-top:1px solid var(--line)}
+.linkbtn.danger{color:var(--danger)}
+.libcard{display:flex;justify-content:space-between;align-items:center;gap:12px}.libcard>div{display:grid;gap:2px}.libcard strong{font-family:var(--display);font-size:18px;line-height:1.15}.libcard .btn{flex:none}
+.codeinput{display:grid;grid-template-columns:1fr auto;gap:8px}
+#sh-code{font-family:var(--display);font-size:20px;letter-spacing:.18em;text-transform:uppercase}
+.sharecode{font-family:var(--display);font-weight:700;font-size:40px;letter-spacing:.22em;text-align:center;background:var(--sunk);border-radius:10px;padding:14px 8px;user-select:all;font-variant-numeric:tabular-nums}
+.seg4{grid-template-columns:repeat(4,1fr)}
+.nf{grid-column:1/-1}
+.weekbar{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;margin-top:16px;padding:8px}
+.weekbar .wk{text-align:center;display:grid}.weekbar .wk b{font-family:var(--display);font-size:20px}
+.wkb{font-size:26px;width:44px;height:44px}
+.weeksum{margin:10px 2px 4px;font-size:14px;color:var(--muted)}.weeksum b{color:var(--fg)}
+.days{display:grid;gap:8px;margin-top:8px}
+.day{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 12px 10px}
+.day.today{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.day.past{opacity:.92}
+.dh{display:flex;justify-content:space-between;align-items:center}
+.dn{font-family:var(--display);font-weight:700;font-size:16px}
+.day.today .dn{color:var(--accent)}
+.dempty{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.prow{appearance:none;width:100%;text-align:left;border:0;background:var(--sunk);border-radius:8px;padding:8px 10px;margin-top:6px;display:grid;grid-template-columns:auto 1fr;gap:2px 10px;align-items:center;cursor:pointer;color:var(--fg)}
+.prow .pk{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);background:var(--accent);border-radius:4px;padding:2px 6px;grid-row:span 2;align-self:center}
+.prow.k-rest .pk{background:var(--muted)}.prow.k-other .pk{background:var(--pr)}
+.prow .pn{font-weight:600;min-width:0;overflow-wrap:anywhere}
+.prow .ps{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.prow.done .ps{color:#2E9E5B;font-weight:600}.prow.miss .ps{color:var(--pr);font-weight:600}
+.prow.done{opacity:.9}
+.card.plan.k-routine{border-left-color:var(--accent)}.card.plan.k-rest{border-left-color:var(--muted)}.card.plan.k-other{border-left-color:var(--pr)}
+.tgroup{display:grid;gap:8px}
 .banner{margin-top:12px;background:var(--pr-bg);color:var(--fg);border-radius:8px;padding:10px 12px;font-size:13px}
 @media (prefers-reduced-motion:no-preference){.sheet{animation:up .18s ease-out}@keyframes up{from{transform:translateY(24px);opacity:.6}}}
 </style>
 </head>
 <body>
+<div class="scene" aria-hidden="true"><svg viewBox="0 0 1000 480" preserveAspectRatio="xMidYMax slice">
+<circle cx="612" cy="246" r="30" fill="var(--sun)"/>
+<path d="M420 214q5-4 10 0q5-4 10 0M452 200q4-3 8 0q4-3 8 0" fill="none" stroke="var(--fig)" stroke-width="1.4" stroke-linecap="round" opacity=".7"/>
+<path d="M0 322L50 300L95 316L150 286L200 312L250 294L300 318L345 290L390 312L430 300L470 318L520 276L560 310L598 292L642 320L690 280L734 312L770 294L820 316L870 288L915 310L960 296L1000 312V480H0Z" fill="var(--m1)"/>
+<path d="M0 352C150 334 300 366 420 360S560 357 640 352S860 340 1000 354V480H0Z" fill="var(--m2)"/>
+<path d="M0 404C180 390 330 410 500 402S800 408 1000 392V480H0Z" fill="var(--m3)"/>
+<path d="M500 480C512 462 552 452 540 432S520 414 542 403" fill="none" stroke="var(--trail)" stroke-width="7" stroke-linecap="round"/>
+<ellipse cx="402" cy="444" rx="54" ry="13" fill="var(--water)"/>
+<g fill="none" stroke="var(--fig)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+ <g transform="translate(404 361)">
+  <path d="M-17 0V-50M17 0V-50M-20 -50H20" stroke-width="2"/>
+  <path d="M-7 -50V-30M7 -50V-30" stroke-width="1.4"/>
+  <circle cx="-7" cy="-27" r="3" stroke-width="1.8"/><circle cx="7" cy="-27" r="3" stroke-width="1.8"/>
+  <path d="M0 -31.5V-18M-7 -27L-3 -31.5M7 -27L3 -31.5M0 -18H13"/>
+  <circle cx="0" cy="-36" r="3.3" fill="var(--fig)" stroke="none"/>
+ </g>
+ <g transform="translate(462 359)">
+  <path d="M0 -23V-11M0 -21L-6 -27L-7 -35M0 -21L6 -27L7 -35M-17 -35H17M0 -11L-4 -4L-5 2M0 -11L4 -4L5 2"/>
+  <rect x="-21" y="-40" width="4" height="10" rx="1" fill="var(--fig)" stroke="none"/><rect x="17" y="-40" width="4" height="10" rx="1" fill="var(--fig)" stroke="none"/>
+  <circle cx="0" cy="-27" r="3.3" fill="var(--fig)" stroke="none"/>
+ </g>
+ <g transform="translate(568 359)">
+  <circle cx="-11" cy="-7" r="7" stroke-width="1.8"/><circle cx="12" cy="-7" r="7" stroke-width="1.8"/>
+  <path d="M-11 -7L-1 -8L8 -17M-1 -8L-4 -18L8 -17M12 -7L8 -17L10 -20" stroke-width="1.8"/>
+  <path d="M-4 -19L7 -26M7 -25L10 -19M-4 -19L2 -13L-1 -8"/>
+  <circle cx="10" cy="-29" r="3.2" fill="var(--fig)" stroke="none"/>
+ </g>
+ <g transform="translate(536 436)">
+  <path d="M1 -22L-2 -10M0 -19L6 -15L9 -19M0 -19L-6 -16L-8 -11M-2 -10L5 -4L3 3M-2 -10L-6 -2L-12 1"/>
+  <circle cx="2" cy="-26" r="3.3" fill="var(--fig)" stroke="none"/>
+ </g>
+ <g transform="translate(400 444)">
+  <path d="M3 -3Q11 -15 19 -4" />
+  <path d="M-4 1H-20M24 1H34M-30 3h6" stroke-width="1.4" opacity=".7"/>
+  <circle cx="0" cy="-2" r="3.3" fill="var(--fig)" stroke="none"/>
+ </g>
+ <g transform="translate(586 446)">
+  <path d="M0 -23L1 -11M0 -20L-7 -15M0 -20L7 -17M1 -11L-1 -4L-1 3M1 -11L8 -6L14 -8"/>
+  <circle cx="0" cy="-27" r="3.3" fill="var(--fig)" stroke="none"/>
+  <circle cx="20" cy="-6" r="3" stroke-width="1.8"/>
+  <path d="M30 4V-20H66V4" stroke-width="2"/>
+  <path d="M36 -20L33 4M42 -20L40 4M48 -20L48 4M54 -20L56 4M60 -20L63 4M31 -12H65M31 -4H65" stroke-width=".8" opacity=".6"/>
+ </g>
+</g>
+</svg>
+</div>
 
 <div class="wrap">
   <header class="top">
@@ -180,12 +288,12 @@ nav.tabs button svg{width:21px;height:21px}
   <main id="view"><div class="card empty" style="margin-top:16px"><strong>Logboek laden</strong><p class="muted">Zo kun je kiezen wie er traint: een bestaand account of een nieuw account.</p></div></main>
 </div>
 <nav class="tabs" aria-label="Onderdelen" hidden><div class="in">
-  <button data-tab="train" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9v6M6 6v12M18 6v12M21 9v6M6 12h12"/></svg>Trainen</button>
-  <button data-tab="schemas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>Schema's</button>
+  <button data-tab="train" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9v6M6 6v12M18 6v12M21 9v6M6 12h12"/></svg>Trainen</button>
+  <button data-tab="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h2M14 14h2M8 17h2"/></svg>Planning</button>
+  <button data-tab="schemas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Schema's</button>
   <button data-tab="records"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM17 6h3v2a3 3 0 0 1-3 3M7 6H4v2a3 3 0 0 0 3 3"/></svg>Records</button>
-  <button data-tab="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Profiel</button>
   <button data-tab="food"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-2-3-7-2.5-7 2.5C5 16 9 21 12 21s7-5 7-10.5C19 5.5 14 5 12 8z"/><path d="M12 8c0-2.5 1.5-4.5 4-5"/></svg>Voeding</button>
-  <button data-tab="help"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17h.01"/></svg>Uitleg</button>
+  <button data-tab="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Profiel</button>
 </div></nav>
 <div id="sheet" hidden></div>
 <div id="toast" class="toast" hidden></div>
@@ -193,8 +301,8 @@ nav.tabs button svg{width:21px;height:21px}
 <script>
 const GROUPS=["Borst","Rug","Schouders","Biceps","Triceps","Onderarmen","Core","Benen","Billen","Kuiten","Full body","Overig"];
 const LS_DATA="krachtlogboek.data.v2", LS_PROFILE="krachtlogboek.profile", LS_TAB="krachtlogboek.tab";
-const S={profiles:{},profilesReady:false,exercises:{},routines:{},sessions:{},meta:{},weights:{},ready:false,mode:"loading",readonly:false,template:null};
-const UI={tab:"train",sheet:null,edit:null,recQ:"",pickQ:"",pickG:"Borst",confirm:null,login:"ask",newName:"",useTemplate:true,pf:null,cardio:null,pinOpen:false,pinFor:null};
+const S={me:null,people:null,profilesReady:false,exercises:{},routines:{},sessions:{},meta:{},weights:{},plan:{},folders:{},ready:false,mode:"loading",readonly:false,template:null};
+const UI={tab:"train",sheet:null,edit:null,recQ:"",pickQ:"",pickG:"Borst",confirm:null,login:"ask",newName:"",useTemplate:true,pf:null,cardio:null,pinOpen:false,pinFor:null,loginName:"",coach:null,delWho:null,folderEdit:null,week:null,pendingShare:null};
 let db=null,pid=null,unsubs=[],draft=null;
 
 function lsGet(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
@@ -212,17 +320,23 @@ function better(a,b){return !b||a.k>b.k||(a.k===b.k&&a.r>b.r)}
 function norm(s){return String(s||"").trim().toLowerCase().replace(/\s+/g," ")}
 const draftKey=()=>"krachtlogboek.draft."+pid;
 
-const savedTab=lsGet(LS_TAB); if(savedTab&&["train","schemas","records","profile","food","help"].includes(savedTab))UI.tab=savedTab;
+const savedTab=lsGet(LS_TAB); if(savedTab&&["train","plan","schemas","records","profile","food","help"].includes(savedTab))UI.tab=savedTab;
 
 const TEMPLATE={"exercises": {"r-dip": {"name": "Ring Dip", "group": "Borst"}, "r-widepull": {"name": "Wide Ring Pull-up", "group": "Rug"}, "r-archerpush": {"name": "Ring Archer Push-up", "group": "Borst"}, "r-archerrow": {"name": "Ring Archer Row", "group": "Rug"}, "r-shoulderpush": {"name": "Ring Shoulder Push-up", "group": "Schouders"}, "r-pelican": {"name": "Pelican Curl", "group": "Biceps"}, "r-tricepext": {"name": "Ring Tricep Extension", "group": "Triceps"}, "r-facepull": {"name": "Ring Face Pull", "group": "Schouders"}, "r-rollout": {"name": "Ring Rollout", "group": "Core"}, "c-dip": {"name": "Dips (parallel bar)", "group": "Borst"}, "c-pullup": {"name": "Pull-up", "group": "Rug"}, "c-archerpush": {"name": "Archer Push-up", "group": "Borst"}, "c-austrow": {"name": "Australian Row", "group": "Rug"}, "c-pike": {"name": "Pike Push-up", "group": "Schouders"}, "c-chinup": {"name": "Chin-up", "group": "Biceps"}, "c-diamond": {"name": "Diamond Push-up", "group": "Triceps"}, "c-legraise": {"name": "Hanging Leg Raise", "group": "Core"}, "c-bss": {"name": "Bulgarian Split Squat (BW)", "group": "Benen"}, "f-bench": {"name": "Bench Press", "group": "Borst"}, "f-latpull": {"name": "Lat Pulldown", "group": "Rug"}, "f-ohp": {"name": "Overhead Press", "group": "Schouders"}, "f-row": {"name": "Barbell Row", "group": "Rug"}, "f-squat": {"name": "Squat", "group": "Benen"}, "f-rdl": {"name": "Romanian Deadlift", "group": "Billen"}, "f-fly": {"name": "Dumbbell Chest Fly", "group": "Borst"}, "f-facepull": {"name": "Cable Face Pull", "group": "Schouders"}, "f-curl": {"name": "EZ-bar Curl", "group": "Biceps"}, "f-pushdown": {"name": "Triceps Pushdown", "group": "Triceps"}}, "routines": {"rt-ringen": {"items": [{"exId": "r-dip", "reps": "8-10", "sets": "3"}, {"exId": "r-widepull", "reps": "6-8", "sets": "3"}, {"exId": "r-archerpush", "reps": "6-8", "sets": "3"}, {"exId": "r-archerrow", "reps": "8-10", "sets": "3"}, {"exId": "r-shoulderpush", "reps": "8-10", "sets": "3"}, {"exId": "r-pelican", "reps": "6-8", "sets": "3"}, {"exId": "r-tricepext", "reps": "10-12", "sets": "3"}, {"exId": "r-facepull", "reps": "12-15", "sets": "3"}, {"exId": "r-rollout", "reps": "8-10", "sets": "3"}], "name": "Ringen — BBR Push/Pull", "order": 0}, "rt-fitness": {"items": [{"exId": "f-bench", "reps": "6-8", "sets": "4"}, {"exId": "f-latpull", "reps": "8-10", "sets": "4"}, {"exId": "f-ohp", "reps": "6-8", "sets": "3"}, {"exId": "f-row", "reps": "8-10", "sets": "3"}, {"exId": "f-squat", "reps": "6-8", "sets": "4"}, {"exId": "f-rdl", "reps": "8-10", "sets": "3"}, {"exId": "f-fly", "reps": "10-12", "sets": "3"}, {"exId": "f-facepull", "reps": "12-15", "sets": "3"}, {"exId": "f-curl", "reps": "10-12", "sets": "3"}, {"exId": "f-pushdown", "reps": "10-12", "sets": "3"}], "name": "Fitness — Gewichten", "order": 2}, "rt-cali": {"items": [{"exId": "c-dip", "reps": "8-10", "sets": "3"}, {"exId": "c-pullup", "reps": "6-8", "sets": "3"}, {"exId": "c-archerpush", "reps": "6-8", "sets": "3"}, {"exId": "c-austrow", "reps": "10-12", "sets": "3"}, {"exId": "c-pike", "reps": "8-10", "sets": "3"}, {"exId": "c-chinup", "reps": "6-8", "sets": "3"}, {"exId": "c-diamond", "reps": "10-12", "sets": "3"}, {"exId": "c-bss", "reps": "10-12", "sets": "3"}, {"exId": "c-legraise", "reps": "10", "sets": "3"}], "name": "Calisthenics — Full body", "order": 1}}};
 S.template=TEMPLATE;
 /* ---------- store (Supabase) ---------- */
 const CFG={url:"https://vxmdbjtuuvrryazrnkfx.supabase.co",key:"sb_publishable_RhOl_un8Ik35a73T3QLThA_niKqiuTQ"};
-const LS_CODE="krachtlogboek.code";
-const COLLS=["exercises","routines","sessions","meta","weights"];
-let code=lsGet(LS_CODE),loadedAt=0;
+const LS_CODE="krachtlogboek.code",LS_ME="krachtlogboek.me";
+const COLLS=["exercises","routines","sessions","meta","weights","plan","folders"];
+let code=lsGet(LS_CODE),loadedAt=0,flushing=false;
 const pinKey=id=>"krachtlogboek.pin."+id;
+const qKey=id=>"krachtlogboek.queue."+id;
+const cacheKey=id=>"krachtlogboek.cache."+id;
+const cardioKey=()=>"krachtlogboek.cardio."+pid;
 const myPin=()=>lsGet(pinKey(pid));
+const queue=()=>pid?(lsGet(qKey(pid))||[]):[];
+function isoOf(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function addDays(iso,n){const d=new Date(iso+"T12:00:00");d.setDate(d.getDate()+n);return isoOf(d)}
 async function rpc(fn,args){
   const h={"Content-Type":"application/json","apikey":CFG.key};
   if(!CFG.key.startsWith("sb_publishable_"))h.Authorization="Bearer "+CFG.key;
@@ -231,97 +345,125 @@ async function rpc(fn,args){
   catch(e){const err=new Error("offline");err.code="net";throw err}
   if(!r.ok){let m="";try{m=(await r.json()).message||""}catch(e){}
     const err=new Error(m||("HTTP "+r.status));
-    err.code=/groepscode/i.test(m)?"bad_code":/persoonlijke code/i.test(m)?"bad_pin":/te kort/i.test(m)?"short_pin":/beheerder/i.test(m)?"not_admin":"net";throw err}
+    err.code=/groepscode/i.test(m)?"bad_code":/persoonlijke code/i.test(m)?"bad_pin":/te kort/i.test(m)?"short_pin":/beheerder/i.test(m)?"not_admin":/bestaat al/i.test(m)?"dup_name":/eigen account/i.test(m)?"self":/naam ontbreekt/i.test(m)?"no_name":/niet gevonden/i.test(m)?"no_share":/te groot/i.test(m)?"too_big":"net";throw err}
   const t=await r.text();return t?JSON.parse(t):null;
 }
-async function initStore(){
-  if(!code){S.profilesReady=true;S.mode="cloud";UI.login="code";render();return}
-  await loadProfiles();
-}
-async function loadProfiles(){
-  try{
-    const rows=await rpc("kl_profiles_list",{p_code:code});
-    const o={};(rows||[]).forEach(r=>{o[r.id]={name:r.name,hasPin:!!r.has_pin,isAdmin:!!r.is_admin}});
-    S.profiles=o;S.profilesReady=true;S.mode="cloud";
-    if(UI.login==="code")UI.login="ask";
-    autoLogin();render();
-  }catch(e){
-    S.profilesReady=true;
-    if(e.code==="bad_code"){code=null;lsSet(LS_CODE,null);UI.login="code";toast("Deze groepscode klopt niet. Vraag de juiste code na.")}
-    else{S.mode="error";toast("Geen verbinding met de database. Controleer je internet en herlaad de pagina.")}
-    render();
-  }
+function initStore(){
+  S.profilesReady=true;
+  if(!code){UI.login="code";render();return}
+  const me=lsGet(LS_ME);
+  if(me&&me.id&&lsGet(pinKey(me.id))){enterProfile(me);return}
+  UI.login="login";render();
 }
 async function submitCode(c){
   c=String(c||"").trim();if(!c){toast("Vul de groepscode in.");return}
-  code=c;lsSet(LS_CODE,code);await loadProfiles();
+  try{await rpc("kl_code_ok",{p_code:c});code=c;lsSet(LS_CODE,c);UI.login="login";render();setTimeout(()=>document.getElementById("li-name")?.focus(),30)}
+  catch(e){toast(e.code==="bad_code"?"Deze groepscode klopt niet. Vraag de juiste code na.":"Geen verbinding. Controleer je internet en probeer het opnieuw.")}
 }
-function autoLogin(){
-  const p=lsGet(LS_PROFILE);
-  if(!pid&&p&&S.profiles[p]&&lsGet(pinKey(p)))selectProfile(p);
-  if(pid&&!S.profiles[pid])logout();
-}
-function choosePerson(id){
-  const p=S.profiles[id];if(!p)return;
-  if(!p.hasPin){UI.login="setpin";UI.pinFor=id}
-  else if(lsGet(pinKey(id))){selectProfile(id);return}
-  else{UI.login="pin";UI.pinFor=id}
-  render();setTimeout(()=>document.getElementById("pin-1")?.focus(),30);
-}
-async function submitPin(){
-  const id=UI.pinFor,pin=(document.getElementById("pin-1")?.value||"").trim();
-  if(!pin){toast("Vul je persoonlijke code in.");return}
-  try{await rpc("kl_login",{p_code:code,p_profile:id,p_pin:pin});lsSet(pinKey(id),pin);selectProfile(id)}
-  catch(e){if(e.code==="bad_pin")toast("Deze code klopt niet. Vergeten? Vraag Jitse om hem te resetten.");else handleErr(e)}
+async function submitLogin(){
+  const name=(document.getElementById("li-name")?.value||"").trim(),pin=(document.getElementById("li-pin")?.value||"").trim();
+  UI.loginName=name;
+  if(!name){toast("Vul je naam in.");return}
+  try{
+    const r=((await rpc("kl_login_name",{p_code:code,p_name:name,p_pin:pin}))||[])[0];
+    if(!r){toast("Naam of code klopt niet.");return}
+    if(r.needs_pin){UI.login="setpin";UI.pinFor={id:r.id,name:r.name,isAdmin:!!r.is_admin};render();setTimeout(()=>document.getElementById("pin-1")?.focus(),30);return}
+    lsSet(pinKey(r.id),pin);enterProfile({id:r.id,name:r.name,isAdmin:!!r.is_admin});
+  }catch(e){
+    if(e.code==="bad_pin")toast("Naam of code klopt niet. Code vergeten? Vraag Jitse om een nieuwe.");
+    else if(e.code==="bad_code")handleErr(e);
+    else toast("Geen verbinding. Controleer je internet en probeer het opnieuw.");
+  }
 }
 async function submitFirstPin(){
-  const id=UI.pinFor,a=(document.getElementById("pin-1")?.value||"").trim(),b=(document.getElementById("pin-2")?.value||"").trim();
+  const p=UI.pinFor,a=(document.getElementById("pin-1")?.value||"").trim(),b=(document.getElementById("pin-2")?.value||"").trim();
+  if(!p)return;
   if(a.length<4){toast("Kies een code van minimaal 4 tekens.");return}
   if(a!==b){toast("De twee codes zijn niet gelijk.");return}
-  try{await rpc("kl_set_first_pin",{p_code:code,p_profile:id,p_pin:a});S.profiles[id].hasPin=true;lsSet(pinKey(id),a);selectProfile(id);toast("Persoonlijke code ingesteld")}
+  try{await rpc("kl_set_first_pin",{p_code:code,p_profile:p.id,p_pin:a});lsSet(pinKey(p.id),a);enterProfile(p);toast("Persoonlijke code ingesteld")}
   catch(e){handleErr(e)}
 }
-async function selectProfile(id){
-  pid=id;lsSet(LS_PROFILE,id);COLLS.forEach(c=>S[c]={});S.ready=false;
-  draft=lsGet(draftKey());UI.sheet=null;UI.edit=null;UI.confirm=null;UI.cardio=null;UI.login="ask";render();
-  await reloadData(id);
+function enterProfile(me){
+  pid=me.id;S.me={name:me.name,isAdmin:!!me.isAdmin};lsSet(LS_ME,{id:me.id,name:me.name,isAdmin:!!me.isAdmin});lsSet(LS_PROFILE,me.id);
+  COLLS.forEach(c=>S[c]={});S.ready=false;S.people=null;
+  draft=lsGet(draftKey());UI.cardio=lsGet(cardioKey());UI.sheet=null;UI.edit=null;UI.confirm=null;UI.coach=null;UI.login="login";UI.pinFor=null;
+  const cache=lsGet(cacheKey(me.id));
+  if(cache){COLLS.forEach(c=>S[c]=cache[c]||{});applyQueue();S.ready=true}
+  render();reloadData(me.id);
 }
 async function reloadData(id){
+  await flushQueue();
+  if(pid!==id)return;
   try{
     const rows=await rpc("kl_load",{p_code:code,p_profile:id,p_pin:lsGet(pinKey(id))});
     if(pid!==id)return;
     const o={};COLLS.forEach(c=>o[c]={});
     (rows||[]).forEach(r=>{if(o[r.coll])o[r.coll][r.id]=r.data});
-    COLLS.forEach(c=>S[c]=o[c]);S.ready=true;S.mode="cloud";loadedAt=Date.now();render();
-  }catch(e){handleErr(e)}
+    COLLS.forEach(c=>S[c]=o[c]);applyQueue();saveCache();
+    S.ready=true;S.mode=queue().length?"offline":"cloud";loadedAt=Date.now();render();
+    if(S.me&&S.me.isAdmin&&!S.people)loadPeople();
+    await seedStandard();
+    if(UI.pendingShare&&pid===id){const c=UI.pendingShare;UI.pendingShare=null;lookupShare(c)}
+  }catch(e){if(pid===id)handleErr(e)}
 }
-function logout(){if(pid)lsSet(pinKey(pid),null);pid=null;draft=null;lsSet(LS_PROFILE,null);S.ready=false;UI.login=code?"ask":"code";UI.sheet=null;UI.edit=null;UI.cardio=null;render();window.scrollTo(0,0)}
+function applyQueue(){for(const q of queue()){if(q.op==="put")S[q.col]={...S[q.col],[q.id]:q.data};else{const n={...S[q.col]};delete n[q.id];S[q.col]=n}}}
+function saveCache(){if(!pid)return;const o={};COLLS.forEach(c=>o[c]=S[c]);lsSet(cacheKey(pid),o)}
+function enqueue(op,col,id,data){const q=queue().filter(x=>!(x.col===col&&x.id===id));q.push({op,col,id,data:data??null});lsSet(qKey(pid),q)}
+async function flushQueue(){
+  if(flushing||!pid)return;
+  const id=pid;let q=lsGet(qKey(id))||[];if(!q.length)return;
+  flushing=true;let sent=0;
+  try{
+    while(q.length&&pid===id){
+      const it=q[0];
+      try{await rpc(it.op==="put"?"kl_put":"kl_del",it.op==="put"?{p_code:code,p_profile:id,p_pin:lsGet(pinKey(id)),p_coll:it.col,p_id:it.id,p_data:it.data}:{p_code:code,p_profile:id,p_pin:lsGet(pinKey(id)),p_coll:it.col,p_id:it.id})}
+      catch(e){if(e.code==="bad_pin"||e.code==="bad_code")handleErr(e);break}
+      sent++;
+      q=(lsGet(qKey(id))||[]).filter(x=>!(x.col===it.col&&x.id===it.id&&JSON.stringify(x.data)===JSON.stringify(it.data)));lsSet(qKey(id),q);
+    }
+  }finally{flushing=false}
+  if(pid===id){if(!q.length){S.mode="cloud";if(sent)toast("Je opgeslagen wijzigingen zijn verstuurd")}else S.mode="offline";render()}
+}
 async function put(col,id,data){
-  S[col]={...S[col],[id]:data};
-  try{await rpc("kl_put",{p_code:code,p_profile:pid,p_pin:myPin(),p_coll:col,p_id:id,p_data:data});S.mode="cloud"}catch(e){handleErr(e)}
+  S[col]={...S[col],[id]:data};saveCache();
+  if(queue().length){enqueue("put",col,id,data);flushQueue();return false}
+  try{await rpc("kl_put",{p_code:code,p_profile:pid,p_pin:myPin(),p_coll:col,p_id:id,p_data:data});S.mode="cloud";return true}
+  catch(e){enqueue("put",col,id,data);if(e.code==="net"){S.mode="offline";render()}else handleErr(e);return false}
 }
 async function del(col,id){
-  const n={...S[col]};delete n[id];S[col]=n;
-  try{await rpc("kl_del",{p_code:code,p_profile:pid,p_pin:myPin(),p_coll:col,p_id:id})}catch(e){handleErr(e)}
+  const n={...S[col]};delete n[id];S[col]=n;saveCache();
+  if(queue().length){enqueue("del",col,id);flushQueue();return false}
+  try{await rpc("kl_del",{p_code:code,p_profile:pid,p_pin:myPin(),p_coll:col,p_id:id});return true}
+  catch(e){enqueue("del",col,id);if(e.code==="net"){S.mode="offline";render()}else handleErr(e);return false}
 }
+function toastOk(msg){toast(queue().length?msg+" op je telefoon. Wordt verstuurd zodra je internet hebt.":msg)}
 function handleErr(e){
-  if(e&&e.code==="bad_code"){code=null;lsSet(LS_CODE,null);toast("De groepscode is gewijzigd. Vul de nieuwe code in.");pid=null;UI.login="code"}
-  else if(e&&e.code==="bad_pin"){const id=pid;if(id){lsSet(pinKey(id),null);pid=null;S.ready=false;UI.login="pin";UI.pinFor=id}toast("Je persoonlijke code is gewijzigd. Log opnieuw in.")}
+  if(e&&e.code==="bad_code"){code=null;lsSet(LS_CODE,null);toast("De groepscode is gewijzigd. Vul de nieuwe code in.");pid=null;S.me=null;S.ready=false;UI.login="code"}
+  else if(e&&e.code==="bad_pin"){if(pid){lsSet(pinKey(pid),null);UI.loginName=S.me?.name||"";lsSet(LS_ME,null);pid=null;S.me=null;S.ready=false;UI.login="login"}toast("Je persoonlijke code is gewijzigd. Log opnieuw in.")}
   else if(e&&e.code==="short_pin")toast("Kies een code van minimaal 4 tekens.");
-  else if(e&&e.code==="not_admin")toast("Alleen de beheerder kan codes van anderen wijzigen.");
-  else{S.mode="error";toast("Opslaan mislukt. Controleer je verbinding en probeer het opnieuw.")}
+  else if(e&&e.code==="not_admin")toast("Alleen de beheerder kan dit doen.");
+  else if(e&&e.code==="dup_name")toast("Deze naam is al in gebruik. Kies een andere, bijvoorbeeld met je achternaam erbij.");
+  else if(e&&e.code==="self")toast("Je kunt je eigen account niet verwijderen.");
+  else{S.mode="offline";toast("Geen verbinding. Controleer je internet en probeer het opnieuw.")}
   render();
+}
+function logout(){
+  const n=queue().length;
+  if(pid){lsSet(pinKey(pid),null);lsSet(cacheKey(pid),null)}
+  pid=null;draft=null;S.me=null;S.people=null;S.ready=false;lsSet(LS_ME,null);lsSet(LS_PROFILE,null);
+  UI.tab="train";lsSet(LS_TAB,"train");UI.login=code?"login":"code";UI.loginName="";UI.sheet=null;UI.edit=null;UI.cardio=null;UI.coach=null;UI.confirm=null;render();window.scrollTo(0,0);
+  if(n)toast(`${n} wijziging${n>1?"en zijn":" is"} nog niet verstuurd. Die blijven op deze telefoon bewaard en worden verstuurd als je weer inlogt.`);
 }
 async function createProfile(name,withTemplate){
   const clean=name.trim();
   const a=(document.getElementById("np-pin")?.value||"").trim(),b=(document.getElementById("np-pin2")?.value||"").trim();
   if(!clean){toast("Vul je naam in.");return}
-  if(Object.values(S.profiles).some(p=>norm(p.name)===norm(clean))){toast(`"${clean}" bestaat al. Kies die naam bij "Ik heb al een account".`);return}
   if(a.length<4){toast("Kies een persoonlijke code van minimaal 4 tekens.");return}
   if(a!==b){toast("De twee codes zijn niet gelijk.");return}
   const id=uid();
-  try{await rpc("kl_profile_create",{p_code:code,p_id:id,p_name:clean,p_pin:a})}catch(e){handleErr(e);return}
-  S.profiles={...S.profiles,[id]:{name:clean,hasPin:true,isAdmin:false}};lsSet(pinKey(id),a);
+  try{await rpc("kl_profile_create",{p_code:code,p_id:id,p_name:clean,p_pin:a})}
+  catch(e){if(e.code==="dup_name"){toast("Deze naam is al in gebruik. Kies een andere, bijvoorbeeld met je achternaam erbij.");document.getElementById("np-name")?.focus()}else if(e.code==="net")toast("Geen verbinding. Controleer je internet en probeer het opnieuw.");else handleErr(e);return}
+  lsSet(pinKey(id),a);
   if(withTemplate){
     try{
       await Promise.all([
@@ -329,7 +471,7 @@ async function createProfile(name,withTemplate){
         ...Object.entries(TEMPLATE.routines).map(([k,v])=>rpc("kl_put",{p_code:code,p_profile:id,p_pin:a,p_coll:"routines",p_id:k,p_data:v}))]);
     }catch(e){toast("Account aangemaakt, maar de voorbeeldschema's konden niet allemaal worden toegevoegd.")}
   }
-  UI.newName="";await selectProfile(id);toast(`Welkom, ${clean}. Ga naar Profiel om je gegevens in te vullen.`);
+  UI.newName="";enterProfile({id,name:clean,isAdmin:false});toast(`Welkom, ${clean}. Ga naar Profiel om je gegevens in te vullen.`);
 }
 async function changeOwnPin(){
   const o=(document.getElementById("cp-old")?.value||"").trim(),a=(document.getElementById("cp-new")?.value||"").trim(),b=(document.getElementById("cp-new2")?.value||"").trim();
@@ -338,33 +480,77 @@ async function changeOwnPin(){
   try{await rpc("kl_change_pin",{p_code:code,p_profile:pid,p_pin:o,p_new:a});lsSet(pinKey(pid),a);UI.pinOpen=false;toast("Je persoonlijke code is gewijzigd");render()}
   catch(e){if(e.code==="bad_pin")toast("Je huidige code klopt niet.");else handleErr(e)}
 }
+/* ---------- beheer ---------- */
+const personName=id=>(S.people||[]).find(p=>p.id===id)?.name||"";
+async function loadPeople(){
+  try{
+    const rows=await rpc("kl_admin_profiles",{p_code:code,p_admin:pid,p_admin_pin:myPin()});
+    S.people=(rows||[]).map(r=>({id:r.id,name:r.name,hasPin:!!r.has_pin,isAdmin:!!r.is_admin,last:r.last_activity,sessions:+r.sessions||0}));render();
+  }catch(e){if(e.code==="not_admin"&&S.me){S.me.isAdmin=false;lsSet(LS_ME,{id:pid,...S.me});render()}}
+}
 async function adminResetPin(){
   const t=document.getElementById("ad-who")?.value,a=(document.getElementById("ad-new")?.value||"").trim();
   if(!t){toast("Kies een account.");return}
   if(a.length<4){toast("Kies een code van minimaal 4 tekens.");return}
-  try{await rpc("kl_admin_set_pin",{p_code:code,p_admin:pid,p_admin_pin:myPin(),p_target:t,p_new:a});S.profiles[t].hasPin=true;document.getElementById("ad-new").value="";toast(`Nieuwe code ingesteld voor ${S.profiles[t].name}. Geef deze door.`)}
+  try{await rpc("kl_admin_set_pin",{p_code:code,p_admin:pid,p_admin_pin:myPin(),p_target:t,p_new:a});document.getElementById("ad-new").value="";toast(`Nieuwe code ingesteld voor ${personName(t)}. Geef deze door.`);loadPeople()}
   catch(e){handleErr(e)}
+}
+async function adminDelete(t){
+  const name=personName(t);
+  try{await rpc("kl_admin_delete_profile",{p_code:code,p_admin:pid,p_admin_pin:myPin(),p_target:t});UI.confirm=null;UI.delWho=null;if(UI.coach&&UI.coach.who===t)UI.coach.who=null;toast(`Account van ${name} verwijderd`);await loadPeople()}
+  catch(e){UI.confirm=null;handleErr(e)}
+}
+async function coachLoad(){
+  const c=UI.coach;if(!c||!c.who)return;const who=c.who;
+  try{
+    const rows=await rpc("kl_admin_plan_load",{p_code:code,p_admin:pid,p_admin_pin:myPin(),p_target:who});
+    const d={plan:{},sessions:{}};(rows||[]).forEach(r=>{if(d[r.coll])d[r.coll][r.id]=r.data});
+    if(UI.coach&&UI.coach.who===who){UI.coach.data=d;render()}
+  }catch(e){handleErr(e)}
+}
+async function coachSave(){
+  const c=UI.coach,f=c&&c.form;if(!f)return;
+  if(!f.date){toast("Kies een datum.");return}
+  if(!f.title.trim()){toast("Geef de training een titel, bijvoorbeeld \"Interval 6×400 m\".");document.getElementById("co-title")?.focus();return}
+  const base={sport:f.sport,title:f.title.trim(),purpose:f.purpose||null,durMin:num(f.durMin),km:num(f.km),desc:(f.desc||"").trim(),coach:S.me.name,updated:Date.now()};
+  const n=f.id?1:Math.max(1,parseInt(f.repeat)||1),jobs=[],stem=uid();
+  for(let k=0;k<n;k++)jobs.push([f.id||stem+"w"+k,{...base,date:addDays(f.date,7*k)}]);
+  try{
+    for(const [id,d] of jobs){await rpc("kl_admin_plan_put",{p_code:code,p_admin:pid,p_admin_pin:myPin(),p_target:c.who,p_id:id,p_data:d});c.data.plan[id]=d}
+    const who=personName(c.who);c.form=null;
+    toast(f.id?`Training aangepast voor ${who}`:n>1?`${n} trainingen ingepland voor ${who}`:`Training ingepland voor ${who}`);
+    render();window.scrollTo(0,0);if(c.who===pid)reloadData(pid);
+  }catch(e){handleErr(e)}
+}
+async function coachDelete(){
+  const c=UI.coach,id=c&&c.form&&c.form.id;if(!id)return;
+  try{await rpc("kl_admin_plan_del",{p_code:code,p_admin:pid,p_admin_pin:myPin(),p_target:c.who,p_id:id});delete c.data.plan[id];c.form=null;UI.confirm=null;toast("Geplande training verwijderd");render();if(c.who===pid)reloadData(pid)}
+  catch(e){UI.confirm=null;handleErr(e)}
 }
 async function importBackup(obj){
   if(!obj||!COLLS.some(c=>obj[c]&&typeof obj[c]==="object")){toast("Dit bestand is geen back-up van het Krachtlogboek.");return}
   const jobs=[];
   for(const c of COLLS)for(const [k,v] of Object.entries(obj[c]||{}))jobs.push([c,k,v]);
   let done=0;toast(`Back-up terugzetten… 0 van ${jobs.length}`);
-  for(let i=0;i<jobs.length;i+=8){
-    await Promise.all(jobs.slice(i,i+8).map(([c,k,v])=>rpc("kl_put",{p_code:code,p_profile:pid,p_pin:myPin(),p_coll:c,p_id:k,p_data:v}).then(()=>{done++})));
-    toast(`Back-up terugzetten… ${done} van ${jobs.length}`);
-  }
+  try{
+    for(let i=0;i<jobs.length;i+=8){
+      await Promise.all(jobs.slice(i,i+8).map(([c,k,v])=>rpc("kl_put",{p_code:code,p_profile:pid,p_pin:myPin(),p_coll:c,p_id:k,p_data:v}).then(()=>{done++})));
+      toast(`Back-up terugzetten… ${done} van ${jobs.length}`);
+    }
+  }catch(e){handleErr(e);return}
   await reloadData(pid);toast(`Back-up teruggezet: ${jobs.length} onderdelen`);
 }
 function exportBackup(){
-  const data={app:"krachtlogboek",version:2,exported:new Date().toISOString(),profile:S.profiles[pid]?.name||""};
+  const data={app:"krachtlogboek",version:3,exported:new Date().toISOString(),profile:S.me?.name||""};
   COLLS.forEach(c=>data[c]=S[c]);
   const blob=new Blob([JSON.stringify(data,null,1)],{type:"application/json"});
   const a=document.createElement("a");a.href=URL.createObjectURL(blob);
-  a.download=`krachtlogboek-${norm(S.profiles[pid]?.name||"backup").replace(/[^a-z0-9]+/g,"-")}-${today()}.json`;
+  a.download=`krachtlogboek-${norm(S.me?.name||"backup").replace(/[^a-z0-9]+/g,"-")}-${today()}.json`;
   document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);
 }
-document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&pid&&!draft&&!UI.edit&&!UI.cardio&&Date.now()-loadedAt>60000)reloadData(pid)});
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState!=="visible"||!pid)return;if(queue().length)flushQueue();else if(!draft&&!UI.edit&&!UI.cardio&&!UI.coach&&Date.now()-loadedAt>60000)reloadData(pid)});
+window.addEventListener("online",()=>{if(pid&&queue().length)flushQueue()});
+setInterval(()=>{if(pid&&queue().length&&navigator.onLine!==false)flushQueue()},20000);
 
 /* ---------- derived ---------- */
 function sortedSessions(){return Object.entries(S.sessions).map(([id,s])=>({id,...s})).sort((a,b)=>(b.date||"").localeCompare(a.date||"")||(b.ts||0)-(a.ts||0))}
@@ -389,11 +575,11 @@ function saveDraft(){if(pid)lsSet(draftKey(),draft)}
 function entryFor(exId,target){
   const last=lastFor(exId);
   const n=parseInt(target?.sets)||(last?last.sets.length:0)||3;
-  return{exId,name:exName(exId),group:exGroup(exId),target:target&&(target.sets||target.reps)?{sets:target.sets||"",reps:target.reps||""}:null,sets:Array.from({length:n},()=>({k:"",r:""}))};
+  return{exId,name:exName(exId),group:exGroup(exId),target:target&&(target.sets||target.reps||target.note)?{sets:target.sets||"",reps:target.reps||"",note:target.note||""}:null,sets:Array.from({length:n},()=>({k:"",r:""}))};
 }
-function startWorkout(routineId){
+function startWorkout(routineId,plan){
   const r=routineId?S.routines[routineId]:null;
-  draft={id:uid(),date:today(),routineId:routineId||null,routineName:r?r.name:"Losse training",entries:r?(r.items||[]).filter(i=>S.exercises[i.exId]).map(i=>entryFor(i.exId,i)):[]};
+  draft={id:uid(),date:today(),planId:plan?.id||null,routineId:routineId||null,routineName:r?r.name:"Losse training",entries:r?(r.items||[]).filter(i=>S.exercises[i.exId]).map(i=>entryFor(i.exId,i)):[]};
   saveDraft();UI.confirm=null;render();window.scrollTo(0,0);
 }
 function placeholderFor(entry,j){const last=lastFor(entry.exId);if(!last)return null;return last.sets[j]||last.sets[last.sets.length-1]}
@@ -404,16 +590,18 @@ async function finishWorkout(){
   let prs=0;for(const e of entries){let b=bestFor(e.exId)?.set||null;for(const s of e.sets)if(better(s,b)){prs++;b=s}}
   const id=draft.id||uid();
   const rec={date:draft.date||today(),ts:Date.now(),routineId:draft.routineId,routineName:draft.routineName,entries};
+  if(draft.planId&&S.plan[draft.planId]){rec.planId=draft.planId;rec.planTitle=planTitle({id:draft.planId,...S.plan[draft.planId]})}
   draft=null;saveDraft();UI.confirm=null;
-  await put("sessions",id,rec);
-  toast(prs?`Training opgeslagen · ${prs} nieuw${prs>1?"e":""} record${prs>1?"s":""}`:"Training opgeslagen");
+  const ok=await put("sessions",id,rec);
+  if(!ok)toast("Geen internet: training bewaard op je telefoon. Wordt automatisch verstuurd zodra je verbinding hebt.");
+  else toast(prs?`Training opgeslagen · ${prs} nieuw${prs>1?"e":""} record${prs>1?"s":""}`:"Training opgeslagen");
   render();window.scrollTo(0,0);
 }
 
 /* ---------- render ---------- */
 function statusHtml(){
-  const m={loading:["","Laden…"],cloud:["ok","Online opgeslagen"],local:["warn","Alleen op dit apparaat"],error:["warn","Niet verbonden"]}[S.mode];
-  if(pid&&S.profiles[pid])return `<div class="who"><span class="dot ${m[0]}" title="${m[1]}"></span><b>${esc(S.profiles[pid].name)}</b><button class="linkbtn" data-act="logout">Wissel</button></div>`;
+  const m={loading:["","Laden…"],cloud:["ok","Online opgeslagen"],local:["warn","Alleen op dit apparaat"],error:["warn","Niet verbonden"],offline:["warn","Offline: wordt later verstuurd"]}[S.mode]||["",""];
+  if(pid&&S.me)return `<div class="who"><span class="dot ${m[0]}" title="${m[1]}"></span><b>${esc(S.me.name)}</b><button class="qbtn" data-act="go-help" aria-label="Uitleg">?</button></div>`;
   return `<span class="dot ${m[0]}"></span><span>${m[1]}</span>`;
 }
 function render(){
@@ -424,58 +612,42 @@ function render(){
   const v=document.getElementById("view");
   if(!S.profilesReady){renderSheet();return}
   if(!pid){v.innerHTML=viewLogin();renderSheet();restore(fid,s1,s2);return}
-  if(!S.ready){v.innerHTML=`<div class="card empty" style="margin-top:16px"><strong>Logboek laden</strong><p class="muted">De schema's en records van ${esc(S.profiles[pid]?.name||"")} verschijnen zo.</p></div>`;renderSheet();return}
-  v.innerHTML=(S.readonly?`<div class="banner">Je hebt alleen leesrechten. Wijzigingen worden niet opgeslagen.</div>`:"")+({train:viewTrain,schemas:viewSchemas,records:viewRecords,profile:viewProfile,food:viewFood,help:viewHelp}[UI.tab]||viewTrain)();
+  if(!S.ready){v.innerHTML=`<div class="card empty" style="margin-top:16px"><strong>${S.mode==="offline"?"Geen internet":"Logboek laden"}</strong><p class="muted">${S.mode==="offline"?"Je logboek kon niet geladen worden. Open de app opnieuw zodra je verbinding hebt.":`De schema's en records van ${esc(S.me?.name||"")} verschijnen zo.`}</p></div>`;renderSheet();return}
+  v.innerHTML=(S.readonly?`<div class="banner">Je hebt alleen leesrechten. Wijzigingen worden niet opgeslagen.</div>`:"")+({train:viewTrain,plan:viewPlan,schemas:viewSchemas,records:viewRecords,profile:viewProfile,food:viewFood,help:viewHelp}[UI.tab]||viewTrain)();
   renderSheet();restore(fid,s1,s2);
 }
 function restore(fid,s1,s2){if(fid){const el=document.getElementById(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});try{if(s1!=null)el.setSelectionRange(s1,s2)}catch(e){}}}}
 
 function viewLogin(){
-  const names=Object.entries(S.profiles).sort((a,b)=>a[1].name.localeCompare(b[1].name));
   if(UI.login==="code"||!code){
-    return `<div class="login"><p class="q">Welkom bij het Krachtlogboek</p><div class="card stack"><label class="f">Groepscode<input type="text" id="gc-code" autocomplete="off" autocapitalize="characters" placeholder="Vraag de code aan je groep"></label><button class="btn primary" data-act="submit-code">Verder</button></div><p class="small muted">Je vult de groepscode maar één keer in op dit apparaat.</p></div>`;
+    return `<div class="login"><p class="q">Welkom bij het Krachtlogboek</p><div class="card stack"><label class="f">Groepscode<input type="text" id="gc-code" autocomplete="off" autocapitalize="characters" placeholder="Vraag de code aan je groep"></label><button class="btn primary" data-act="submit-code">Verder</button></div><p class="small muted">Je vult de groepscode alleen de eerste keer in op dit apparaat.</p></div>`;
   }
-  if(UI.login==="existing"){
-    return `<div class="login"><p class="q">Wie ben jij?</p>${names.length?`<div class="names">${names.map(([id,p])=>`<button class="btn" data-act="pick-profile" data-id="${id}">${esc(p.name)}</button>`).join("")}</div>`:`<div class="card empty"><p class="muted">Er zijn nog geen accounts. Maak er eerst een aan.</p></div>`}<button class="linkbtn" data-act="login-new">Nieuw hier? Account aanmaken</button></div>`;
-  }
-  if(UI.login==="pin"&&S.profiles[UI.pinFor]){
-    return `<div class="login"><p class="q">Hoi ${esc(S.profiles[UI.pinFor].name)}</p><div class="card stack"><label class="f">Persoonlijke code<input type="password" id="pin-1" autocomplete="current-password"></label><button class="btn primary" data-act="submit-pin">Inloggen</button></div><p class="small muted">Code vergeten? Vraag Jitse om een nieuwe in te stellen.</p><button class="linkbtn" data-act="login-existing">Ander account kiezen</button></div>`;
-  }
-  if(UI.login==="setpin"&&S.profiles[UI.pinFor]){
-    return `<div class="login"><p class="q">Kies je persoonlijke code</p><div class="card stack"><p class="hp">Hoi ${esc(S.profiles[UI.pinFor].name)}, je account heeft nog geen code. Kies er een van minimaal 4 tekens. Daarmee log je voortaan in.</p><label class="f">Code<input type="password" id="pin-1" autocomplete="new-password"></label><label class="f">Herhaal code<input type="password" id="pin-2" autocomplete="new-password"></label><button class="btn primary" data-act="submit-firstpin">Code instellen</button></div><button class="linkbtn" data-act="login-existing">Ander account kiezen</button></div>`;
+  if(UI.login==="setpin"&&UI.pinFor){
+    return `<div class="login"><p class="q">Kies je persoonlijke code</p><div class="card stack"><p class="hp">Hoi ${esc(UI.pinFor.name)}, je account heeft nog geen code. Kies er een van minimaal 4 tekens. Daarmee log je voortaan in.</p><label class="f">Code<input type="password" id="pin-1" autocomplete="new-password"></label><label class="f">Herhaal code<input type="password" id="pin-2" autocomplete="new-password"></label><button class="btn primary" data-act="submit-firstpin">Code instellen</button></div><button class="linkbtn" data-act="login-back">Terug</button></div>`;
   }
   if(UI.login==="new"){
     return `<div class="login"><p class="q">Nieuw account</p><div class="card stack"><label class="f">Je naam<input type="text" id="np-name" value="${esc(UI.newName)}" placeholder="Bijv. Jitse" autocomplete="off"></label>
       <label class="f">Persoonlijke code<input type="password" id="np-pin" autocomplete="new-password" placeholder="minimaal 4 tekens"></label>
       <label class="f">Herhaal code<input type="password" id="np-pin2" autocomplete="new-password"></label>
-      <label class="check"><input type="checkbox" id="np-tpl" ${UI.useTemplate?"checked":""}><span>Start met de 3 voorbeeldschema's (Ringen, Calisthenics, Fitness)</span></label>
-      <button class="btn primary" data-act="create-profile">Account aanmaken</button></div><p class="small muted">Met je persoonlijke code log je in. Vergeet je hem, dan kan Jitse een nieuwe instellen.</p>${names.length?`<button class="linkbtn" data-act="login-existing">Ik heb al een account</button>`:""}</div>`;
+      <p class="hp small muted">Je krijgt automatisch de map "Krachttraining 3 dagen split". Andere voorbeeldmappen voeg je later toe onder Schema's.</p>
+      <button class="btn primary" data-act="create-profile">Account aanmaken</button></div><p class="small muted">Je logt voortaan in met je naam en deze code. Vergeet je hem, dan kan Jitse een nieuwe instellen.</p><button class="linkbtn" data-act="login-back">Ik heb al een account</button></div>`;
   }
-  return `<div class="login"><p class="q">Ben je nieuw of heb je al een account?</p><div class="choice"><button class="btn primary" data-act="login-existing" ${names.length?"":"disabled"}>Ik heb al een account</button><button class="btn" data-act="login-new">Ik ben nieuw</button></div>${names.length?`<p class="small muted">${names.length} account${names.length>1?"s":""}: ${names.map(([,p])=>esc(p.name)).join(", ")}</p>`:""}</div>`;
+  return `${UI.pendingShare?`<div class="banner">Je hebt een gedeeld schema geopend. Log in om het toe te voegen.</div>`:""}<div class="login"><p class="q">Inloggen</p><div class="card stack"><label class="f">Naam<input type="text" id="li-name" value="${esc(UI.loginName)}" autocomplete="username" autocapitalize="words" placeholder="Je naam"></label><label class="f">Persoonlijke code<input type="password" id="li-pin" autocomplete="current-password"></label><button class="btn primary" data-act="submit-login">Inloggen</button></div><p class="small muted">Code vergeten? Vraag Jitse om een nieuwe in te stellen.</p><button class="linkbtn" data-act="login-new">Nieuw hier? Account aanmaken</button></div>`;
 }
 
 function viewTrain(){
   if(draft)return viewWorkout();
   if(UI.cardio)return viewCardio();
-  const routines=Object.entries(S.routines).sort((a,b)=>(a[1].order??0)-(b[1].order??0)||a[1].name.localeCompare(b[1].name));
-  let h=`<h2>Training starten</h2>`;
-  if(!routines.length){
-    h+=`<div class="card empty"><strong>Nog geen schema's</strong><p class="muted">Maak eerst een schema met je vaste oefeningen, bijvoorbeeld "Dag 1 — Push". Je kunt ook meteen een losse training loggen.</p><div class="btnrow"><button class="btn primary" data-act="new-routine">Schema maken</button><button class="btn" data-act="start" data-id="">Losse training</button></div></div>`;
-  }else{
-    h+=`<div class="stack">`+routines.map(([id,r])=>{
-      const last=sortedSessions().find(s=>s.routineId===id);
-      return `<button class="card start" data-act="start" data-id="${id}"><span><span class="name">${esc(r.name)}</span><br><span class="muted small">${(r.items||[]).length} oefeningen${last?" · laatst "+dateTxt(last.date):""}</span></span><span class="go">Start</span></button>`;
-    }).join("")+`<button class="btn block" data-act="start" data-id="">Losse training zonder schema</button></div>`;
-  }
+  if(UI.coach&&S.me&&S.me.isAdmin)return viewCoach();
+  let h=queueBanner()+viewPlanCard()+`<h2>Training starten</h2>`+trainStartList();
   h+=`<h2>Duurtraining</h2><div class="btnrow"><button class="btn" data-act="c-new" data-v="Hardlopen">+ Hardlopen</button><button class="btn" data-act="c-new" data-v="Wielrennen">+ Wielrennen</button><button class="btn" data-act="c-new" data-v="Anders">+ Anders</button></div>`;
-  if(false){
-  }
   const recent=sortedSessions().slice(0,6);
   if(recent.length){
     h+=`<h2>Recente trainingen</h2><div class="recgroup">`+recent.map(s=>{const nSets=(s.entries||[]).reduce((t,e)=>t+e.sets.length,0);
       if(s.kind==="cardio")return `<button class="row" data-act="open-session" data-id="${s.id}"><span class="n">${esc(s.sport)}${s.purpose?` <span class="chip">${esc(s.purpose)}</span>`:""}</span><span class="b none">${dateTxt(s.date)}</span><span class="l">${cardioSummary(s)}</span></button>`;
       return `<button class="row" data-act="open-session" data-id="${s.id}"><span class="n">${esc(s.routineName||"Training")}</span><span class="b none">${dateTxt(s.date)}</span><span class="l">${(s.entries||[]).length} oefeningen · ${nSets} sets</span></button>`}).join("")+`</div>`;
   }
+  if(S.me&&S.me.isAdmin)h+=`<h2>Coachen</h2><button class="btn block" data-act="coach-open">Trainingen inplannen voor anderen</button>`;
   return h;
 }
 
@@ -491,7 +663,7 @@ function viewWorkout(){
       <button class="ib" data-act="ex-remove" data-i="${i}" aria-label="Verwijder oefening">✕</button></div></header>
       <dl class="refs"><div class="best"><dt>Hoogste</dt><dd>${best?setTxt(best.set)+`<small>${dateTxt(best.date)}</small>`:`—<small>nog geen record</small>`}</dd></div>
       <div><dt>Laatste</dt><dd>${last?`${last.sets.length} sets · ${last.sets.map(shortSet).join(" · ")}<small>${dateTxt(last.date)}${otherSchema}</small>`:`—<small>eerste keer</small>`}</dd></div>
-      ${e.target?`<div class="target"><dt>Doel</dt><dd>${esc(e.target.sets||"?")} sets × ${esc(e.target.reps||"?")} reps</dd></div>`:""}</dl>
+      ${e.target?`<div class="target"><dt>Doel</dt><dd>${e.target.sets||e.target.reps?`${esc(e.target.sets||"?")} sets × ${esc(e.target.reps||"?")} reps`:""}${e.target.note?`<small>${esc(e.target.note)}</small>`:""}</dd></div>`:""}</dl>
       <div class="sets"><div class="setrow sethead"><span>Set</span><span>Kg</span><span>Reps</span><span></span><span></span></div>`;
     e.sets.forEach((st,j)=>{const ph=placeholderFor(e,j);
       h+=`<div class="setrow"><button class="setn" data-act="fill" data-i="${i}" data-j="${j}" aria-label="Neem waarden van vorige keer over">${j+1}</button>
@@ -507,22 +679,13 @@ function viewWorkout(){
   return h;
 }
 
-function viewSchemas(){
-  if(UI.edit)return viewEditor();
-  const routines=Object.entries(S.routines).sort((a,b)=>(a[1].order??0)-(b[1].order??0)||a[1].name.localeCompare(b[1].name));
-  let h=`<h2>Jouw schema's</h2>`;
-  if(!routines.length)h+=`<div class="card empty"><strong>Nog geen schema's</strong><p class="muted">Een schema is een vaste lijst oefeningen die je per training afwerkt, met optioneel je doel aan sets en reps.</p></div>`;
-  else h+=`<div class="stack">`+routines.map(([id,r])=>`<div class="card routine"><div class="start"><span class="name">${esc(r.name)}</span></div><div class="items">${(r.items||[]).map(i=>esc(exName(i.exId))).join(" · ")||"Nog geen oefeningen"}</div><div class="btnrow"><button class="btn" data-act="edit-routine" data-id="${id}">Bewerken</button><button class="btn primary" data-act="start-from-schema" data-id="${id}">Start training</button></div></div>`).join("")+`</div>`;
-  h+=`<div style="margin-top:12px"><button class="btn primary block" data-act="new-routine">+ Nieuw schema</button></div>`;
-  return h;
-}
 function viewEditor(){
   const e=UI.edit;
-  let h=`<h2>${e.id&&S.routines[e.id]?"Schema bewerken":"Nieuw schema"}</h2><div class="card stack"><label class="f">Naam<input type="text" id="re-name" value="${esc(e.name)}" placeholder="Bijv. Dag 1 — Push"></label><div>`;
+  let h=`<h2>${e.id&&S.routines[e.id]?"Schema bewerken":"Nieuw schema"}</h2><div class="card stack"><label class="f">Naam<input type="text" id="re-name" value="${esc(e.name)}" placeholder="Bijv. Dag 1 — Push"></label><label class="f">Map<select id="re-folder"><option value="">Zonder map</option>${folderList().map(f=>`<option value="${f.id}" ${e.folderId===f.id?"selected":""}>${esc(f.name)}</option>`).join("")}</select></label><div>`;
   if(!e.items.length)h+=`<p class="muted small" style="margin:4px 0">Voeg je eerste oefening toe.</p>`;
   e.items.forEach((it,i)=>{h+=`<div class="edititem"><div><strong>${esc(exName(it.exId))}</strong> <span class="chip">${esc(exGroup(it.exId))}</span></div><div class="icons">
     <button class="ib" data-act="it-up" data-i="${i}" aria-label="Omhoog" ${i===0?"disabled":""}>↑</button><button class="ib" data-act="it-down" data-i="${i}" aria-label="Omlaag" ${i===e.items.length-1?"disabled":""}>↓</button><button class="ib" data-act="it-remove" data-i="${i}" aria-label="Verwijder">✕</button></div>
-    <div class="tg"><label class="f">Doel sets<input type="text" inputmode="numeric" id="re-s-${i}" value="${esc(it.sets)}" placeholder="3"></label><label class="f">Doel reps<input type="text" id="re-r-${i}" value="${esc(it.reps)}" placeholder="8-10"></label></div></div>`});
+    <div class="tg"><label class="f">Doel sets<input type="text" inputmode="numeric" id="re-s-${i}" value="${esc(it.sets)}" placeholder="3"></label><label class="f">Doel reps<input type="text" id="re-r-${i}" value="${esc(it.reps)}" placeholder="8-10"></label><label class="f nf">Notitie <i>optioneel</i><input type="text" id="re-n-${i}" value="${esc(it.note||"")}" placeholder="Tempo, rust, gewicht of tip"></label></div></div>`});
   h+=`</div><button class="btn block" data-act="pick" data-mode="routine">+ Oefening toevoegen</button></div><div style="margin-top:12px" class="stack">`;
   if(UI.confirm==="del-routine")h+=`<div class="confirm"><span>Schema verwijderen? Je gelogde trainingen en records blijven bewaard.</span><div class="btnrow"><button class="btn danger" data-act="del-routine-yes">Verwijderen</button><button class="btn" data-act="confirm-no">Behouden</button></div></div>`;
   h+=`<div class="btnrow"><button class="btn primary" data-act="save-routine">Schema opslaan</button><button class="btn" data-act="close-editor">Annuleren</button></div>`;
@@ -551,13 +714,17 @@ function viewStrengthRecords(){
 
 function viewHelp(){
   const steps=[
-    ["Kies je account","De eerste keer vul je de groepscode in. Daarna kies je je naam en vul je je persoonlijke code in, of je maakt een nieuw account aan met een eigen code. Je telefoon onthoudt wie er ingelogd is. Code vergeten? Jitse kan als beheerder een nieuwe instellen. Via <b>Wissel</b> rechtsboven kies je een ander account. Iedereen heeft eigen schema's, trainingen en records."],
-    ["Maak een schema","Ga naar <b>Schema's → Nieuw schema</b>. Geef het een naam, voeg oefeningen toe en vul eventueel een doel in, bijvoorbeeld 3 sets × 8-10 reps. Bestaat een oefening nog niet, typ dan de naam en kies de spiergroep."],
+    ["Log in","De eerste keer vul je de groepscode in. Daarna log je in met je naam en persoonlijke code, of maak je een nieuw account aan. Je telefoon onthoudt dat je ingelogd bent tot je op <b>Uitloggen</b> tikt. Code vergeten? Jitse kan als beheerder een nieuwe instellen. Iedereen ziet alleen zijn eigen schema's, trainingen en records."],
+    ["Mappen en schema's","In <b>Schema's</b> staan je schema's in mappen, bijvoorbeeld \"Fitness 4 dagen\". Maak een map met <b>+ Nieuwe map</b> en kies bij een schema in welke map het hoort. Iedereen krijgt de map \"Krachttraining 3 dagen split\"; de calisthenics-mappen met en zonder ringen voeg je toe onder <b>Voorbeeldmappen</b>."],
+    ["Delen met vrienden","Tik bij een schema of map op <b>Delen</b>. Je krijgt een code van 6 tekens en een link die je via WhatsApp kunt sturen. De ander vult de code in bij <b>Schema's → Gedeeld schema toevoegen</b> en heeft het schema dan zelf, met eigen resultaten."],
+    ["Plan je week","In <b>Planning</b> zie je je week. Tik bij een dag op <b>+ Plannen</b> en kies een schema, duurtraining, rustdag of andere sport. Vandaag geplande trainingen staan ook bovenaan in Trainen, met een knop om meteen te starten. Gedaan? Dan krijgt het vanzelf een vinkje."],
+    ["Maak een schema","Ga naar <b>Schema's → Nieuw schema</b>. Geef het een naam, voeg oefeningen toe en vul eventueel een doel in, bijvoorbeeld 3 sets × 8-10 reps. Bestaat een oefening nog niet, typ dan de naam en kies de spiergroep. Bij elke oefening kun je een notitie zetten, zoals tempo of rusttijd."],
     ["Start een training","Tik in <b>Trainen</b> op een schema. Elke oefening toont je <b>Hoogste</b> set ooit en wat je de <b>Laatste</b> keer deed. Een losse training zonder schema kan ook."],
     ["Vul je sets in","Per set vul je kg en reps in. Leeg kg betekent bodyweight. Grijze getallen zijn je resultaat van vorige keer: tik op het setnummer om ze over te nemen. Met <b>+ Set</b> voeg je een set toe."],
-    ["Sla op","Tik op <b>Training opslaan</b>. Sets zonder reps worden overgeslagen. Je training blijft bewaard als je tussendoor de app sluit, tot je opslaat of weggooit."],
+    ["Sla op","Tik op <b>Training opslaan</b>. Sets zonder reps worden overgeslagen. Je training blijft bewaard als je tussendoor de app sluit, tot je opslaat of weggooit. Geen internet bij het opslaan? Dan blijft de training op je telefoon staan en wordt hij automatisch verstuurd zodra je weer verbinding hebt."],
     ["Bekijk je records","In <b>Records</b> staat per spiergroep je zwaarste set. Tik op een oefening voor de volledige geschiedenis, of om de naam of spiergroep aan te passen."],
     ["Log je duurtraining","Onder <b>Trainen → Duurtraining</b> log je hardlopen of wielrennen: duur, afstand, eventueel hartslag en een toelichting. Snelheid en tempo worden automatisch berekend en verschijnen onder Records."],
+    ["Geplande trainingen","Maakt Jitse een training voor je, dan staat die bovenaan in <b>Trainen</b> onder <b>Op je planning</b>, met datum en uitleg. Tik op <b>Training loggen</b> als je hem gedaan hebt: je resultaat wordt gekoppeld en Jitse ziet het terug."],
     ["Vul je profiel in","In <b>Profiel</b> vul je je leeftijd, lengte, doel en trainingen per week in, en houd je je gewicht bij. Op basis daarvan berekent <b>Voeding</b> je dagelijkse calorieën, eiwit, koolhydraten en vet."]
   ];
   return `<h2>Zo werkt het</h2><div class="stack">${steps.map((s,i)=>`<div class="card help"><span class="hn">${i+1}</span><div><strong>${s[0]}</strong><p>${s[1]}</p></div></div>`).join("")}</div>
@@ -565,11 +732,11 @@ function viewHelp(){
   <h2>Tips</h2><div class="card"><ul class="hl">
     <li>Dezelfde oefening in meerdere schema's deelt één geschiedenis, zolang de naam gelijk is.</li>
     <li>Voor holds zoals een Hollow Body Hold vul je seconden in bij reps.</li>
-    <li>Zet de pagina op je beginscherm: open de link in je browser en kies <b>Zet op beginscherm</b>.</li>
+    <li>Zet de pagina op je beginscherm: open de link in Safari, tik op het deelicoon en kies <b>Zet op beginscherm</b>. Zo blijf je ingelogd en wist Safari je niet-verstuurde gegevens niet.</li>
     <li>Een training verkeerd ingevoerd? Open hem onder <b>Trainen → Recente trainingen</b> en verwijder hem. Records worden opnieuw berekend.</li>
   </ul></div>
   <h2>Back-up</h2><div class="card stack"><p class="hp">Download een kopie van al je schema's en trainingen, of zet een eerdere back-up terug in dit account. Bestaande onderdelen met dezelfde naam worden daarbij overschreven.</p>
-  ${UI.confirm==="import"&&UI.importObj?`<div class="confirm"><span>Back-up${UI.importObj.profile?" van "+esc(UI.importObj.profile):""} met ${Object.keys(UI.importObj.sessions||{}).length} trainingen en ${Object.keys(UI.importObj.routines||{}).length} schema's terugzetten in het account van ${esc(S.profiles[pid]?.name||"")}?</span><div class="btnrow"><button class="btn primary" data-act="import-yes">Terugzetten</button><button class="btn" data-act="confirm-no">Annuleren</button></div></div>`:""}
+  ${UI.confirm==="import"&&UI.importObj?`<div class="confirm"><span>Back-up${UI.importObj.profile?" van "+esc(UI.importObj.profile):""} met ${Object.keys(UI.importObj.sessions||{}).length} trainingen en ${Object.keys(UI.importObj.routines||{}).length} schema's terugzetten in het account van ${esc(S.me?.name||"")}?</span><div class="btnrow"><button class="btn primary" data-act="import-yes">Terugzetten</button><button class="btn" data-act="confirm-no">Annuleren</button></div></div>`:""}
   <div class="btnrow"><button class="btn" data-act="export-backup">Back-up downloaden</button><label class="btn" for="imp-file" style="text-align:center;display:grid;place-items:center">Back-up terugzetten</label></div><input type="file" id="imp-file" accept="application/json,.json" hidden></div>`;
 }
 
@@ -592,7 +759,7 @@ function sparkline(list){
   return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Gewichtsverloop van ${fmt1(ks[0])} naar ${fmt1(ks[ks.length-1])} kg"><path d="${d} L${last[0]} ${H} L${pts[0][0]} ${H} Z" fill="var(--accent)" opacity=".12"/><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round"/><circle cx="${last[0]}" cy="${last[1]}" r="4" fill="var(--accent)"/></svg>`;
 }
 function viewProfile(){
-  const f=pfDraft(),p=S.profiles[pid]||{},wl=weightList(),cw=currentWeight();
+  const f=pfDraft(),p=S.me||{},wl=weightList(),cw=currentWeight();
   let h=`<h2>Mijn gegevens</h2><div class="card stack">
     <div class="grid2"><label class="f">Leeftijd<input type="text" inputmode="numeric" id="pf-age" value="${esc(f.age)}" placeholder="jaar"></label>
     <label class="f">Lengte<input type="text" inputmode="decimal" id="pf-height" value="${esc(f.height)}" placeholder="cm"></label></div>
@@ -616,19 +783,15 @@ function viewProfile(){
     ${UI.pinOpen?`<label class="f">Huidige code<input type="password" id="cp-old" autocomplete="current-password"></label><label class="f">Nieuwe code<input type="password" id="cp-new" autocomplete="new-password"></label><label class="f">Herhaal nieuwe code<input type="password" id="cp-new2" autocomplete="new-password"></label><div class="btnrow"><button class="btn primary" data-act="cp-save">Code wijzigen</button><button class="btn" data-act="cp-toggle">Annuleren</button></div>`
     :`<p class="hp">Met je persoonlijke code log je in op een nieuw apparaat. Vergeten? Jitse kan hem als beheerder opnieuw instellen.</p><button class="btn" data-act="cp-toggle">Code wijzigen</button>`}
   </div>`;
-  if(p.isAdmin){
-    const others=Object.entries(S.profiles).filter(([id])=>id!==pid).sort((a,b)=>a[1].name.localeCompare(b[1].name));
-    h+=`<h2>Beheer</h2><div class="card stack"><p class="hp">Is iemand zijn code vergeten? Stel hier een nieuwe in en geef die door. Diegene kan hem daarna zelf weer wijzigen.</p>
-      ${others.length?`<label class="f">Account<select id="ad-who">${others.map(([id,o])=>`<option value="${id}">${esc(o.name)}</option>`).join("")}</select></label><label class="f">Nieuwe code<input type="text" id="ad-new" autocomplete="off" placeholder="minimaal 4 tekens"></label><button class="btn primary" data-act="ad-save">Nieuwe code instellen</button>`:`<p class="muted small" style="margin:0">Er zijn nog geen andere accounts.</p>`}</div>`;
-  }
-  h+=`<div style="margin-top:16px"><button class="btn block" data-act="logout">Uitloggen</button></div>`;
+  if(p.isAdmin)h+=viewAdmin();
+  h+=`<div class="stack" style="margin-top:16px"><button class="btn block" data-act="go-help">Uitleg en back-up</button><button class="btn block" data-act="logout">Uitloggen</button></div>`;
   return h;
 }
 async function saveProfile(){
   const f=pfDraft();
   const sports={};for(const [k] of SPORTS){const n=num(f.sports[k]?.n),m=num(f.sports[k]?.min);if(n||m)sports[k]={n:n||0,min:m||0}}
   const data={age:num(f.age),height:num(f.height),sex:f.sex||null,targetWeight:num(f.targetWeight),goal:f.goal||null,work:f.work||"gemengd",sports};
-  await put("meta","body",data);toast("Gegevens opgeslagen");UI.pf=null;render();
+  await put("meta","body",data);toastOk("Gegevens opgeslagen");UI.pf=null;render();
 }
 
 /* ---------- voeding ---------- */
@@ -716,14 +879,16 @@ function durTxt(min){if(!min)return"—";const t=Math.round(min*60),h=Math.floor
 function paceTxt(min,km){if(!min||!km)return"—";const p=min/km;const m=Math.floor(p),s=Math.round((p-m)*60);return `${m}:${String(s===60?0:s).padStart(2,"0")} /km`}
 function speed(min,km){return min&&km?km/(min/60):null}
 function cardioDraftMin(c){return (num(c.h)||0)*60+(num(c.m)||0)+(num(c.s)||0)/60}
-function newCardio(sport){UI.cardio={sport:sport||"Hardlopen",date:today(),h:"",m:"",s:"",km:"",avgHr:"",maxHr:"",purpose:"",note:""};render();window.scrollTo(0,0)}
+function saveCardioDraft(){if(pid)lsSet(cardioKey(),UI.cardio)}
+function newCardio(sport,plan){UI.cardio={sport:sport||"Hardlopen",date:today(),h:"",m:"",s:"",km:"",avgHr:"",maxHr:"",purpose:plan?.purpose||"",note:"",planId:plan?.id||null};saveCardioDraft();render();window.scrollTo(0,0)}
 function cardioLive(){
   const c=UI.cardio,min=cardioDraftMin(c),km=num(c.km),v=speed(min,km);
   return v?`<b>${fmt1(v)} km/u</b>${c.sport==="Hardlopen"?` · ${paceTxt(min,km)}`:""}`:`<span class="muted">Vul duur en afstand in</span>`;
 }
 function viewCardio(){
   const c=UI.cardio;
-  return `<div class="wohead"><div class="title">Duurtraining loggen</div></div><div class="card stack" style="margin-top:12px">
+  const pl=c.planId?S.plan[c.planId]:null;
+  return `<div class="wohead"><div class="title">Duurtraining loggen</div></div>${pl?`<div class="card plan" style="margin-top:12px"><span class="ml">Geplande training · ${esc(dayLabel(pl.date))}</span><strong>${esc(pl.title)}</strong>${planTargets(pl)?`<span class="muted small">${planTargets(pl)}</span>`:""}${pl.desc?`<p class="pdesc">${esc(pl.desc)}</p>`:""}</div>`:""}<div class="card stack" style="margin-top:12px">
     <div class="f">Sport<div class="seg seg3">${CARDIO.map(s=>`<button class="segb" data-act="c-sport" data-v="${s}" aria-pressed="${c.sport===s}">${s}</button>`).join("")}</div></div>
     <label class="f">Datum<input type="date" id="c-date" value="${esc(c.date)}"></label>
     <div class="f">Duur<div class="grid3"><input type="text" inputmode="numeric" id="c-h" value="${esc(c.h)}" placeholder="uur" aria-label="Uren"><input type="text" inputmode="numeric" id="c-m" value="${esc(c.m)}" placeholder="min" aria-label="Minuten"><input type="text" inputmode="numeric" id="c-s" value="${esc(c.s)}" placeholder="sec" aria-label="Seconden"></div></div>
@@ -739,7 +904,9 @@ async function saveCardio(){
   if(!min){toast("Vul de duur in.");return}
   const id=uid();
   const rec={kind:"cardio",sport:c.sport,date:c.date||today(),ts:Date.now(),routineName:c.sport,durMin:Math.round(min*100)/100,km:km||null,avgHr:num(c.avgHr),maxHr:num(c.maxHr),purpose:c.purpose||null,note:(c.note||"").trim(),entries:[]};
-  UI.cardio=null;await put("sessions",id,rec);toast(`${c.sport} opgeslagen`);render();window.scrollTo(0,0);
+  if(c.planId&&S.plan[c.planId]){rec.planId=c.planId;rec.planTitle=S.plan[c.planId].title}
+  UI.cardio=null;saveCardioDraft();const ok=await put("sessions",id,rec);
+  toast(ok?`${c.sport} opgeslagen`:"Geen internet: training bewaard op je telefoon. Wordt automatisch verstuurd zodra je verbinding hebt.");render();window.scrollTo(0,0);
 }
 function cardioSessions(sport){return sortedSessions().filter(s=>s.kind==="cardio"&&(!sport||s.sport===sport))}
 function cardioSummary(s){return [s.km?fmt1(s.km)+" km":null,durTxt(s.durMin),s.km&&s.durMin?(s.sport==="Hardlopen"?paceTxt(s.durMin,s.km):fmt1(speed(s.durMin,s.km))+" km/u"):null].filter(Boolean).join(" · ")}
@@ -756,6 +923,323 @@ function viewCardioRecords(){
   }
   return h+`</div>`;
 }
+
+/* ---------- planning & coachen ---------- */
+function queueBanner(){
+  const n=queue().length;if(!n)return "";
+  return `<div class="banner qbanner"><span>${n} wijziging${n>1?"en":""} nog niet verstuurd. Dat gebeurt automatisch zodra je internet hebt.</span><button class="linkbtn" data-act="flush">Nu versturen</button></div>`;
+}
+function dayLabel(iso){
+  const t=today();if(iso===t)return "Vandaag";if(iso===addDays(t,1))return "Morgen";if(iso===addDays(t,-1))return "Gisteren";
+  const d=new Date(iso+"T12:00:00");return d.toLocaleDateString("nl-NL",{weekday:"short",day:"numeric",month:"short"});
+}
+function planTargets(p){return [p.purpose,p.durMin?`± ${String(p.durMin).replace(".",",")} min`:null,p.km?`${fmt1(p.km)} km`:null].filter(Boolean).map(esc).join(" · ")}
+function planSession(sessions,planId){return Object.entries(sessions||{}).map(([id,s])=>({id,...s})).find(s=>s.planId===planId)||null}
+function viewCoach(){
+  const c=UI.coach,people=S.people;
+  let h=`<div class="wohead"><div class="title">Coachen</div><button class="linkbtn" data-act="coach-close">Terug</button></div>`;
+  if(!people)return h+`<div class="card empty" style="margin-top:12px"><p class="muted">Sporters laden…</p></div>`;
+  h+=`<div class="card stack" style="margin-top:12px"><label class="f">Sporter<select id="co-who"><option value="">Kies een sporter</option>${people.map(p=>`<option value="${p.id}" ${c.who===p.id?"selected":""}>${esc(p.name)}${p.id===pid?" (jij)":""}</option>`).join("")}</select></label></div>`;
+  if(!c.who)return h+`<p class="muted small">Kies voor wie je trainingen wilt inplannen. Diegene ziet ze bovenaan in Trainen, en jij ziet hier terug wat er gelogd is.</p>`;
+  if(!c.data)return h+`<p class="muted">Planning laden…</p>`;
+  const name=personName(c.who);
+  if(c.form){
+    const f=c.form;
+    h+=`<h2>${f.id?"Training aanpassen":"Training inplannen"} · ${esc(name)}</h2><div class="card stack">
+      <label class="f">Datum<input type="date" id="co-date" value="${esc(f.date)}"></label>
+      <div class="f">Sport<div class="seg seg3">${CARDIO.map(s=>`<button class="segb" data-act="co-sport" data-v="${s}" aria-pressed="${f.sport===s}">${s}</button>`).join("")}</div></div>
+      <label class="f">Titel<input type="text" id="co-title" value="${esc(f.title)}" placeholder="Bijv. Interval 6×400 m"></label>
+      <div class="f">Soort training<div class="chips">${PURPOSES.map(p=>`<button class="chipb" data-act="co-purpose" data-v="${p}" aria-pressed="${f.purpose===p}">${p}</button>`).join("")}</div></div>
+      <div class="grid2"><label class="f">Duur <i>optioneel</i><input type="text" inputmode="numeric" id="co-dur" value="${esc(f.durMin)}" placeholder="min"></label><label class="f">Afstand <i>optioneel</i><input type="text" inputmode="decimal" id="co-km" value="${esc(f.km)}" placeholder="km"></label></div>
+      <label class="f">Uitleg<textarea id="co-desc" rows="5" placeholder="Bijv. 10 min inlopen · 6× 400 m op 5 km-tempo, 90 sec dribbelen · 10 min uitlopen. Hartslag zone 4.">${esc(f.desc)}</textarea></label>
+      ${f.id?"":`<label class="f">Herhalen<select id="co-rep">${[["1","Eenmalig"],["2","2 weken, elke week"],["3","3 weken, elke week"],["4","4 weken, elke week"],["6","6 weken, elke week"],["8","8 weken, elke week"]].map(([v,l])=>`<option value="${v}" ${f.repeat===v?"selected":""}>${l}</option>`).join("")}</select></label>`}
+      <div class="btnrow"><button class="btn primary" data-act="co-save">${f.id?"Opslaan":"Inplannen"}</button><button class="btn" data-act="co-cancel">Annuleren</button></div>
+      ${f.id?(UI.confirm==="co-del"?`<div class="confirm"><span>Deze geplande training verwijderen? Een al gelogde training blijft bewaard.</span><div class="btnrow"><button class="btn danger" data-act="co-del-yes">Verwijderen</button><button class="btn" data-act="confirm-no">Behouden</button></div></div>`:`<div class="btnrow"><button class="btn ghost" data-act="co-copy">Kopiëren naar volgende week</button><button class="btn ghost danger" data-act="co-del">Verwijderen</button></div>`):""}
+    </div>`;
+    return h;
+  }
+  h+=`<button class="btn primary block" data-act="co-new" style="margin-top:12px">+ Training inplannen voor ${esc(name)}</button>`;
+  const t=today(),all=Object.entries(c.data.plan).map(([id,p])=>({id,...p,done:planSession(c.data.sessions,id)}));
+  const up=all.filter(p=>p.date>=t).sort((a,b)=>a.date.localeCompare(b.date));
+  const past=all.filter(p=>p.date<t).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,30);
+  const row=p=>{const st=p.done?`<span class="ok">✓ ${sessionSummary(p.done)}${p.done.avgHr?` · ${p.done.avgHr} bpm`:""}</span>${p.done.note?`<span class="l"> · "${esc(p.done.note)}"</span>`:""}`:p.date<t?`<span class="miss">Niet gelogd</span>`:`<span class="muted">Gepland</span>`;
+    return `<button class="row coachrow" data-act="co-edit" data-id="${p.id}"><span class="n">${esc(p.title)}</span><span class="b none">${esc(dayLabel(p.date))}</span><span class="l">${esc(p.sport)}${planTargets(p)?" · "+planTargets(p):""}</span><span class="l">${st}</span></button>`};
+  h+=`<h2>Komende trainingen</h2>${up.length?`<div class="recgroup">${up.map(row).join("")}</div>`:`<p class="muted small">Nog niets ingepland.</p>`}`;
+  if(past.length){const done=past.filter(p=>p.done).length;h+=`<h2>Afgelopen · ${done} van ${past.length} gedaan</h2><div class="recgroup">${past.map(row).join("")}</div>`}
+  return h;
+}
+function viewAdmin(){
+  const people=S.people;
+  let h=`<h2>Beheer</h2>`;
+  if(!people)return h+`<div class="card"><p class="muted" style="margin:0">Accounts laden…</p></div>`;
+  const others=people.filter(p=>p.id!==pid);
+  h+=`<div class="card stack"><div class="adhead"><strong>Accounts (${people.length})</strong><button class="linkbtn" data-act="ad-refresh">Vernieuwen</button></div><div class="wlist">${people.map(p=>`<div class="arow"><span><b>${esc(p.name)}</b>${p.isAdmin?' <span class="chip">beheerder</span>':""}${p.hasPin?"":' <span class="chip">geen code</span>'}</span><span class="muted small">${p.sessions} training${p.sessions===1?"":"en"}${p.last?" · actief "+dateTxt(String(p.last).slice(0,10)):""}</span></div>`).join("")}</div>
+    <p class="hp small muted">Alleen jij ziet deze lijst. Anderen loggen in met hun naam en code.</p>
+    <button class="btn" data-act="coach-open">Trainingen inplannen</button></div>`;
+  if(!others.length)return h+`<p class="muted small">Er zijn nog geen andere accounts.</p>`;
+  const opts=others.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+  h+=`<div class="card stack"><strong>Code vergeten</strong><p class="hp">Stel een nieuwe code in en geef die door. Diegene kan hem daarna zelf weer wijzigen.</p>
+    <label class="f">Account<select id="ad-who">${opts}</select></label><label class="f">Nieuwe code<input type="text" id="ad-new" autocomplete="off" placeholder="minimaal 4 tekens"></label><button class="btn primary" data-act="ad-save">Nieuwe code instellen</button></div>`;
+  h+=`<div class="card stack"><strong>Account verwijderen</strong>`;
+  if(UI.confirm==="ad-del"&&UI.delWho){const p=people.find(x=>x.id===UI.delWho);
+    h+=`<div class="confirm"><span>Account van <b>${esc(p?.name||"")}</b> definitief verwijderen? ${p&&p.sessions?`Alle ${p.sessions} training${p.sessions===1?"":"en"}, schema's en gegevens worden gewist.`:"Alle schema's en gegevens worden gewist."} Dit kan niet ongedaan worden gemaakt.</span><div class="btnrow"><button class="btn danger" data-act="ad-del-yes">Definitief verwijderen</button><button class="btn" data-act="confirm-no">Annuleren</button></div></div>`;
+  }else h+=`<p class="hp">Alle trainingen en gegevens van dit account worden gewist.</p><label class="f">Account<select id="ad-delwho"><option value="">Kies een account</option>${opts}</select></label><button class="btn ghost danger" data-act="ad-del">Account verwijderen</button>`;
+  return h+`</div>`;
+}
+
+/* ---------- mappen, bibliotheek & delen ---------- */
+const LIB=[{"id": "kt3", "name": "Krachttraining 3 dagen split", "std": true, "desc": "Standaard voor iedereen", "routines": [{"name": "Borst/schouder/triceps", "items": [{"name": "Bench Press", "group": "Borst"}, {"name": "Dips", "group": "Borst"}, {"name": "Dumbbell Incline Bench Press", "group": "Borst"}, {"name": "Dumbbell Shoulder Press", "group": "Schouders"}, {"name": "Side Fly's", "group": "Schouders"}, {"name": "Front Fly's", "group": "Schouders"}, {"name": "Tricep Overhead Extension", "group": "Triceps"}, {"name": "Tricep Cable Pulldown", "group": "Triceps"}, {"name": "Tricep Dips", "group": "Triceps"}]}, {"name": "Rug/biceps/onderarmen", "items": [{"name": "Pull-ups", "group": "Rug"}, {"name": "Deadlifts", "group": "Rug"}, {"name": "Cable Row", "group": "Rug"}, {"name": "Bicep Curl (gebogen stang)", "group": "Biceps"}, {"name": "Hammer Curls", "group": "Biceps"}, {"name": "Reverse Grip Cable Curl", "group": "Onderarmen"}, {"name": "Forearm Curl", "group": "Onderarmen"}]}, {"name": "Legs/abs", "items": [{"name": "Squats", "group": "Benen"}, {"name": "Straight Leg Deadlifts", "group": "Benen"}, {"name": "Romanian Lunges", "group": "Benen"}, {"name": "Quadricep Extension", "group": "Benen"}, {"name": "Hamstring Extension", "group": "Benen"}, {"name": "Calf Raise", "group": "Kuiten"}, {"name": "Hanging Leg Raise", "group": "Core"}, {"name": "Crunches", "group": "Core"}, {"name": "Planking", "group": "Core"}]}]}, {"id": "cali-r", "name": "Calisthenics schema 4 dagen split met ringen", "desc": "Body by Rings-geïnspireerd · 4 schema's met tempo, rust en tips", "routines": [{"name": "Dag 1 — Push · borst, schouder, triceps", "items": [{"name": "Ring Dip", "group": "Borst", "sets": "4", "reps": "6-10", "note": "tempo 30X1 · 90s rust · BW / +5-10kg gordel · Ringen stabiel, licht voorover"}, {"name": "Ring Archer Push-up", "group": "Borst", "sets": "3", "reps": "6-8", "note": "tempo 30X0 · 75s rust · BW · Niet-dominante arm gestrekt"}, {"name": "Ring Chest Fly", "group": "Borst", "sets": "3", "reps": "10-12", "note": "tempo 30X0 · 60s rust · BW · Elbows licht gebogen"}, {"name": "Ring Push-up (turned out)", "group": "Borst", "sets": "3", "reps": "10-15", "note": "tempo 20X0 · 60s rust · BW · Ringen draaien naar buiten bovenaan"}, {"name": "Tricep Extension (ringen)", "group": "Triceps", "sets": "3", "reps": "8-12", "note": "tempo 30X1 · 60s rust · BW · Ellebogen vast naast hoofd"}, {"name": "Ring Shoulder Push-up", "group": "Schouders", "sets": "3", "reps": "6-10", "note": "tempo 40X1 · 90s rust · BW · Heupen hoog, hoofd naar vloer"}, {"name": "Ring Planche Lean", "group": "Schouders", "sets": "3", "reps": "20-30s", "note": "60s rust · BW · Protractie, licht voorover"}, {"name": "Pseudo Planche Push-up", "group": "Schouders", "sets": "3", "reps": "6-10", "note": "tempo 30X0 · 90s rust · BW · Handen richting heupen"}]}, {"name": "Dag 2 — Pull · rug, biceps, achterschouder", "items": [{"name": "Wide Ring Pull-up", "group": "Rug", "sets": "4", "reps": "5-8", "note": "tempo 30X0 · 120s rust · BW / +5-10kg gordel · Schouderbladen neerhalen"}, {"name": "Ring Row Archer", "group": "Rug", "sets": "3", "reps": "8-10", "note": "tempo 20X0 · 75s rust · BW · Vrije arm gestrekt"}, {"name": "Pelican Curl", "group": "Biceps", "sets": "3", "reps": "6-8", "note": "tempo 30X0 · 90s rust · BW · Langzaam zakken = key"}, {"name": "Rear Delt Ring Fly", "group": "Schouders", "sets": "3", "reps": "12-15", "note": "tempo 30X0 · 60s rust · BW · Pinkje omhoog bovenaan"}, {"name": "Ring Rollout", "group": "Core", "sets": "3", "reps": "6-10", "note": "tempo 40X0 · 60s rust · BW · Bekken neutraal houden"}, {"name": "Archer Chin-up", "group": "Rug", "sets": "3", "reps": "5-7", "note": "tempo 30X0 · 90s rust · BW · Trek naar dominante hand"}, {"name": "Ring L-Row", "group": "Rug", "sets": "3", "reps": "8-10", "note": "tempo 30X0 · 75s rust · BW · Benen horizontaal, row vanuit hang"}, {"name": "One Arm Hang", "group": "Onderarmen", "sets": "3", "reps": "20-40s", "note": "60s rust · BW · Schouder actief ingetrokken"}, {"name": "Face Pull (ringen laag)", "group": "Schouders", "sets": "3", "reps": "12-15", "note": "tempo 30X0 · 60s rust · BW · Externe rotatie, pinkje hoog"}]}, {"name": "Dag 3 — Benen + kracht", "items": [{"name": "Bulgarian Split Squat (ringen bal.)", "group": "Benen", "sets": "4", "reps": "8-10", "note": "tempo 30X0 · 90s rust · BW / +10-20kg · Ringen voor balans"}, {"name": "Romanian Deadlift", "group": "Billen", "sets": "4", "reps": "8-10", "note": "tempo 30X1 · 120s rust · 40-80kg · Rug recht, heupen terug"}, {"name": "Hip Thrust (barbell)", "group": "Billen", "sets": "3", "reps": "10-12", "note": "tempo 20X1 · 90s rust · 30-60kg · Squeeze 1s bovenaan"}, {"name": "Nordic Curl", "group": "Benen", "sets": "3", "reps": "5-8", "note": "tempo 50X0 · 90s rust · BW · Excentrisch = primair"}, {"name": "Ring Pistol Squat Progressie", "group": "Benen", "sets": "3", "reps": "6-8", "note": "tempo 30X0 · 75s rust · BW · Ringen voor balans, gecontroleerd"}, {"name": "Goblet Squat", "group": "Benen", "sets": "3", "reps": "12-15", "note": "tempo 30X0 · 75s rust · 16-24kg · Elbow-to-knee onderaan"}, {"name": "Ring Fallout", "group": "Core", "sets": "3", "reps": "8-10", "note": "tempo 30X1 · 60s rust · BW · Core+hip flexor"}, {"name": "Calf Raise (verzwaard)", "group": "Kuiten", "sets": "3", "reps": "15-20", "note": "tempo 20X1 · 60s rust · BW / +20kg · Volledig stretch onderaan"}, {"name": "Glute Bridge (single leg)", "group": "Billen", "sets": "3", "reps": "10-12", "note": "tempo 20X1 · 60s rust · BW · Niet-actieve been omhoog"}]}, {"name": "Dag 4 — Schouder, core + posterior chain", "items": [{"name": "Ring Shoulder Push-up (pike)", "group": "Schouders", "sets": "4", "reps": "6-10", "note": "tempo 40X1 · 90s rust · BW · Oren richting polsen"}, {"name": "Ring Dip (schouder focus)", "group": "Schouders", "sets": "3", "reps": "8-10", "note": "tempo 30X1 · 90s rust · BW · Meer rechtop dan dag 1"}, {"name": "Bulgarian Push-up (ringen)", "group": "Borst", "sets": "3", "reps": "8-12", "note": "tempo 20X0 · 75s rust · BW · Explosief omhoog"}, {"name": "Hanging Leg Raise", "group": "Core", "sets": "3", "reps": "8-12", "note": "tempo 20X0 · 60s rust · BW · Geen swing"}, {"name": "L-sit (ringen)", "group": "Core", "sets": "3", "reps": "10-20s", "note": "60s rust · BW · Benen gestrekt = doel"}, {"name": "Ring Tuck Planche Hold", "group": "Schouders", "sets": "3", "reps": "10-20s", "note": "90s rust · BW · Progressie naar planche"}, {"name": "Ring Back Lever Progressie", "group": "Rug", "sets": "3", "reps": "10-15s", "note": "90s rust · BW · Begin tuck, bouw uit"}, {"name": "Skin the Cat", "group": "Schouders", "sets": "3", "reps": "5-8", "note": "75s rust · BW · Schouder mobiliteit"}]}]}, {"id": "cali-z", "name": "Calisthenics schema 4 dagen split zonder ringen", "desc": "Zelfde opbouw zonder ringen · 4 schema's met rust en tips", "routines": [{"name": "Dag 1 — Push · borst, schouder, triceps", "items": [{"name": "Dips (parallettes/stoel)", "group": "Borst", "sets": "4", "reps": "6-10", "note": "90s rust · BW / +5-10kg gordel · Licht voorover voor borst"}, {"name": "Archer Push-up", "group": "Borst", "sets": "3", "reps": "6-8", "note": "75s rust · BW · Zijwaartse hand gestrekt"}, {"name": "Push-up (wijd, slow ecc.)", "group": "Borst", "sets": "3", "reps": "10-15", "note": "60s rust · BW · 3s naar beneden"}, {"name": "Pike Push-up", "group": "Schouders", "sets": "3", "reps": "8-12", "note": "60s rust · BW · Heupen hoog, V-positie"}, {"name": "Diamond Push-up", "group": "Triceps", "sets": "3", "reps": "10-15", "note": "60s rust · BW · Duimen raken elkaar"}, {"name": "Handstand Wall Hold", "group": "Schouders", "sets": "3", "reps": "20-40s", "note": "90s rust · BW · Actief duwen door schouders"}, {"name": "Planche Lean (vloer)", "group": "Schouders", "sets": "3", "reps": "20-30s", "note": "60s rust · BW · Schouders voor handen"}, {"name": "Pseudo Planche Push-up", "group": "Schouders", "sets": "3", "reps": "6-10", "note": "90s rust · BW · Handen richting heupen"}]}, {"name": "Dag 2 — Pull · rug, biceps, achterschouder", "items": [{"name": "Pull-up (overhand)", "group": "Rug", "sets": "4", "reps": "5-8", "note": "120s rust · BW / +5-10kg gordel · Schouderbladen neerhalen"}, {"name": "Australian Row (tafel/stang)", "group": "Rug", "sets": "3", "reps": "8-10", "note": "75s rust · BW · Borst naar stang"}, {"name": "Chin-up (supinatie)", "group": "Biceps", "sets": "3", "reps": "6-8", "note": "90s rust · BW · Biceps focus"}, {"name": "DB / Band Rear Delt Fly", "group": "Schouders", "sets": "3", "reps": "12-15", "note": "60s rust · 5-10kg · Pinkje omhoog"}, {"name": "Ab-wheel Rollout", "group": "Core", "sets": "3", "reps": "6-10", "note": "60s rust · BW · Bekken neutraal"}, {"name": "Archer Pull-up", "group": "Rug", "sets": "3", "reps": "5-7", "note": "90s rust · BW · Trek naar dominante hand"}, {"name": "Renegade Row", "group": "Rug", "sets": "3", "reps": "8-10", "note": "75s rust · 10-15kg · Core stijf"}, {"name": "Dead Hang", "group": "Onderarmen", "sets": "3", "reps": "30-60s", "note": "60s rust · BW · Schouder actief ingetrokken"}, {"name": "Band Face Pull", "group": "Schouders", "sets": "3", "reps": "12-15", "note": "60s rust · BW / lichte band · Externe rotatie"}]}, {"name": "Dag 3 — Benen + kracht", "items": [{"name": "Bulgarian Split Squat (DB)", "group": "Benen", "sets": "4", "reps": "8-10", "note": "90s rust · BW / 2×10-20kg · Achterste voet verhoogd"}, {"name": "Romanian Deadlift", "group": "Billen", "sets": "4", "reps": "8-10", "note": "120s rust · 40-80kg · Rug recht, heupen terug"}, {"name": "Hip Thrust (barbell)", "group": "Billen", "sets": "3", "reps": "10-12", "note": "90s rust · 30-60kg · Schouderbladen op bank"}, {"name": "Nordic Curl (bank/deur)", "group": "Benen", "sets": "3", "reps": "5-8", "note": "90s rust · BW · Excentrisch = primair"}, {"name": "Pistol Squat (geassisteerd)", "group": "Benen", "sets": "3", "reps": "6-8", "note": "75s rust · BW · Vasthouden aan steun"}, {"name": "Goblet Squat", "group": "Benen", "sets": "3", "reps": "12-15", "note": "75s rust · 16-24kg · Elbow-to-knee onderaan"}, {"name": "Hollow Body Hold", "group": "Core", "sets": "3", "reps": "20-30s", "note": "60s rust · BW · Rug volledig plat"}, {"name": "Calf Raise (trap/stap)", "group": "Kuiten", "sets": "3", "reps": "15-20", "note": "60s rust · BW / +10-20kg · Stap voor extra ROM"}, {"name": "Single Leg RDL", "group": "Billen", "sets": "3", "reps": "10/zijde", "note": "75s rust · BW / 10-15kg · Balans+hamstring"}]}, {"name": "Dag 4 — Schouder, core + posterior chain", "items": [{"name": "Pike Push-up (voeten verhoogd)", "group": "Schouders", "sets": "4", "reps": "6-10", "note": "90s rust · BW · Voeten op stoel/bank"}, {"name": "Handstand Push-up (muur)", "group": "Schouders", "sets": "3", "reps": "5-8", "note": "90s rust · BW · Hoofd raakt grond"}, {"name": "Korean Dip (stang achter)", "group": "Schouders", "sets": "3", "reps": "6-10", "note": "75s rust · BW · Max schouder stretch"}, {"name": "Dragon Flag", "group": "Core", "sets": "3", "reps": "5-8", "note": "90s rust · BW · Gecontroleerd zakken"}, {"name": "Toes to Bar", "group": "Core", "sets": "3", "reps": "8-12", "note": "60s rust · BW · Houd stang stijf"}, {"name": "Planche Lean (vloer)", "group": "Schouders", "sets": "3", "reps": "20-30s", "note": "60s rust · BW · Schouders voor handen"}, {"name": "Back Extension (roman chair)", "group": "Rug", "sets": "3", "reps": "12-15", "note": "60s rust · BW / 5-10kg · Lage rug focus"}, {"name": "Ab-Wheel Rollout", "group": "Core", "sets": "3", "reps": "6-10", "note": "60s rust · BW · Idem dag 2"}]}]}];
+const OLD_TPL_ROUTINES=["rt-ringen","rt-cali","rt-fitness"];
+const LS_OPEN="krachtlogboek.open";
+let seeding=false;
+UI.open=lsGet(LS_OPEN)||{};
+function isOpen(k){return !!UI.open[k]}
+function toggleOpen(k){UI.open[k]=!isOpen(k);lsSet(LS_OPEN,UI.open);render()}
+function folderList(){return Object.entries(S.folders||{}).map(([id,f])=>({id,...f})).sort((a,b)=>(a.order??0)-(b.order??0)||String(a.name).localeCompare(String(b.name)))}
+function routinesIn(fid){return Object.entries(S.routines).filter(([,r])=>((r.folderId&&S.folders[r.folderId])?r.folderId:null)===fid).sort((a,b)=>(a[1].order??0)-(b[1].order??0)||a[1].name.localeCompare(b[1].name))}
+async function runJobs(jobs,fn){for(let i=0;i<jobs.length;i+=8)await Promise.all(jobs.slice(i,i+8).map(j=>fn(...j)))}
+function cleanItem(it){return{name:String(it&&it.name||"").trim().slice(0,80),group:GROUPS.includes(it&&it.group)?it.group:"Overig",sets:String(it&&it.sets||"").slice(0,10),reps:String(it&&it.reps||"").slice(0,20),note:String(it&&it.note||"").slice(0,200)}}
+async function addFolderSet(pkg,fid){
+  const exMap=new Map(Object.entries(S.exercises).map(([id,x])=>[norm(x.name),id]));
+  const ex=[],rest=[];
+  const resolve=it=>{const k=norm(it.name);if(exMap.has(k))return exMap.get(k);const id=uid();exMap.set(k,id);ex.push(["exercises",id,{name:it.name,group:it.group}]);return id};
+  if(fid)rest.push(["folders",fid,{name:String(pkg.name||"Map").slice(0,60),order:folderList().length,lib:pkg.lib||null}]);
+  const base=fid?0:routinesIn(null).length;
+  (pkg.routines||[]).forEach((r,i)=>{
+    const items=(r.items||[]).map(cleanItem).filter(it=>it.name);
+    rest.push(["routines",uid()+i,{name:String(r.name||"Schema").slice(0,80),folderId:fid||null,order:base+i,items:items.map(it=>({exId:resolve(it),sets:it.sets,reps:it.reps,note:it.note}))}]);
+  });
+  await runJobs(ex,put);await runJobs(rest,put);
+  if(fid){UI.open["f:"+fid]=true;lsSet(LS_OPEN,UI.open)}
+  return fid;
+}
+async function addLibrary(libId,fid){const lib=LIB.find(l=>l.id===libId);if(!lib)return null;return addFolderSet({name:lib.name,lib:libId,routines:lib.routines},fid||("fd-"+libId+"-"+uid()))}
+async function seedStandard(){
+  if(seeding||!pid||S.mode!=="cloud"||queue().length||(S.meta.seed&&S.meta.seed.v>=5))return;
+  seeding=true;const id=pid;
+  try{
+    if(S.meta.seed&&S.meta.seed.v===4){
+      const ent=Object.entries(S.routines).find(([,r])=>r.folderId==="fd-kt3"&&r.name==="Legs/abs");
+      if(ent){
+        const [rid,r]=ent,lib=LIB[0].routines[2].items,have=new Set((r.items||[]).map(it=>norm(exName(it.exId)))),add=[];
+        const exMap=new Map(Object.entries(S.exercises).map(([xid,x])=>[norm(x.name),xid]));
+        for(const it of lib.slice(6))if(!have.has(norm(it.name))){let xid=exMap.get(norm(it.name));if(!xid){xid=uid();await put("exercises",xid,{name:it.name,group:it.group})}add.push({exId:xid,sets:"",reps:"",note:""})}
+        if(add.length)await put("routines",rid,{...clone(r),items:[...(r.items||[]),...add]});
+      }
+      await put("meta","seed",{v:5,at:Date.now()});render();return;
+    }
+    await runJobs(OLD_TPL_ROUTINES.filter(r=>S.routines[r]).map(r=>["routines",r]),del);
+    const used=new Set();
+    for(const s of Object.values(S.sessions))for(const e of s.entries||[]){used.add(e.exId);used.add(norm(e.name))}
+    for(const r of Object.values(S.routines))for(const it of r.items||[])used.add(it.exId);
+    await runJobs(Object.keys(TEMPLATE.exercises).filter(x=>S.exercises[x]&&!used.has(x)&&!used.has(norm(S.exercises[x].name))).map(x=>["exercises",x]),del);
+    if(pid!==id)return;
+    if(!folderList().some(f=>f.lib==="kt3"))await addLibrary("kt3","fd-kt3");
+    await put("meta","seed",{v:5,at:Date.now()});
+    render();
+  }finally{seeding=false}
+}
+function pkgRoutine(r){return{name:r.name,items:(r.items||[]).filter(it=>S.exercises[it.exId]).map(it=>({name:exName(it.exId),group:exGroup(it.exId),sets:it.sets||"",reps:it.reps||"",note:it.note||""}))}}
+async function shareThing(kind,id){
+  let pkg;
+  if(kind==="folder"){const f=S.folders[id];if(!f)return;pkg={type:"folder",name:f.name,routines:routinesIn(id).map(([,r])=>pkgRoutine(r))}}
+  else{const r=S.routines[id];if(!r)return;pkg={type:"routine",name:r.name,routines:[pkgRoutine(r)]}}
+  if(!pkg.routines.some(r=>r.items.length)){toast("Er staan nog geen oefeningen in om te delen.");return}
+  pkg.by=S.me?.name||"";pkg.v=1;
+  try{const c=await rpc("kl_share_create",{p_code:code,p_profile:pid,p_pin:myPin(),p_data:pkg});UI.sheet={type:"share",code:c,name:pkg.name,kind};UI.confirm=null;render()}
+  catch(e){if(e.code==="net")toast("Delen lukt alleen met internet.");else if(e.code==="too_big")toast("Dit is te groot om te delen. Deel de schema's los.");else handleErr(e)}
+}
+function shareUrl(c){return location.origin+location.pathname+"#deel="+c}
+function shareText(sh){return `${sh.kind==="folder"?"Map":"Schema"} "${sh.name}" uit het Krachtlogboek. Open de link, of vul bij Schema's de deelcode ${sh.code} in.`}
+async function lookupShare(c){
+  c=String(c||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+  if(c.length!==6){toast("Een deelcode heeft 6 tekens, bijvoorbeeld 7KQ2MX.");return}
+  try{const d=await rpc("kl_share_get",{p_code:code,p_share:c});UI.sheet={type:"import",code:c,data:d};UI.confirm=null;render()}
+  catch(e){if(e.code==="no_share")toast("Deze deelcode bestaat niet. Controleer de tekens.");else if(e.code==="net")toast("Geen verbinding. Probeer het opnieuw als je internet hebt.");else handleErr(e)}
+}
+async function importShare(){
+  const d=UI.sheet&&UI.sheet.data;if(!d)return;UI.sheet=null;render();toast("Toevoegen…");
+  if(d.type==="folder"){let name=String(d.name||"Gedeelde map");if(folderList().some(f=>norm(f.name)===norm(name)))name+=` (van ${d.by||"iemand"})`;await addFolderSet({name,routines:d.routines},"fd-"+uid())}
+  else await addFolderSet({routines:d.routines},null);
+  UI.tab="schemas";lsSet(LS_TAB,"schemas");if(d.type!=="folder"){UI.open["f:none"]=true;lsSet(LS_OPEN,UI.open)}
+  toastOk(`"${d.name}" toegevoegd`);render();window.scrollTo(0,0);
+}
+function routineSelect(id,sel){
+  const groups=folderList().map(f=>({name:f.name,rs:routinesIn(f.id)})).concat([{name:"Zonder map",rs:routinesIn(null)}]).filter(g=>g.rs.length);
+  return `<select id="${id}">${groups.map(g=>`<optgroup label="${esc(g.name)}">${g.rs.map(([rid,r])=>`<option value="${rid}" ${sel===rid?"selected":""}>${esc(r.name)}</option>`).join("")}</optgroup>`).join("")}</select>`;
+}
+
+/* ---------- schema's ---------- */
+function viewSchemas(){
+  if(UI.edit)return viewEditor();
+  const folders=folderList(),loose=routinesIn(null);
+  let h=`<h2>Jouw schema's</h2>`;
+  if(UI.folderEdit)h+=`<div class="card stack" style="margin-bottom:10px"><label class="f">${UI.folderEdit.id?"Map hernoemen":"Nieuwe map"}<input type="text" id="fd-name" value="${esc(UI.folderEdit.name)}" placeholder="Bijv. Fitness 4 dagen" autocomplete="off"></label><div class="btnrow"><button class="btn primary" data-act="fd-save">Opslaan</button><button class="btn" data-act="fd-cancel">Annuleren</button></div></div>`;
+  if(!folders.length&&!loose.length)h+=`<div class="card empty"><strong>Nog geen schema's</strong><p class="muted">Maak een map, bijvoorbeeld "Fitness 4 dagen", en zet daar je schema's in. Of voeg hieronder een voorbeeldmap toe.</p></div>`;
+  h+=`<div class="stack">`+folders.map(folderCard).join("")+(loose.length?folderCard({id:null,name:"Zonder map"}):"")+`</div>`;
+  h+=`<div class="btnrow" style="margin-top:12px"><button class="btn primary" data-act="new-routine">+ Nieuw schema</button><button class="btn" data-act="fd-new">+ Nieuwe map</button></div>`;
+  h+=`<h2>Gedeeld schema toevoegen</h2><div class="card stack"><p class="hp">Heeft iemand een schema of map met je gedeeld? Vul de deelcode in.</p><div class="codeinput"><input type="text" id="sh-code" placeholder="Bijv. 7KQ2MX" autocapitalize="characters" autocomplete="off" maxlength="8"><button class="btn primary" data-act="sh-lookup">Bekijken</button></div></div>`;
+  h+=`<h2>Voorbeeldmappen</h2><div class="stack">`+LIB.map(l=>{const has=folders.some(f=>f.lib===l.id);
+    return `<div class="card libcard"><div><strong>${esc(l.name)}</strong><span class="muted small">${l.routines.length} schema's · ${esc(l.desc)}</span></div><button class="btn ${has?"":"primary"}" data-act="lib-add" data-id="${l.id}" ${has?"disabled":""}>${has?"Toegevoegd ✓":"Toevoegen"}</button></div>`}).join("")+`</div>`;
+  return h;
+}
+function folderCard(f){
+  const k="f:"+(f.id||"none"),open=isOpen(k),rs=routinesIn(f.id);
+  let h=`<section class="card folder"><button class="fhead" data-act="fd-toggle" data-id="${k}" aria-expanded="${open}"><span class="ficon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span class="fname">${esc(f.name)}</span><span class="fcount">${rs.length}</span><span class="chev" aria-hidden="true">${open?"▾":"▸"}</span></button>`;
+  if(!open)return h+`</section>`;
+  h+=`<div class="fbody">`;
+  h+=rs.length?rs.map(([id,r])=>`<div class="fitem"><div class="fi-n">${esc(r.name)}</div><div class="fi-x">${(r.items||[]).map(i=>esc(exName(i.exId))).join(" · ")||"Nog geen oefeningen"}</div><div class="btnrow"><button class="btn" data-act="edit-routine" data-id="${id}">Bewerken</button><button class="btn" data-act="share-routine" data-id="${id}">Delen</button><button class="btn primary" data-act="start-from-schema" data-id="${id}">Start</button></div></div>`).join(""):`<p class="muted small" style="margin:8px 0">Nog geen schema's in deze map.</p>`;
+  if(f.id){
+    if(UI.confirm==="fd-del:"+f.id)h+=`<div class="confirm" style="margin-top:10px"><span>Map "${esc(f.name)}" verwijderen? Je gelogde trainingen en records blijven altijd bewaard.</span><div class="stack"><button class="btn danger" data-act="fd-del-all" data-id="${f.id}">Map én ${rs.length} schema's verwijderen</button><button class="btn" data-act="fd-del-keep" data-id="${f.id}">Alleen de map, schema's naar "Zonder map"</button><button class="btn ghost" data-act="confirm-no">Annuleren</button></div></div>`;
+    else h+=`<div class="factions"><button class="linkbtn" data-act="new-routine" data-id="${f.id}">+ Schema in deze map</button><button class="linkbtn" data-act="share-folder" data-id="${f.id}">Map delen</button><button class="linkbtn" data-act="fd-rename" data-id="${f.id}">Hernoemen</button><button class="linkbtn danger" data-act="fd-del" data-id="${f.id}">Verwijderen</button></div>`;
+  }
+  return h+`</div></section>`;
+}
+async function folderSave(){
+  const fe=UI.folderEdit,name=(document.getElementById("fd-name")?.value||fe.name||"").trim();
+  if(!name){toast("Geef de map een naam.");document.getElementById("fd-name")?.focus();return}
+  if(fe.id)await put("folders",fe.id,{...S.folders[fe.id],name});
+  else{const id="fd-"+uid();await put("folders",id,{name,order:folderList().length,lib:null});UI.open["f:"+id]=true;lsSet(LS_OPEN,UI.open)}
+  UI.folderEdit=null;toastOk(fe.id?"Map hernoemd":"Map aangemaakt");render();
+}
+async function folderDelete(fid,withRoutines){
+  const rs=routinesIn(fid);
+  if(withRoutines)await runJobs(rs.map(([id])=>["routines",id]),del);
+  else await runJobs(rs.map(([id,r])=>["routines",id,{...clone(r),folderId:null}]),put);
+  await del("folders",fid);UI.confirm=null;toastOk("Map verwijderd");render();
+}
+function trainStartList(){
+  const groups=folderList().map(f=>({k:"t:"+f.id,name:f.name,rs:routinesIn(f.id)})).concat([{k:"t:none",name:"Zonder map",rs:routinesIn(null)}]).filter(g=>g.rs.length);
+  if(!groups.length)return `<div class="card empty"><strong>Nog geen schema's</strong><p class="muted">Maak eerst een schema, of log meteen een losse training.</p><div class="btnrow"><button class="btn primary" data-act="new-routine">Schema maken</button><button class="btn" data-act="start" data-id="">Losse training</button></div></div>`;
+  return `<div class="stack">`+groups.map(g=>{const open=groups.length===1||isOpen(g.k);
+    return `<section class="tgroup"><button class="fhead plain" data-act="fd-toggle" data-id="${g.k}" aria-expanded="${open}"><span class="fname">${esc(g.name)}</span><span class="fcount">${g.rs.length}</span><span class="chev" aria-hidden="true">${open?"▾":"▸"}</span></button>${open?`<div class="stack">${g.rs.map(([id,r])=>{const last=sortedSessions().find(s=>s.routineId===id);return `<button class="card start" data-act="start" data-id="${id}"><span><span class="name">${esc(r.name)}</span><br><span class="muted small">${(r.items||[]).length} oefeningen${last?" · laatst "+dateTxt(last.date):""}</span></span><span class="go">Start</span></button>`}).join("")}</div>`:""}</section>`}).join("")
+    +`<button class="btn block" data-act="start" data-id="">Losse training zonder schema</button></div>`;
+}
+
+/* ---------- planning ---------- */
+function planList(){return Object.entries(S.plan||{}).map(([id,p])=>({id,...p}))}
+function planKind(p){return p.type||"cardio"}
+function planDoneFor(p){
+  if(p.doneAt)return{kind:"check"};
+  const s=planSession(S.sessions,p.id);if(s)return s;
+  if(planKind(p)==="routine"&&p.routineId)return sortedSessions().find(x=>x.date===p.date&&x.routineId===p.routineId&&!x.planId)||null;
+  return null;
+}
+function planTitle(p){const k=planKind(p);if(k==="routine")return S.routines[p.routineId]?.name||p.routineName||"Schema";if(k==="rest")return "Rustdag";return p.title||p.sport||"Training"}
+function planChip(p){const k=planKind(p);return k==="routine"?"Kracht":k==="rest"?"Rust":k==="other"?"Overig":(p.sport||"Duur")}
+function sessionSummary(s){if(!s)return "";if(s.kind==="check")return "Afgevinkt";if(s.kind==="cardio")return cardioSummary(s);const n=(s.entries||[]).reduce((t,e)=>t+(e.sets||[]).length,0);const e=(s.entries||[]).length;return `${e} oefening${e===1?"":"en"} · ${n} set${n===1?"":"s"}`}
+function dayName(iso){const t=today();const w=new Date(iso+"T12:00:00").toLocaleDateString("nl-NL",{weekday:"long"});const lbl=iso===t?"Vandaag":iso===addDays(t,1)?"Morgen":iso===addDays(t,-1)?"Gisteren":w.charAt(0).toUpperCase()+w.slice(1);return `${lbl} ${new Date(iso+"T12:00:00").toLocaleDateString("nl-NL",{day:"numeric",month:"short"})}`}
+function weekStart(iso){const d=new Date(iso+"T12:00:00");d.setDate(d.getDate()-((d.getDay()+6)%7));return isoOf(d)}
+function weekNo(iso){const d=new Date(iso+"T12:00:00");d.setDate(d.getDate()+3-((d.getDay()+6)%7));const y=new Date(d.getFullYear(),0,4);return 1+Math.round(((d-y)/864e5-3+((y.getDay()+6)%7))/7)}
+function planItemBtn(p,late){
+  const k=planKind(p);
+  if(k==="rest")return "";
+  if(k==="routine")return `<button class="btn ${late?"":"primary"}" data-act="plan-start" data-id="${p.id}">Start training</button>`;
+  if(k==="other")return `<button class="btn" data-act="pl-check" data-id="${p.id}">Afvinken als gedaan</button>`;
+  return `<button class="btn ${late?"":"primary"}" data-act="plan-start" data-id="${p.id}">${late?"Toch nog loggen":"Training loggen"}</button>`;
+}
+function viewPlanCard(){
+  const t=today(),to=addDays(t,14),from=addDays(t,-7);
+  const all=planList();
+  const show=all.filter(p=>{const done=planDoneFor(p);if(p.date===t)return true;if(!p.coach)return false;if(p.date>t&&p.date<=to)return true;return p.date<t&&p.date>=from&&!done})
+    .sort((a,b)=>a.date.localeCompare(b.date)||(a.updated||0)-(b.updated||0));
+  if(!show.length)return "";
+  return `<h2>Op je planning</h2><div class="stack">${show.map(p=>{
+    const done=planDoneFor(p),late=!done&&p.date<t,k=planKind(p);
+    const tg=k==="cardio"?planTargets(p):"",txt=p.desc||p.note||"";
+    return `<article class="card plan k-${k}${done?" done":""}${late?" late":""}"><div class="ph"><span class="pd">${esc(dayLabel(p.date))}</span><span class="chip">${esc(planChip(p))}</span></div>
+      <strong class="pt">${esc(planTitle(p))}</strong>${tg?`<span class="muted small">${tg}</span>`:""}
+      ${txt?`<p class="pdesc">${esc(txt)}</p>`:""}
+      ${done?`<div class="pdone">✓ Gedaan: ${sessionSummary(done)}</div>`:planItemBtn(p,late)}
+      ${p.coach?`<span class="small muted">Van ${esc(p.coach)}${late?" · nog niet gelogd":""}</span>`:""}</article>`}).join("")}</div><button class="linkbtn" data-act="go-plan">Hele week bekijken →</button>`;
+}
+function viewPlan(){
+  const t=today(),ws=UI.week||weekStart(t),days=[...Array(7)].map((_,i)=>addDays(ws,i)),items=planList();
+  let planned=0,done=0;
+  const dayHtml=days.map(d=>{
+    const its=items.filter(p=>p.date===d).sort((a,b)=>(a.updated||0)-(b.updated||0));
+    const linked=new Set(its.map(p=>{const x=planDoneFor(p);return x&&x.id}).filter(Boolean));
+    const extra=sortedSessions().filter(s=>s.date===d&&!linked.has(s.id));
+    its.forEach(p=>{if(planKind(p)!=="rest"){planned++;if(planDoneFor(p))done++}});
+    return `<section class="day${d===t?" today":""}${d<t?" past":""}"><div class="dh"><span class="dn">${esc(dayName(d))}</span><button class="linkbtn" data-act="pl-add" data-id="${d}">+ Plannen</button></div>
+      ${its.map(p=>planRow(p,d<t)).join("")}
+      ${extra.map(s=>`<button class="prow done" data-act="open-session" data-id="${s.id}"><span class="pk">${s.kind==="cardio"?esc(s.sport):"Kracht"}</span><span class="pn">${esc(s.routineName||"Training")} <span class="muted small">· niet gepland</span></span><span class="ps">✓ ${sessionSummary(s)}</span></button>`).join("")}
+      ${!its.length&&!extra.length?`<p class="dempty">Nog niets gepland</p>`:""}</section>`;
+  }).join("");
+  return `<div class="weekbar card"><button class="ib wkb" data-act="wk-prev" aria-label="Vorige week">‹</button><div class="wk"><b>Week ${weekNo(ws)}</b><span class="muted small">${dateTxt(days[0])} – ${dateTxt(days[6])}</span></div><button class="ib wkb" data-act="wk-next" aria-label="Volgende week">›</button></div>
+    <div class="weeksum">${planned?`<b>${done} van ${planned}</b> geplande training${planned>1?"en":""} gedaan`:"Nog niets gepland deze week"}${ws!==weekStart(t)?` · <button class="linkbtn" data-act="wk-today">naar deze week</button>`:""}</div>
+    <div class="days">${dayHtml}</div>
+    <div class="btnrow" style="margin-top:12px"><button class="btn" data-act="wk-copy">Deze week kopiëren naar volgende week</button></div>
+    <p class="small muted">Tik op een dag om een schema, duurtraining, rustdag of andere sport te plannen. Gedane trainingen krijgen vanzelf een vinkje.</p>`;
+}
+function planRow(p,past){
+  const done=planDoneFor(p),k=planKind(p);
+  const st=done?`✓ ${sessionSummary(done)}`:k==="rest"?"":past?"Niet gedaan":"Gepland";
+  return `<button class="prow k-${k}${done?" done":""}${!done&&past&&k!=="rest"?" miss":""}" data-act="pl-open" data-id="${p.id}"><span class="pk">${esc(planChip(p))}</span><span class="pn">${esc(planTitle(p))}${p.coach?` <span class="muted small">· van ${esc(p.coach)}</span>`:""}</span>${st?`<span class="ps">${st}</span>`:""}</button>`;
+}
+function plAddSheet(sh){
+  const kinds=[["routine","Schema"],["cardio","Duur"],["rest","Rust"],["other","Anders"]];
+  const hasR=Object.keys(S.routines).length>0;
+  let h=`<div class="sh"><h2>${esc(dayName(sh.date))}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card stack">
+    <div class="f">Wat plan je?<div class="seg seg4">${kinds.map(([k,l])=>`<button class="segb" data-act="pa-kind" data-v="${k}" aria-pressed="${sh.kind===k}">${l}</button>`).join("")}</div></div>`;
+  if(sh.kind==="routine")h+=hasR?`<label class="f">Schema${routineSelect("pa-routine",sh.routineId)}</label>`:`<p class="muted" style="margin:0">Je hebt nog geen schema's. Maak er eerst een onder Schema's.</p>`;
+  if(sh.kind==="cardio")h+=`<div class="f">Sport<div class="seg seg3">${CARDIO.map(s=>`<button class="segb" data-act="pa-sport" data-v="${s}" aria-pressed="${sh.sport===s}">${s}</button>`).join("")}</div></div>
+    <label class="f">Omschrijving <i>optioneel</i><input type="text" id="pa-title" value="${esc(sh.title)}" placeholder="Bijv. Rustige duurloop"></label>
+    <div class="grid2"><label class="f">Duur <i>optioneel</i><input type="text" inputmode="numeric" id="pa-dur" value="${esc(sh.durMin)}" placeholder="min"></label><label class="f">Afstand <i>optioneel</i><input type="text" inputmode="decimal" id="pa-km" value="${esc(sh.km)}" placeholder="km"></label></div>`;
+  if(sh.kind==="other")h+=`<label class="f">Wat ga je doen?<input type="text" id="pa-title" value="${esc(sh.title)}" placeholder="Bijv. Voetbal, zwemmen, padel"></label>`;
+  if(sh.kind!=="rest")h+=`<label class="f">Notitie <i>optioneel</i><textarea id="pa-note" rows="2" placeholder="Bijv. met Tom, of: rustig aan na beendag">${esc(sh.note)}</textarea></label>`;
+  h+=`<label class="f">Herhalen<select id="pa-rep">${[["1","Alleen deze dag"],["2","2 weken, elke week"],["4","4 weken, elke week"],["8","8 weken, elke week"],["12","12 weken, elke week"]].map(([v,l])=>`<option value="${v}" ${sh.repeat===v?"selected":""}>${l}</option>`).join("")}</select></label>
+    <button class="btn primary" data-act="pa-save" ${sh.kind==="routine"&&!hasR?"disabled":""}>Inplannen</button></div>`;
+  return h;
+}
+async function planAddSave(){
+  const sh=UI.sheet,k=sh.kind,base={type:k,own:true,updated:Date.now()};
+  if(k!=="rest"&&(sh.note||"").trim())base.note=sh.note.trim();
+  if(k==="routine"){const rid=document.getElementById("pa-routine")?.value;if(!rid||!S.routines[rid]){toast("Kies een schema.");return}Object.assign(base,{routineId:rid,routineName:S.routines[rid].name})}
+  if(k==="cardio")Object.assign(base,{sport:sh.sport||"Hardlopen",title:(sh.title||"").trim()||sh.sport||"Hardlopen",durMin:num(sh.durMin),km:num(sh.km)});
+  if(k==="other"){if(!(sh.title||"").trim()){toast("Vul in wat je gaat doen, bijvoorbeeld Voetbal.");document.getElementById("pa-title")?.focus();return}base.title=sh.title.trim()}
+  const n=Math.max(1,parseInt(sh.repeat)||1),stem=uid();
+  await runJobs([...Array(n)].map((_,i)=>["plan",stem+"p"+i,{...base,date:addDays(sh.date,7*i)}]),put);
+  UI.sheet=null;toastOk(n>1?`${n} weken ingepland`:"Ingepland");render();
+}
+function plItemSheet(sh){
+  const p0=S.plan[sh.id];if(!p0)return null;
+  const p={id:sh.id,...p0},k=planKind(p),done=planDoneFor(p),t=today();
+  const tg=k==="cardio"?planTargets(p):"",txt=p.desc||p.note||"";
+  let h=`<div class="sh"><h2>${esc(dayName(p.date))}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card plan k-${k}${done?" done":""}"><div class="ph"><span class="chip">${esc(planChip(p))}</span>${p.coach?`<span class="small muted">van ${esc(p.coach)}</span>`:""}</div><strong class="pt">${esc(planTitle(p))}</strong>${tg?`<span class="muted small">${tg}</span>`:""}${txt?`<p class="pdesc">${esc(txt)}</p>`:""}
+    ${done?`<div class="pdone">✓ Gedaan: ${sessionSummary(done)}</div>${done.kind==="check"?`<button class="btn ghost" data-act="pl-uncheck" data-id="${p.id}">Toch niet gedaan</button>`:""}`:planItemBtn(p,p.date<t)}</div>
+    <div class="card stack" style="margin-top:10px"><label class="f">Verplaatsen naar<input type="date" id="pl-date" value="${esc(p.date)}"></label><button class="btn" data-act="pl-move" data-id="${p.id}">Verplaatsen</button></div>`;
+  h+=`<div style="margin-top:12px">${UI.confirm==="pl-del"?`<div class="confirm"><span>Uit je planning halen?${done&&done.kind!=="check"?" Je gelogde training blijft bewaard.":""}</span><div class="btnrow"><button class="btn danger" data-act="pl-del-yes" data-id="${p.id}">Verwijderen</button><button class="btn" data-act="confirm-no">Behouden</button></div></div>`:`<button class="btn ghost danger" data-act="pl-del">Uit planning verwijderen</button>`}</div>`;
+  return h;
+}
+async function weekCopy(){
+  const ws=UI.week||weekStart(today()),we=addDays(ws,6),items=planList();
+  const src=items.filter(p=>p.date>=ws&&p.date<=we&&!p.coach);
+  if(!src.length){toast("Er staat deze week nog niets in je eigen planning om te kopiëren.");return}
+  const key=p=>[p.date,planKind(p),p.routineId||"",p.title||"",p.sport||""].join("|");
+  const have=new Set(items.map(key)),stem=uid(),jobs=[];
+  src.forEach((p,i)=>{const {id,doneAt,...rest}=p;const np={...rest,date:addDays(p.date,7),updated:Date.now()};if(!have.has(key(np)))jobs.push(["plan",stem+"c"+i,np])});
+  if(!jobs.length){toast("Volgende week staat dit al in je planning.");return}
+  await runJobs(jobs,put);UI.week=addDays(ws,7);toastOk(`${jobs.length} onderde${jobs.length>1?"len":"el"} gekopieerd naar volgende week`);render();window.scrollTo(0,0);
+}
+function shareSheet(sh){
+  const can=!!navigator.share;
+  return `<div class="sh"><h2>${sh.kind==="folder"?"Map":"Schema"} delen</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>
+    <div class="card stack"><p class="hp">Stuur deze code of link naar een vriend. Die kan "${esc(sh.name)}" dan met één tik aan zijn eigen schema's toevoegen. Zijn resultaten blijven van hemzelf.</p>
+    <div class="sharecode" aria-label="Deelcode">${esc(sh.code)}</div>
+    ${can?`<button class="btn primary" data-act="sh-native">Delen via WhatsApp, berichten…</button>`:""}
+    <button class="btn ${can?"":"primary"}" data-act="sh-copy">Kopieer bericht met link</button>
+    <p class="small muted" style="margin:0">Ontvanger vult de code in bij <b>Schema's → Gedeeld schema toevoegen</b>, of opent de link en logt in.</p></div>`;
+}
+function importSheet(sh){
+  const d=sh.data||{},rs=d.routines||[];
+  return `<div class="sh"><h2>${d.type==="folder"?"Gedeelde map":"Gedeeld schema"}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>
+    <div class="card stack"><div><strong style="font-family:var(--display);font-size:22px">${esc(d.name||"")}</strong>${d.by?`<div class="muted small">Gedeeld door ${esc(d.by)}</div>`:""}</div>
+    ${rs.map(r=>`<div class="fitem"><div class="fi-n">${esc(r.name)}</div><div class="fi-x">${(r.items||[]).map(i=>esc(i.name)).join(" · ")}</div></div>`).join("")}
+    <p class="small muted" style="margin:0">${d.type==="folder"?"Wordt toegevoegd als nieuwe map.":"Komt bij je schema's onder \"Zonder map\". Je kunt het daarna in een map zetten."} Oefeningen die je al hebt, delen hun records met je bestaande geschiedenis.</p>
+    <button class="btn primary" data-act="sh-import">Toevoegen aan mijn schema's</button></div>`;
+}
+const EXTRA_SHEETS={"pl-add":plAddSheet,"pl-item":plItemSheet,"share":shareSheet,"import":importSheet};
 
 /* ---------- sheets ---------- */
 function renderSheet(){
@@ -783,12 +1267,13 @@ function renderSheet(){
   }else if(sh.type==="session"){
     const s=S.sessions[sh.id];if(!s){UI.sheet=null;el.hidden=true;return}
     if(s.kind==="cardio"){const v=speed(s.durMin,s.km);
-      inner=`<div class="sh"><h2>${esc(s.sport)} · ${dateTxt(s.date)}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card"><div class="calc">
+      inner=`<div class="sh"><h2>${esc(s.sport)} · ${dateTxt(s.date)}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>${s.planTitle?`<p class="small muted" style="margin:0 0 8px">Geplande training: <b>${esc(s.planTitle)}</b></p>`:""}<div class="card"><div class="calc">
         <div><span>Duur</span><b>${durTxt(s.durMin)}</b></div>${s.km?`<div><span>Afstand</span><b>${fmt1(s.km)} km</b></div>`:""}${v?`<div><span>Gem. snelheid</span><b>${fmt1(v)} km/u</b></div>`:""}${v&&s.sport==="Hardlopen"?`<div><span>Tempo</span><b>${paceTxt(s.durMin,s.km)}</b></div>`:""}${s.avgHr?`<div><span>Gem. hartslag</span><b>${s.avgHr} bpm</b></div>`:""}${s.maxHr?`<div><span>Max. hartslag</span><b>${s.maxHr} bpm</b></div>`:""}${s.purpose?`<div><span>Soort training</span><b>${esc(s.purpose)}</b></div>`:""}</div>${s.note?`<p class="hp" style="margin-top:10px">${esc(s.note)}</p>`:""}</div>`;
     }else inner=`<div class="sh"><h2>${esc(s.routineName||"Training")} · ${dateTxt(s.date)}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="hist">`+
       (s.entries||[]).map(e=>`<div class="h"><div class="d">${esc(exName(e.exId,e.name))}</div><div class="s">${e.sets.map(shortSet).join(" · ")}</div></div>`).join("")+`</div>`;
     inner+=`<div style="margin-top:14px">${UI.confirm==="del-session"?`<div class="confirm"><span>Deze training verwijderen? Records worden opnieuw berekend.</span><div class="btnrow"><button class="btn danger" data-act="del-session-yes">Verwijderen</button><button class="btn" data-act="confirm-no">Behouden</button></div></div>`:`<button class="btn ghost danger" data-act="del-session">Training verwijderen</button>`}</div>`;
   }
+  if(EXTRA_SHEETS[sh.type]){inner=EXTRA_SHEETS[sh.type](sh);if(inner==null){UI.sheet=null;el.hidden=true;el.innerHTML="";return}}
   el.innerHTML=`<div class="scrim" data-act="scrim"><div class="sheet" role="dialog" aria-modal="true">${inner}</div></div>`;
 }
 
@@ -811,25 +1296,75 @@ document.addEventListener("click",async ev=>{
     case "submit-code":await submitCode(document.getElementById("gc-code")?.value);break;
     case "export-backup":exportBackup();break;
     case "import-yes":{const o=UI.importObj;UI.importObj=null;UI.confirm=null;render();await importBackup(o);break}
-    case "submit-pin":await submitPin();break;
+    case "submit-login":await submitLogin();break;
+    case "login-back":UI.login="login";UI.pinFor=null;render();break;
+    case "flush":await flushQueue();break;
+    case "plan-start":{const p=S.plan[id];if(!p)return;const k=planKind(p);
+      if(draft){toast("Er loopt al een training. Rond die eerst af.");UI.sheet=null;UI.tab="train";render();return}
+      if(k==="routine"&&!S.routines[p.routineId]){toast("Dit schema bestaat niet meer. Kies een ander schema.");return}
+      UI.sheet=null;UI.confirm=null;UI.coach=null;UI.tab="train";lsSet(LS_TAB,"train");
+      if(k==="routine")startWorkout(p.routineId,{...p,id});else newCardio(CARDIO.includes(p.sport)?p.sport:"Anders",{...p,id});break}
+    case "go-plan":UI.tab="plan";lsSet(LS_TAB,"plan");UI.week=null;render();window.scrollTo(0,0);break;
+    case "go-help":UI.tab="help";lsSet(LS_TAB,"help");UI.sheet=null;render();window.scrollTo(0,0);break;
+    case "wk-prev":UI.week=addDays(UI.week||weekStart(today()),-7);render();break;
+    case "wk-next":UI.week=addDays(UI.week||weekStart(today()),7);render();break;
+    case "wk-today":UI.week=null;render();break;
+    case "wk-copy":await weekCopy();break;
+    case "pl-add":UI.sheet={type:"pl-add",date:id,kind:Object.keys(S.routines).length?"routine":"cardio",routineId:"",sport:"Hardlopen",title:"",durMin:"",km:"",note:"",repeat:"1"};UI.confirm=null;render();break;
+    case "pa-kind":UI.sheet.kind=b.dataset.v;render();break;
+    case "pa-sport":UI.sheet.sport=b.dataset.v;render();break;
+    case "pa-save":await planAddSave();break;
+    case "pl-open":UI.sheet={type:"pl-item",id};UI.confirm=null;render();break;
+    case "pl-check":{const p=S.plan[id];if(!p)return;await put("plan",id,{...p,doneAt:Date.now()});toastOk("Afgevinkt");render();break}
+    case "pl-uncheck":{const p=S.plan[id];if(!p)return;const {doneAt,...rest}=p;await put("plan",id,rest);render();break}
+    case "pl-move":{const p=S.plan[id],d=document.getElementById("pl-date")?.value;if(!p||!d)return;await put("plan",id,{...p,date:d,updated:Date.now()});UI.sheet=null;toastOk("Verplaatst naar "+dayName(d).toLowerCase());render();break}
+    case "pl-del":UI.confirm="pl-del";render();break;
+    case "pl-del-yes":await del("plan",id);UI.sheet=null;UI.confirm=null;toastOk("Uit je planning gehaald");render();break;
+    case "fd-toggle":toggleOpen(id);break;
+    case "fd-new":UI.folderEdit={id:null,name:""};UI.confirm=null;render();window.scrollTo(0,0);setTimeout(()=>document.getElementById("fd-name")?.focus(),30);break;
+    case "fd-rename":UI.folderEdit={id,name:S.folders[id]?.name||""};UI.confirm=null;render();window.scrollTo(0,0);setTimeout(()=>document.getElementById("fd-name")?.focus(),30);break;
+    case "fd-save":await folderSave();break;
+    case "fd-cancel":UI.folderEdit=null;render();break;
+    case "fd-del":UI.confirm="fd-del:"+id;render();break;
+    case "fd-del-all":await folderDelete(id,true);break;
+    case "fd-del-keep":await folderDelete(id,false);break;
+    case "lib-add":{const l=LIB.find(x=>x.id===id);b.disabled=true;toast("Toevoegen…");await addLibrary(id);toastOk(`Map "${l.name}" toegevoegd`);render();break}
+    case "share-routine":await shareThing("routine",id);break;
+    case "share-folder":await shareThing("folder",id);break;
+    case "sh-lookup":await lookupShare(document.getElementById("sh-code")?.value);break;
+    case "sh-import":await importShare();break;
+    case "sh-native":{const sh=UI.sheet;try{await navigator.share({title:"Krachtlogboek",text:shareText(sh),url:shareUrl(sh.code)})}catch(e){}break}
+    case "sh-copy":{const sh=UI.sheet;const txt=shareText(sh)+" "+shareUrl(sh.code);try{await navigator.clipboard.writeText(txt);toast("Bericht met link gekopieerd. Plak het in WhatsApp.")}catch(e){toast("Kopiëren lukte niet. Geef de code door: "+sh.code)}break}
+    case "coach-open":UI.coach={who:null,data:null,form:null};UI.confirm=null;UI.tab="train";lsSet(LS_TAB,"train");if(!S.people)loadPeople();render();window.scrollTo(0,0);break;
+    case "coach-close":UI.coach=null;UI.confirm=null;render();window.scrollTo(0,0);break;
+    case "co-new":UI.coach.form={id:null,date:addDays(today(),1),sport:"Hardlopen",title:"",purpose:"",durMin:"",km:"",desc:"",repeat:"1"};UI.confirm=null;render();setTimeout(()=>document.getElementById("co-title")?.focus(),30);break;
+    case "co-edit":{const p=UI.coach.data.plan[id];UI.coach.form={id,date:p.date,sport:p.sport,title:p.title,purpose:p.purpose||"",durMin:p.durMin??"",km:p.km!=null?String(p.km).replace(".",","):"",desc:p.desc||"",repeat:"1"};UI.confirm=null;render();window.scrollTo(0,0);break}
+    case "co-copy":{const f=UI.coach.form;f.id=null;f.date=addDays(f.date,7);render();toast("Kopie gemaakt, een week later. Pas aan en tik op Inplannen.");break}
+    case "co-sport":UI.coach.form.sport=b.dataset.v;render();break;
+    case "co-purpose":UI.coach.form.purpose=UI.coach.form.purpose===b.dataset.v?"":b.dataset.v;render();break;
+    case "co-save":await coachSave();break;
+    case "co-cancel":UI.coach.form=null;UI.confirm=null;render();break;
+    case "co-del":UI.confirm="co-del";render();break;
+    case "co-del-yes":await coachDelete();break;
+    case "ad-del":{const t=document.getElementById("ad-delwho")?.value;if(!t){toast("Kies een account.");return}UI.delWho=t;UI.confirm="ad-del";render();break}
+    case "ad-del-yes":await adminDelete(UI.delWho);break;
+    case "ad-refresh":await loadPeople();toast("Lijst bijgewerkt");break;
     case "submit-firstpin":await submitFirstPin();break;
     case "go-profile":UI.tab="profile";lsSet(LS_TAB,"profile");render();window.scrollTo(0,0);break;
     case "pf-sex":pfDraft().sex=b.dataset.v;render();break;
     case "pf-goal":pfDraft().goal=b.dataset.v;render();break;
     case "pf-save":await saveProfile();break;
-    case "w-add":{const kg=num(document.getElementById("w-kg")?.value),d=document.getElementById("w-date")?.value||today();if(!kg||kg<25||kg>300){toast("Vul een geldig gewicht in kg in.");return}await put("weights",d,{date:d,kg:Math.round(kg*10)/10});toast("Gewicht toegevoegd");render();break}
+    case "w-add":{const kg=num(document.getElementById("w-kg")?.value),d=document.getElementById("w-date")?.value||today();if(!kg||kg<25||kg>300){toast("Vul een geldig gewicht in kg in.");return}await put("weights",d,{date:d,kg:Math.round(kg*10)/10});toastOk("Gewicht opgeslagen");render();break}
     case "w-del":await del("weights",id);render();break;
     case "cp-toggle":UI.pinOpen=!UI.pinOpen;render();break;
     case "cp-save":await changeOwnPin();break;
     case "ad-save":await adminResetPin();break;
     case "c-new":newCardio(b.dataset.v);break;
-    case "c-sport":UI.cardio.sport=b.dataset.v;render();break;
-    case "c-purpose":UI.cardio.purpose=UI.cardio.purpose===b.dataset.v?"":b.dataset.v;render();break;
+    case "c-sport":UI.cardio.sport=b.dataset.v;saveCardioDraft();render();break;
+    case "c-purpose":UI.cardio.purpose=UI.cardio.purpose===b.dataset.v?"":b.dataset.v;saveCardioDraft();render();break;
     case "c-save":await saveCardio();break;
-    case "c-cancel":UI.cardio=null;render();break;
-    case "login-existing":UI.login="existing";render();break;
+    case "c-cancel":UI.cardio=null;saveCardioDraft();render();break;
     case "login-new":UI.login="new";render();setTimeout(()=>document.getElementById("np-name")?.focus(),30);break;
-    case "pick-profile":choosePerson(id);break;
     case "create-profile":{const n=document.getElementById("np-name")?.value||"";const t=document.getElementById("np-tpl");await createProfile(n,t?t.checked:false);break}
     case "logout":logout();break;
     case "start":startWorkout(id||null);break;
@@ -848,15 +1383,16 @@ document.addEventListener("click",async ev=>{
     case "pick-ex":addExercise(id);break;
     case "create-ex":{const name=UI.pickQ.trim();if(!name)return;const g=document.getElementById("pk-g")?.value||UI.pickG;UI.pickG=g;const nid=uid();await put("exercises",nid,{name,group:g});addExercise(nid);break}
     case "close-sheet":UI.sheet=null;UI.confirm=null;render();break;
-    case "new-routine":UI.tab="schemas";lsSet(LS_TAB,"schemas");UI.edit={id:null,name:"",items:[]};UI.confirm=null;render();window.scrollTo(0,0);break;
-    case "edit-routine":{const r=S.routines[id];UI.edit={id,name:r.name,items:clone(r.items||[])};UI.confirm=null;render();window.scrollTo(0,0);break}
+    case "new-routine":UI.tab="schemas";lsSet(LS_TAB,"schemas");UI.edit={id:null,name:"",folderId:id||"",items:[]};UI.folderEdit=null;UI.confirm=null;render();window.scrollTo(0,0);break;
+    case "edit-routine":{const r=S.routines[id];UI.edit={id,name:r.name,folderId:r.folderId&&S.folders[r.folderId]?r.folderId:"",items:clone(r.items||[])};UI.folderEdit=null;UI.confirm=null;render();window.scrollTo(0,0);break}
     case "it-up":[UI.edit.items[i-1],UI.edit.items[i]]=[UI.edit.items[i],UI.edit.items[i-1]];render();break;
     case "it-down":[UI.edit.items[i+1],UI.edit.items[i]]=[UI.edit.items[i],UI.edit.items[i+1]];render();break;
     case "it-remove":UI.edit.items.splice(i,1);render();break;
     case "save-routine":{const e=UI.edit;if(!e.name.trim()){toast("Geef het schema een naam.");document.getElementById("re-name")?.focus();return}
-      const rid=e.id||uid();const order=e.id&&S.routines[e.id]?S.routines[e.id].order??0:Object.keys(S.routines).length;
-      await put("routines",rid,{name:e.name.trim(),order,items:e.items.map(it=>({exId:it.exId,sets:String(it.sets||""),reps:String(it.reps||"")}))});
-      UI.edit=null;UI.confirm=null;toast("Schema opgeslagen");render();break}
+      const rid=e.id||uid();const fid=e.folderId&&S.folders[e.folderId]?e.folderId:null;const prev=e.id?S.routines[e.id]:null;const order=prev&&(prev.folderId||null)===fid?prev.order??0:routinesIn(fid).length;
+      await put("routines",rid,{name:e.name.trim(),folderId:fid,order,items:e.items.map(it=>({exId:it.exId,sets:String(it.sets||""),reps:String(it.reps||""),note:String(it.note||"")}))});
+      if(fid){UI.open["f:"+fid]=true;lsSet(LS_OPEN,UI.open)}
+      UI.edit=null;UI.confirm=null;toastOk("Schema opgeslagen");render();break}
     case "close-editor":UI.edit=null;UI.confirm=null;render();break;
     case "del-routine":UI.confirm="del-routine";render();break;
     case "del-routine-yes":await del("routines",UI.edit.id);UI.edit=null;UI.confirm=null;toast("Schema verwijderd");render();break;
@@ -880,20 +1416,32 @@ document.addEventListener("input",ev=>{
   }else if(id==="d-date"&&draft){draft.date=t.value||today();saveDraft()}
   else if(id==="np-name")UI.newName=t.value;
   else if(id.startsWith("pf-")&&UI.pf!==undefined){const f=pfDraft();if(id==="pf-age")f.age=t.value;else if(id==="pf-height")f.height=t.value;else if(id==="pf-target")f.targetWeight=t.value;else if(id==="pf-work")f.work=t.value;else{const mm=id.match(/^pf-([nm])-(\w+)$/);if(mm){f.sports[mm[2]]=f.sports[mm[2]]||{};f.sports[mm[2]][mm[1]==="n"?"n":"min"]=t.value}}}
-  else if(id.startsWith("c-")&&UI.cardio){const map={"c-date":"date","c-h":"h","c-m":"m","c-s":"s","c-km":"km","c-avg":"avgHr","c-max":"maxHr","c-note":"note"};if(map[id])UI.cardio[map[id]]=t.value;const lv=document.getElementById("c-live");if(lv)lv.innerHTML=cardioLive()}
+  else if(id.startsWith("c-")&&UI.cardio){const map={"c-date":"date","c-h":"h","c-m":"m","c-s":"s","c-km":"km","c-avg":"avgHr","c-max":"maxHr","c-note":"note"};if(map[id])UI.cardio[map[id]]=t.value;saveCardioDraft();const lv=document.getElementById("c-live");if(lv)lv.innerHTML=cardioLive()}
   else if(id==="np-tpl")UI.useTemplate=t.checked;
+  else if(id==="li-name")UI.loginName=t.value;
+  else if(id.startsWith("co-")&&UI.coach&&UI.coach.form){const map={"co-date":"date","co-title":"title","co-dur":"durMin","co-km":"km","co-desc":"desc","co-rep":"repeat"};if(map[id])UI.coach.form[map[id]]=t.value}
   else if(id==="re-name"&&UI.edit)UI.edit.name=t.value;
-  else if((m=id.match(/^re-([sr])-(\d+)$/))&&UI.edit)UI.edit.items[+m[2]][m[1]==="s"?"sets":"reps"]=t.value;
+  else if((m=id.match(/^re-([srn])-(\d+)$/))&&UI.edit)UI.edit.items[+m[2]][{s:"sets",r:"reps",n:"note"}[m[1]]]=t.value;
+  else if(id==="fd-name"&&UI.folderEdit)UI.folderEdit.name=t.value;
+  else if(id.startsWith("pa-")&&UI.sheet&&UI.sheet.type==="pl-add"){const map={"pa-title":"title","pa-dur":"durMin","pa-km":"km","pa-note":"note"};if(map[id])UI.sheet[map[id]]=t.value}
   else if(id==="pk-q"){UI.pickQ=t.value;renderSheet();const el=document.getElementById("pk-q");if(el){el.focus();const n=el.value.length;try{el.setSelectionRange(n,n)}catch(e){}}}
   else if(id==="pk-g")UI.pickG=t.value;
   else if(id==="rec-q"){UI.recQ=t.value;render()}
 });
 document.addEventListener("change",ev=>{
   if(ev.target.id==="pf-work"&&UI.pf)UI.pf.work=ev.target.value;
+  if(ev.target.id==="re-folder"&&UI.edit)UI.edit.folderId=ev.target.value;
+  if(ev.target.id==="pa-rep"&&UI.sheet)UI.sheet.repeat=ev.target.value;
+  if(ev.target.id==="pa-routine"&&UI.sheet)UI.sheet.routineId=ev.target.value;
+  if(ev.target.id==="co-who"&&UI.coach){UI.coach={who:ev.target.value||null,data:null,form:null};UI.confirm=null;render();coachLoad()}
+  if(ev.target.id==="co-rep"&&UI.coach&&UI.coach.form)UI.coach.form.repeat=ev.target.value;
   if(ev.target.id==="imp-file"&&ev.target.files&&ev.target.files[0]){const f=ev.target.files[0];const rd=new FileReader();rd.onload=()=>{try{const o=JSON.parse(rd.result);UI.importObj=o;UI.confirm="import";render()}catch(e){toast("Dit bestand kan niet gelezen worden.")}};rd.readAsText(f);ev.target.value=""}
 if(ev.target.id==="pk-g")UI.pickG=ev.target.value;if(ev.target.id==="np-tpl")UI.useTemplate=ev.target.checked});
-document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&UI.sheet){UI.sheet=null;UI.confirm=null;render()}if(ev.key==="Enter"&&(ev.target.id==="pin-1"||ev.target.id==="pin-2")){ev.preventDefault();document.querySelector('[data-act="submit-pin"],[data-act="submit-firstpin"]')?.click()}if(ev.key==="Enter"&&ev.target.id==="gc-code"){ev.preventDefault();document.querySelector('[data-act="submit-code"]')?.click()}if(ev.key==="Enter"&&ev.target.id==="np-name"){ev.preventDefault();document.querySelector('[data-act="create-profile"]')?.click()}});
+document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&UI.sheet){UI.sheet=null;UI.confirm=null;render()}if(ev.key==="Enter"&&(ev.target.id==="pin-1"||ev.target.id==="pin-2")){ev.preventDefault();document.querySelector('[data-act="submit-firstpin"]')?.click()}if(ev.key==="Enter"&&(ev.target.id==="li-name"||ev.target.id==="li-pin")){ev.preventDefault();if(ev.target.id==="li-name")document.getElementById("li-pin")?.focus();else document.querySelector('[data-act="submit-login"]')?.click()}if(ev.key==="Enter"&&ev.target.id==="sh-code"){ev.preventDefault();document.querySelector('[data-act="sh-lookup"]')?.click()}if(ev.key==="Enter"&&ev.target.id==="fd-name"){ev.preventDefault();document.querySelector('[data-act="fd-save"]')?.click()}if(ev.key==="Enter"&&ev.target.id==="gc-code"){ev.preventDefault();document.querySelector('[data-act="submit-code"]')?.click()}if(ev.key==="Enter"&&ev.target.id==="np-name"){ev.preventDefault();document.querySelector('[data-act="create-profile"]')?.click()}});
 
+{const mm=location.hash.match(/deel=([A-Za-z0-9]{6})/);if(mm){UI.pendingShare=mm[1].toUpperCase();try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}}}
+window.addEventListener("hashchange",()=>{const mm=location.hash.match(/deel=([A-Za-z0-9]{6})/);if(!mm)return;try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}if(pid&&S.ready)lookupShare(mm[1]);else{UI.pendingShare=mm[1].toUpperCase();render()}});
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
 initStore();
 </script>
 
