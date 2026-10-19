@@ -6,6 +6,9 @@
 <meta name="theme-color" content="#E2ECEC" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0B1317" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Krachtlogboek">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px/1.4 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -22,16 +25,16 @@
 /* Layout: one narrow phone column, sticky header, fixed bottom tab bar, bottom sheets for pickers */
 :root{
   --bg:#EEF0EC; --surface:#FFFFFF; --sunk:#E3E6E1; --fg:#15181B; --muted:#5F666D; --line:#D5D9D3;
-  --accent:#1F4FE0; --accent-ink:#FFFFFF; --pr:#A86A00; --pr-bg:#FCEFD3; --danger:#B3261E;
+  --accent:#1F4FE0; --accent-ink:#FFFFFF; --pr:#A86A00; --pr-bg:#FCEFD3; --danger:#B3261E; --good:#2E7D4F; --warn:#B26A00; --bad:#C62828;
   --display:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
   --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0E1012; --surface:#171A1E; --sunk:#202429; --fg:#ECEEF1; --muted:#949AA2; --line:#2A2F35;
-  --accent:#7290FF; --accent-ink:#0B0D10; --pr:#F2B544; --pr-bg:#3A2C10; --danger:#FF8A80; color-scheme:dark}}
+  --accent:#7290FF; --accent-ink:#0B0D10; --pr:#F2B544; --pr-bg:#3A2C10; --danger:#FF8A80; --good:#5CCB8A; --warn:#F2B544; --bad:#FF8A80; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0E1012; --surface:#171A1E; --sunk:#202429; --fg:#ECEEF1; --muted:#949AA2; --line:#2A2F35;
-  --accent:#7290FF; --accent-ink:#0B0D10; --pr:#F2B544; --pr-bg:#3A2C10; --danger:#FF8A80; color-scheme:dark}
+  --accent:#7290FF; --accent-ink:#0B0D10; --pr:#F2B544; --pr-bg:#3A2C10; --danger:#FF8A80; --good:#5CCB8A; --warn:#F2B544; --bad:#FF8A80; color-scheme:dark}
 *{box-sizing:border-box}
 html,body{background:var(--bg)}
 body{color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.4;-webkit-tap-highlight-color:transparent}
@@ -307,6 +310,21 @@ a.btn{text-decoration:none;color:var(--fg);text-align:center;display:grid;place-
 .cnt{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 7px;border-radius:12px;background:var(--pr);color:#fff;font-weight:700;font-size:13px}
 .permbox{background:var(--sunk);border-radius:8px;padding:10px}
 .reqcard{border-left:4px solid var(--pr)}.inboxcard{border-left:4px solid var(--accent)}
+.ptiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.ptile{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:2px;align-content:start}
+.ptile b{font-family:var(--display);font-size:20px;line-height:1.15}.ptile .small{color:var(--muted)}
+.pst{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
+.ptile.st-good{border-left-color:var(--good)}.ptile.st-good .pst{color:var(--good)}
+.ptile.st-warn{border-left-color:var(--warn)}.ptile.st-warn .pst{color:var(--warn)}
+.ptile.st-bad{border-left-color:var(--bad)}.ptile.st-bad .pst{color:var(--bad)}
+.ptile.st-none .pst{color:var(--muted)}
+.overall{display:grid;gap:2px;margin-top:10px;border-left:6px solid var(--line)}.overall b{font-family:var(--display);font-size:26px}
+.overall.st-good{border-left-color:var(--good)}.overall.st-good b{color:var(--good)}.overall.st-warn{border-left-color:var(--warn)}.overall.st-warn b{color:var(--warn)}.overall.st-bad{border-left-color:var(--bad)}.overall.st-bad b{color:var(--bad)}
+.insight{border-left:6px solid var(--line)}.insight p{margin:0;line-height:1.5}
+.in-good{border-left-color:var(--good)}.in-warn{border-left-color:var(--warn)}.in-bad{border-left-color:var(--bad)}.in-info{border-left-color:var(--accent)}
+.pchart{width:100%;height:auto;display:block;margin-top:6px}
+.installcard{margin-top:12px;align-items:center}
+.pmeter{display:flex;justify-content:space-between;align-items:baseline}.pmeter b{font-family:var(--display);font-size:24px}
 .banner{margin-top:12px;background:var(--pr-bg);color:var(--fg);border-radius:8px;padding:10px 12px;font-size:13px}
 @media (prefers-reduced-motion:no-preference){.sheet{animation:up .18s ease-out}@keyframes up{from{transform:translateY(24px);opacity:.6}}}
 </style>
@@ -370,7 +388,7 @@ a.btn{text-decoration:none;color:var(--fg);text-align:center;display:grid;place-
   <button data-tab="train" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9v6M6 6v12M18 6v12M21 9v6M6 12h12"/></svg>Trainen</button>
   <button data-tab="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h2M14 14h2M8 17h2"/></svg>Planning</button>
   <button data-tab="schemas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Schema's</button>
-  <button data-tab="records"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4zM17 6h3v2a3 3 0 0 1-3 3M7 6H4v2a3 3 0 0 0 3 3"/></svg>Records</button>
+  <button data-tab="records"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V5M16 20v-6M22 20H2"/></svg>Voortgang</button>
   <button data-tab="food"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-2-3-7-2.5-7 2.5C5 16 9 21 12 21s7-5 7-10.5C19 5.5 14 5 12 8z"/><path d="M12 8c0-2.5 1.5-4.5 4-5"/></svg>Voeding</button>
   <button data-tab="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Profiel</button>
 </div></nav>
@@ -446,6 +464,7 @@ async function submitLogin(){
   try{
     const r=((await rpc("kl_login_name",{p_code:code,p_name:name,p_pin:pin}))||[])[0];
     if(!r){toast("Naam of code klopt niet.");return}
+    if(!r.id&&r.name==="__locked__"){toast("Te veel foute pogingen. Probeer het over 15 minuten opnieuw, of vraag Jitse om je code opnieuw in te stellen.");return}
     if(r.needs_pin){UI.login="setpin";UI.pinFor={id:r.id,name:r.name,isAdmin:!!r.is_admin};render();setTimeout(()=>document.getElementById("pin-1")?.focus(),30);return}
     lsSet(pinKey(r.id),pin);enterProfile({id:r.id,name:r.name,isAdmin:!!r.is_admin});
   }catch(e){
@@ -457,7 +476,7 @@ async function submitLogin(){
 async function submitFirstPin(){
   const p=UI.pinFor,a=(document.getElementById("pin-1")?.value||"").trim(),b=(document.getElementById("pin-2")?.value||"").trim();
   if(!p)return;
-  if(a.length<4){toast("Kies een code van minimaal 4 tekens.");return}
+  if(a.length<6){toast("Kies een code van minimaal 6 tekens.");return}
   if(a!==b){toast("De twee codes zijn niet gelijk.");return}
   try{await rpc("kl_set_first_pin",{p_code:code,p_profile:p.id,p_pin:a});lsSet(pinKey(p.id),a);enterProfile(p);toast("Persoonlijke code ingesteld")}
   catch(e){handleErr(e)}
@@ -524,7 +543,8 @@ function toastOk(msg){toast(queue().length?msg+" op je telefoon. Wordt verstuurd
 function handleErr(e){
   if(e&&e.code==="bad_code"){code=null;lsSet(LS_CODE,null);toast("De groepscode is gewijzigd. Vul de nieuwe code in.");pid=null;S.me=null;S.ready=false;UI.login="code"}
   else if(e&&e.code==="bad_pin"){if(pid){lsSet(pinKey(pid),null);UI.loginName=S.me?.name||"";lsSet(LS_ME,null);pid=null;S.me=null;S.ready=false;UI.login="login"}toast("Je persoonlijke code is gewijzigd. Log opnieuw in.")}
-  else if(e&&e.code==="short_pin")toast("Kies een code van minimaal 4 tekens.");
+  else if(e&&e.code==="too_many")toast("Te veel foute pogingen met je code. Probeer het over 15 minuten opnieuw.");
+  else if(e&&e.code==="short_pin")toast("Kies een code van minimaal 6 tekens.");
   else if(e&&e.code==="not_admin")toast("Alleen de beheerder kan dit doen.");
   else if(e&&e.code==="dup_name")toast("Deze naam is al in gebruik. Kies een andere, bijvoorbeeld met je achternaam erbij.");
   else if(e&&e.code==="self")toast("Je kunt je eigen account niet verwijderen.");
@@ -542,7 +562,7 @@ async function createProfile(name,withTemplate){
   const clean=name.trim();
   const a=(document.getElementById("np-pin")?.value||"").trim(),b=(document.getElementById("np-pin2")?.value||"").trim();
   if(!clean){toast("Vul je naam in.");return}
-  if(a.length<4){toast("Kies een persoonlijke code van minimaal 4 tekens.");return}
+  if(a.length<6){toast("Kies een persoonlijke code van minimaal 6 tekens.");return}
   if(a!==b){toast("De twee codes zijn niet gelijk.");return}
   if(!consentChecked("np-")){toast("Vink de drie punten onderaan aan om een account te maken.");return}
   const id=uid();
@@ -561,7 +581,7 @@ async function createProfile(name,withTemplate){
 }
 async function changeOwnPin(){
   const o=(document.getElementById("cp-old")?.value||"").trim(),a=(document.getElementById("cp-new")?.value||"").trim(),b=(document.getElementById("cp-new2")?.value||"").trim();
-  if(a.length<4){toast("Kies een nieuwe code van minimaal 4 tekens.");return}
+  if(a.length<6){toast("Kies een nieuwe code van minimaal 6 tekens.");return}
   if(a!==b){toast("De twee nieuwe codes zijn niet gelijk.");return}
   try{await rpc("kl_change_pin",{p_code:code,p_profile:pid,p_pin:o,p_new:a});lsSet(pinKey(pid),a);UI.pinOpen=false;toast("Je persoonlijke code is gewijzigd");render()}
   catch(e){if(e.code==="bad_pin")toast("Je huidige code klopt niet.");else handleErr(e)}
@@ -577,7 +597,7 @@ async function loadPeople(){
 async function adminResetPin(){
   const t=document.getElementById("ad-who")?.value,a=(document.getElementById("ad-new")?.value||"").trim();
   if(!t){toast("Kies een account.");return}
-  if(a.length<4){toast("Kies een code van minimaal 4 tekens.");return}
+  if(a.length<6){toast("Kies een code van minimaal 6 tekens.");return}
   try{await rpc("kl_admin_set_pin",{p_code:code,p_admin:pid,p_admin_pin:myPin(),p_target:t,p_new:a});document.getElementById("ad-new").value="";toast(`Nieuwe code ingesteld voor ${personName(t)}. Geef deze door.`);loadPeople()}
   catch(e){handleErr(e)}
 }
@@ -713,11 +733,11 @@ function viewLogin(){
     return `<div class="login"><p class="q">Welkom bij het Krachtlogboek</p><div class="card stack"><label class="f">Groepscode<input type="text" id="gc-code" autocomplete="off" autocapitalize="characters" placeholder="Vraag de code aan je groep"></label><button class="btn primary" data-act="submit-code">Verder</button></div><p class="small muted">Je vult de groepscode alleen de eerste keer in op dit apparaat.</p></div>`;
   }
   if(UI.login==="setpin"&&UI.pinFor){
-    return `<div class="login"><p class="q">Kies je persoonlijke code</p><div class="card stack"><p class="hp">Hoi ${esc(UI.pinFor.name)}, je account heeft nog geen code. Kies er een van minimaal 4 tekens. Daarmee log je voortaan in.</p><label class="f">Code<input type="password" id="pin-1" autocomplete="new-password"></label><label class="f">Herhaal code<input type="password" id="pin-2" autocomplete="new-password"></label><button class="btn primary" data-act="submit-firstpin">Code instellen</button></div><button class="linkbtn" data-act="login-back">Terug</button></div>`;
+    return `<div class="login"><p class="q">Kies je persoonlijke code</p><div class="card stack"><p class="hp">Hoi ${esc(UI.pinFor.name)}, je account heeft nog geen code. Kies er een van minimaal 6 tekens. Daarmee log je voortaan in.</p><label class="f">Code<input type="password" id="pin-1" autocomplete="new-password"></label><label class="f">Herhaal code<input type="password" id="pin-2" autocomplete="new-password"></label><button class="btn primary" data-act="submit-firstpin">Code instellen</button></div><button class="linkbtn" data-act="login-back">Terug</button></div>`;
   }
   if(UI.login==="new"){
     return `<div class="login"><p class="q">Nieuw account</p><div class="card stack"><label class="f">Je naam<input type="text" id="np-name" value="${esc(UI.newName)}" placeholder="Je voornaam" autocomplete="off"></label>
-      <label class="f">Persoonlijke code<input type="password" id="np-pin" autocomplete="new-password" placeholder="minimaal 4 tekens"></label>
+      <label class="f">Persoonlijke code<input type="password" id="np-pin" autocomplete="new-password" placeholder="minimaal 6 tekens"></label>
       <label class="f">Herhaal code<input type="password" id="np-pin2" autocomplete="new-password"></label>
       <p class="hp small muted">Je krijgt automatisch de map "Krachttraining 3 dagen split". Andere voorbeeldmappen voeg je later toe onder Schema's.</p>
       ${consentBoxes("np-")}
@@ -784,7 +804,7 @@ function viewEditor(){
   return h+`</div>`;
 }
 
-function viewRecords(){return viewStrengthRecords()+viewCardioRecords()}
+function viewRecords(){const t=UI.recTab||"voortgang";return `<div class="seg seg2" style="margin-top:16px"><button class="segb" data-act="rec-tab" data-v="voortgang" aria-pressed="${t==="voortgang"}">Voortgang</button><button class="segb" data-act="rec-tab" data-v="records" aria-pressed="${t==="records"}">Records</button></div>`+(t==="voortgang"?viewProgress():viewStrengthRecords()+viewCardioRecords())}
 function viewStrengthRecords(){
   const q=UI.recQ.trim().toLowerCase();
   const seen=new Set();
@@ -813,11 +833,13 @@ function viewHelp(){
     ["Start een training","Tik in <b>Trainen</b> op een schema. Elke oefening toont je <b>Hoogste</b> set ooit en wat je de <b>Laatste</b> keer deed. Een losse training zonder schema kan ook."],
     ["Vul je sets in","Per set vul je kg en reps in. Leeg kg betekent bodyweight. Grijze getallen zijn je resultaat van vorige keer: tik op het setnummer om ze over te nemen. Met <b>+ Set</b> voeg je een set toe."],
     ["Sla op","Tik op <b>Training opslaan</b>. Sets zonder reps worden overgeslagen. Je training blijft bewaard als je tussendoor de app sluit, tot je opslaat of weggooit. Geen internet bij het opslaan? Dan blijft de training op je telefoon staan en wordt hij automatisch verstuurd zodra je weer verbinding hebt."],
-    ["Bekijk je records","In <b>Records</b> staat per spiergroep je zwaarste set. Tik op een oefening voor de volledige geschiedenis, of om de naam of spiergroep aan te passen."],
+    ["Bekijk je records","In <b>Voortgang → Records</b> staat per spiergroep je zwaarste set. Tik op een oefening voor de volledige geschiedenis, of om de naam of spiergroep aan te passen."],
     ["Log je duurtraining","Onder <b>Trainen → Duurtraining</b> log je hardlopen of wielrennen: duur, afstand, eventueel hartslag en een toelichting. Snelheid en tempo worden automatisch berekend. Heb je van je sporthorloge of sportapp een GPX-bestand van je activiteit? Dan kun je dat optioneel importeren: alles wordt ingevuld en je echte snelste 5 km, 10 km enzovoort verschijnen onder Records. Zonder bestand vul je duur en afstand gewoon zelf in. Andere sporten zoals voetbal kies je onder Anders."],
     ["Eerdere resultaten overzetten","Heb jij al eerdere resultaten van trainingen in notities bijgehouden? Bijvoorbeeld wekelijks je resultaten opgeschreven, of al je persoonlijke records en hoogst behaalde kg per oefening? App deze statistieken dan naar Jitse. Hij zet ze om in een code die je zelf invult bij <b>Schema's → Gedeeld schema toevoegen</b>. Al deze resultaten (met trainingsdatum als je die erbij hebt gezet) komen dan in je account te staan."],
     ["Voeding","In <b>Voeding</b> zie je je dagdoel op basis van je profiel en sportweek. Je kunt het zelf aanpassen, je voorkeuren voor eten instellen, drie voorbeelddagen met grammen bekijken, je eten registreren in het dagboek en een boodschappenlijst maken."],
     ["Privacy en bewaren","Details van trainingen, je voedingsdagboek en je planning worden 3 maanden bewaard en daarna samengevat; je records blijven altijd staan. Lees de <b>Privacyverklaring</b> onder Profiel. Daar kun je ook je account verwijderen."],
+    ["Schema op maat","Onder <b>Schema's → Schema op maat</b> vertel je wat je leuk vindt, wat je wilt bereiken en hoeveel dagen je wilt trainen. Hoe meer je invult (niveau, tijd, materiaal, focus, blessures, eigen wensen), hoe persoonlijker het schema. Je krijgt een map met schema's en kunt ze direct in je planning zetten."],
+    ["Voortgang","Onder <b>Voortgang</b> zie je per week of per 4 weken hoe je ervoor staat: gewicht, calorieën, eiwit, trainingen, kracht en duursport. Groen is goed, oranje let op, rood bijsturen. Daaronder staat wat dat betekent en wat je kunt doen. Hoe meer je registreert (trainingen, eten en 2 à 3 keer per week je gewicht), hoe beter het advies."],
     ["Samen trainen","Onder <b>Profiel → Samen trainen</b> vraag je iemand op naam of je iets voor diegene mag klaarzetten. Accepteert die persoon, dan kies jij of hij of zij trainingen in je planning mag zetten, schema's of maaltijden mag sturen, of je resultaten mag zien, en of dat direct mag of eerst als voorstel komt. Intrekken kan altijd."],
     ["Suggesties","Mis je iets of werkt iets niet? Meld het via <b>Wat is er nieuw</b> (onder Profiel of bovenaan deze pagina). Jitse ziet je melding en laat weten wat ermee gebeurt."],
     ["Geplande trainingen","Maakt Jitse een training voor je, dan staat die bovenaan in <b>Trainen</b> onder <b>Op je planning</b>, met datum en uitleg. Tik op <b>Training loggen</b> als je hem gedaan hebt: je resultaat wordt gekoppeld en Jitse ziet het terug."],
@@ -884,11 +906,11 @@ function viewProfile(){
   </div>
   <h2>Persoonlijke code</h2><div class="card stack">
     ${UI.pinOpen?`<label class="f">Huidige code<input type="password" id="cp-old" autocomplete="current-password"></label><label class="f">Nieuwe code<input type="password" id="cp-new" autocomplete="new-password"></label><label class="f">Herhaal nieuwe code<input type="password" id="cp-new2" autocomplete="new-password"></label><div class="btnrow"><button class="btn primary" data-act="cp-save">Code wijzigen</button><button class="btn" data-act="cp-toggle">Annuleren</button></div>`
-    :`<p class="hp">Met je naam en persoonlijke code log je in. Vergeten? Jitse kan hem als beheerder opnieuw instellen.</p><button class="btn" data-act="cp-toggle">Code wijzigen</button>`}
+    :`<p class="hp">Met je naam en persoonlijke code log je in. Vergeten? Jitse kan hem als beheerder opnieuw instellen.</p>${(myPin()||"").length<6?`<p class="hp small" style="color:var(--warn)">Je code is korter dan 6 tekens. Kies voor extra veiligheid een langere code.</p>`:""}<button class="btn" data-act="cp-toggle">Code wijzigen</button>`}
   </div>`;
   if(p.isAdmin)h+=viewAdmin()+adminToolsV5();
   h+=`<h2>Account verwijderen</h2><div class="card stack">${UI.confirm==="self-del"?selfDelBox():`<p class="hp">Hiermee verwijder je je account en al je gegevens. Daarmee trek je ook je toestemming in.</p><button class="btn ghost danger" data-act="self-del">Account verwijderen</button>`}</div>`;
-  h+=`<div class="stack" style="margin-top:16px"><button class="btn block" data-act="go-news">Wat is er nieuw · suggesties</button><button class="btn block" data-act="go-privacy">Privacyverklaring</button><button class="btn block" data-act="go-help">Uitleg en back-up</button><button class="btn block" data-act="logout">Uitloggen</button></div>`;
+  h+=`<div class="stack" style="margin-top:16px">${installCard()}<button class="btn block" data-act="go-news">Wat is er nieuw · suggesties</button><button class="btn block" data-act="go-privacy">Privacyverklaring</button><button class="btn block" data-act="go-help">Uitleg en back-up</button><button class="btn block" data-act="logout">Uitloggen</button></div>`;
   return h;
 }
 async function saveProfile(){
@@ -1396,7 +1418,7 @@ function viewAdmin(){
   if(!others.length)return h+`<p class="muted small">Er zijn nog geen andere accounts.</p>`;
   const opts=others.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
   h+=`<div class="card stack"><strong>Code vergeten</strong><p class="hp">Stel een nieuwe code in en geef die door. Diegene kan hem daarna zelf weer wijzigen.</p>
-    <label class="f">Account<select id="ad-who">${opts}</select></label><label class="f">Nieuwe code<input type="text" id="ad-new" autocomplete="off" placeholder="minimaal 4 tekens"></label><button class="btn primary" data-act="ad-save">Nieuwe code instellen</button></div>`;
+    <label class="f">Account<select id="ad-who">${opts}</select></label><label class="f">Nieuwe code<input type="text" id="ad-new" autocomplete="off" placeholder="minimaal 6 tekens"></label><button class="btn primary" data-act="ad-save">Nieuwe code instellen</button></div>`;
   h+=`<div class="card stack"><strong>Account verwijderen</strong>`;
   if(UI.confirm==="ad-del"&&UI.delWho){const p=people.find(x=>x.id===UI.delWho);
     h+=`<div class="confirm"><span>Account van <b>${esc(p?.name||"")}</b> definitief verwijderen? ${p&&p.sessions?`Alle ${p.sessions} training${p.sessions===1?"":"en"}, schema's en gegevens worden gewist.`:"Alle schema's en gegevens worden gewist."} Dit kan niet ongedaan worden gemaakt.</span><div class="btnrow"><button class="btn danger" data-act="ad-del-yes">Definitief verwijderen</button><button class="btn" data-act="confirm-no">Annuleren</button></div></div>`;
@@ -1489,8 +1511,9 @@ function routineSelect(id,sel){
 /* ---------- schema's ---------- */
 function viewSchemas(){
   if(UI.edit)return viewEditor();
+  if(UI.cg)return viewCoachGen();
   const folders=folderList(),loose=routinesIn(null);
-  let h=`<h2>Jouw schema's</h2>`;
+  let h=`<button class="card start" style="margin-top:16px" data-act="cg-open"><span><span class="name">Schema op maat</span><br><span class="muted small">Vertel wat je leuk vindt; de coach maakt een map met schema's voor jouw aantal dagen</span></span><span class="go">Start</span></button><h2>Jouw schema's</h2>`;
   if(UI.folderEdit)h+=`<div class="card stack" style="margin-bottom:10px"><label class="f">${UI.folderEdit.id?"Map hernoemen":"Nieuwe map"}<input type="text" id="fd-name" value="${esc(UI.folderEdit.name)}" placeholder="Bijv. Fitness 4 dagen" autocomplete="off"></label><div class="btnrow"><button class="btn primary" data-act="fd-save">Opslaan</button><button class="btn" data-act="fd-cancel">Annuleren</button></div></div>`;
   if(!folders.length&&!loose.length)h+=`<div class="card empty"><strong>Nog geen schema's</strong><p class="muted">Maak een map, bijvoorbeeld "Fitness 4 dagen", en zet daar je schema's in. Of voeg hieronder een voorbeeldmap toe.</p></div>`;
   h+=`<div class="stack">`+folders.map(folderCard).join("")+(loose.length?folderCard({id:null,name:"Zonder map"}):"")+`</div>`;
@@ -1677,6 +1700,10 @@ const CHANGELOG=[
   ["Maaltijden en producten delen met een code; zelf toegevoegde producten worden onthouden.",""],
   ["Boodschappenlijst met losse producten, gedeeld tussen je apparaten, en afvinken in de winkel.",""],
   ["Spiergroepen: quadriceps en hamstrings apart, en zelf een spiergroep toevoegen.",""],
+  ["Schema op maat: kies wat je leuk vindt (kracht, calisthenics, HIIT, cardio), je doel en aantal dagen; de coach maakt een map met schema's en zet ze desgewenst in je planning.",""],
+  ["Als app installeren op je beginscherm, met eigen icoon.",""],
+  ["Persoonlijke codes beter beschermd: na 5 foute pogingen 15 minuten geblokkeerd, nieuwe codes minimaal 6 tekens.","Extra beveiliging."],
+  ["Voortgang: in één oogopslag met kleuren zien of je op koers ligt voor je doel, met uitleg over de samenhang tussen voeding, gewicht en training en een passend advies.",""],
   ["Samen trainen: met jouw toestemming kan iemand trainingen voor je inplannen of schema's en maaltijden sturen. Jij kiest per persoon waarvoor.","Ook de beheerder plant alleen nog met toestemming."],
   ["Records tonen alleen oefeningen die je hebt gedaan.",""]]},
  {v:"5.0",date:"2026-10-19",items:[["Uitgebreid voedingsadvies, voorbeelddagen, dagboek en boodschappen.",""],["Records per afstand en optioneel een GPX-bestand importeren.",""],["Oude resultaten laten omzetten naar je account.",""],["Suggesties en problemen melden via deze pagina.",""]]},
@@ -1869,12 +1896,12 @@ function viewConsent(){
 function privacyHtml(){
   return `<h3>Privacyverklaring Krachtlogboek</h3><p class="small muted">Versie 1 · 19 oktober 2026</p>
   <h4>Wie biedt de app aan?</h4><p>Het Krachtlogboek wordt privé aangeboden door Jitse, vrijwillig, kosteloos en op vriendschappelijke basis. Er is geen bedrijf, geen lidmaatschap en je betaalt niets. Jitse is beheerder van de app en verantwoordelijk voor de gegevens die erin staan.</p>
-  <h4>Welke gegevens?</h4><ul><li>Je naam en je persoonlijke code (versleuteld opgeslagen, niemand kan hem terugzien).</li><li>Je schema's, trainingen, planning en records.</li><li>Je profiel: leeftijd, lengte, geslacht, gewicht, doelgewicht, doel, werk, stappen en sportweek.</li><li>Hartslag bij duurtrainingen, je voedingsdagboek en je voorkeuren voor eten.</li><li>Meldingen en suggesties die je instuurt.</li></ul>
+  <h4>Welke gegevens?</h4><ul><li>Je naam en je persoonlijke code (versleuteld opgeslagen, niemand kan hem terugzien). Na 5 foute pogingen wordt inloggen 15 minuten geblokkeerd.</li><li>Je schema's, trainingen, planning en records.</li><li>Je profiel: leeftijd, lengte, geslacht, gewicht, doelgewicht, doel, werk, stappen en sportweek.</li><li>Hartslag bij duurtrainingen, je voedingsdagboek en je voorkeuren voor eten.</li><li>Meldingen en suggesties die je instuurt.</li></ul>
   <p>Gewicht, hartslag en voeding zijn gezondheidsgegevens. Die worden alleen opgeslagen met je uitdrukkelijke toestemming.</p>
-  <h4>Waarvoor?</h4><p>Alleen om de functies van de app te laten werken: je trainingen en voortgang bijhouden, je voedingsadvies berekenen en trainingen inplannen. Er zijn geen advertenties, er wordt niets verkocht of gedeeld met bedrijven, en er wordt niets gevolgd of gemeten.</p>
+  <h4>Waarvoor?</h4><p>Alleen om de functies van de app te laten werken: je trainingen en voortgang bijhouden, je voedingsadvies berekenen en trainingen inplannen. Er zijn geen advertenties, er wordt niets verkocht of gedeeld met bedrijven, en er wordt niets gevolgd of gemeten.</p><p><b>Voortgang en Schema op maat</b> analyseren je eigen gegevens (training, voeding en gewicht) om je feedback en een schema te geven. Dat wordt op je eigen telefoon berekend; er gaat daarvoor niets naar anderen. Het zijn alleen suggesties: de app neemt geen beslissingen over je.</p>
   <h4>Wie ziet wat?</h4><ul><li>Je eigen gegevens zie alleen jij.</li><li>Jitse ziet als beheerder: de namen van de accounts, het aantal trainingen, wanneer iemand laatst actief was en ingestuurde meldingen.</li><li><b>Samen trainen:</b> geef je iemand toestemming, dan mag die persoon alleen wat jij aanvinkt: trainingen in je planning zetten, schema's of maaltijden sturen. Hij of zij ziet van jou alleen de trainingen die hij of zij zelf voor je inplande en of je die gedaan hebt, en alleen als jij dat aanvinkt ook het resultaat daarvan. Je kunt toestemming altijd intrekken. Dit geldt ook voor Jitse.</li><li>Als beheerder van de database kan Jitse technisch bij alle gegevens. Hij kijkt daar alleen in als dat nodig is, bijvoorbeeld om een probleem op te lossen of een back-up terug te zetten.</li><li>Andere gebruikers zien verder niets van jou, ook je naam niet, tenzij je met iemand samen traint. Deel je zelf een schema, dan staat je naam als afzender bij dat schema.</li></ul>
   <h4>Waar staan de gegevens?</h4><ul><li>In een online database bij Supabase.</li><li>De app zelf staat op GitHub Pages.</li><li>Eén keer per week wordt een back-up gemaakt in een afgeschermde, privé GitHub-omgeving waar alleen Jitse bij kan.</li><li>Op je eigen telefoon staat een kopie, zodat de app ook zonder internet werkt. Bij uitloggen wordt die gewist.</li><li>Zoek je in het dagboek in Open Food Facts, dan gaat je zoekterm naar Open Food Facts. Verder gaan er geen gegevens naar andere partijen; de lettertypes zitten in de app zelf.</li></ul>
-  <h4>Hoe lang?</h4><ul><li>Trainingen, je voedingsdagboek en je planning worden 3 maanden in detail bewaard. Daarna worden ze samengevat: je records, aantallen en maandtotalen blijven, de details verdwijnen.</li><li>Je profiel, gewicht en schema's blijven tot je ze zelf aanpast of verwijdert.</li><li>Back-ups worden maximaal 3 maanden bewaard.</li><li>Verwijder je je account, dan worden al je gegevens, meldingen en deelcodes direct gewist. Uit de back-ups verdwijnen ze binnen 3 maanden.</li></ul>
+  <h4>Hoe lang?</h4><ul><li>Trainingen, je voedingsdagboek en je planning worden 3 maanden in detail bewaard. Daarna worden ze samengevat: je records, aantallen en maandtotalen blijven, de details verdwijnen.</li><li>Je profiel, gewicht en schema's blijven tot je ze zelf aanpast of verwijdert.</li><li>Back-ups worden maximaal 3 maanden bewaard.</li><li>Toestemmingen voor Samen trainen blijven staan tot jij of de ander ze intrekt, of tot een van beiden het account verwijdert. Voorstellen verdwijnen zodra je ze toevoegt of weigert; trek je toestemming in, dan vervallen openstaande voorstellen.</li><li>Verwijder je je account, dan worden al je gegevens, meldingen, deelcodes en toestemmingen direct gewist. Uit de back-ups verdwijnen ze binnen 3 maanden.</li></ul>
   <h4>Jouw rechten</h4><p>Je kunt je gegevens altijd inzien en downloaden (Uitleg → Back-up downloaden), aanpassen en zelf verwijderen (Profiel → Account verwijderen). Je toestemming intrekken doe je door je account te verwijderen. Vragen? Stuur Jitse een bericht of gebruik Wat is er nieuw → Suggestie. Ben je het ergens niet mee eens, dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens.</p>
   <h4>Gebruik op eigen risico</h4><p>Jitse biedt de app aan als vriendendienst, zonder lidmaatschap of betaling. Hij doet zijn best om je gegevens zorgvuldig te beveiligen en de app goed te laten werken, maar geeft geen garantie dat de app altijd beschikbaar is, foutloos werkt of dat gegevens nooit verloren gaan. Je gebruikt de app op eigen risico. Voedings- en trainingsadviezen zijn algemene richtlijnen en geen medisch advies; overleg bij twijfel of klachten met een huisarts, diëtist of fysiotherapeut.</p>
   <h4>Leeftijd</h4><p>De app is bedoeld voor mensen van 16 jaar en ouder. Ben je jonger, dan heb je toestemming van een ouder of verzorger nodig.</p>`;
@@ -2598,6 +2625,358 @@ document.addEventListener("click",async ev=>{
 document.addEventListener("input",ev=>{if(ev.target.id==="pa-date"&&UI.sheet&&UI.sheet.type==="pl-add")UI.sheet.date=ev.target.value});
 document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&ev.target.id==="lk-name"){ev.preventDefault();document.querySelector('[data-act="lk-request"]')?.click()}});
 
+/* ---------- coach: schema op maat ---------- */
+/* oefening: [naam, spiergroep, slots, materiaal(g=sportschool,d=dumbbells,b=eigen gewicht,p=stang,r=ringen), vermijden bij(k=knie,o=onderrug,s=schouder), extra (c=compound,h=houdoefening,a=gevorderd)] */
+const CX=[
+["Squats","Quadriceps","squat","g","ko","c"],["Goblet Squat","Quadriceps","squat","d","k","c"],["Leg Press","Quadriceps","squat quad","g","","c"],["Squat (eigen gewicht, tempo)","Quadriceps","squat","b","k","c"],["Pistol Squat (geassisteerd)","Quadriceps","squat lunge","b","k","ca"],["Ring Pistol Squat Progressie","Quadriceps","squat","r","k","ca"],
+["Deadlifts","Rug","hinge","g","o","c"],["Romanian Deadlift","Billen","hinge","gd","o","c"],["Single Leg RDL","Billen","hinge","db","","c"],["Hip Thrust (barbell)","Billen","glute hinge","g","","c"],["Glute Bridge (single leg)","Billen","glute hinge","b","","c"],["Back Extension (roman chair)","Rug","hinge","g","o",""],
+["Romanian Lunges","Quadriceps","lunge","d","k","c"],["Bulgarian Split Squat (DB)","Quadriceps","lunge squat","d","k","c"],["Walking Lunges","Quadriceps","lunge","b","k","c"],["Step-up (bank)","Quadriceps","lunge","db","","c"],
+["Quadricep Extension","Quadriceps","quad","g","k",""],["Wall Sit","Quadriceps","quad","b","k","h"],
+["Hamstring Extension","Hamstrings","ham","g","",""],["Nordic Curl (bank/deur)","Hamstrings","ham","b","","a"],["Hamstring Bridge Walkout","Hamstrings","ham","b","",""],
+["Calf Raise","Kuiten","calf","gd","",""],["Calf Raise (trap/stap)","Kuiten","calf","b","",""],
+["Cable Kickback","Billen","glute","g","",""],["Hip Abduction (machine/band)","Billen","glute","gb","",""],
+["Bench Press","Borst","hpush","g","s","c"],["Dumbbell Bench Press","Borst","hpush","d","","c"],["Push-up (wijd, slow ecc.)","Borst","hpush","b","","c"],["Ring Push-up (turned out)","Borst","hpush","r","s","c"],["Dips","Borst","hpush","gp","s","c"],["Archer Push-up","Borst","hpush","b","s","ca"],
+["Dumbbell Incline Bench Press","Borst","hpush2","d","","c"],["Push-up (voeten verhoogd)","Borst","hpush2","b","","c"],["Ring Dip","Borst","hpush2","r","s","ca"],
+["Cable Fly","Borst","chest","g","s",""],["Dumbbell Fly","Borst","chest","d","s",""],["Ring Chest Fly","Borst","chest","r","s","a"],
+["Dumbbell Shoulder Press","Schouders","vpush","d","s","c"],["Overhead Press (barbell)","Schouders","vpush","g","so","c"],["Landmine Press","Schouders","vpush","g","","c"],["Pike Push-up","Schouders","vpush","b","s","c"],["Handstand Push-up (muur)","Schouders","vpush","b","s","ca"],
+["Side Fly's","Schouders","delt","d",""],["Cable Lateral Raise","Schouders","delt","g","",""],["Band Face Pull","Schouders","rear delt","b","",""],
+["Face Pull (cable)","Schouders","rear","g","",""],["DB / Band Rear Delt Fly","Schouders","rear","db","",""],["Rear Delt Ring Fly","Schouders","rear","r","",""],
+["Pull-ups","Rug","vpull","p","","c"],["Lat Pulldown","Rug","vpull","g","","c"],["Chin-up (supinatie)","Biceps","vpull bi","p","","c"],["Negatieve Pull-up","Rug","vpull","p","","c"],["Wide Ring Pull-up","Rug","vpull","r","","ca"],
+["Cable Row","Rug","hpull","g","","c"],["Dumbbell Row","Rug","hpull hpull2","d","","c"],["Australian Row (tafel/stang)","Rug","hpull","bp","","c"],["Ring Row","Rug","hpull","r","","c"],["Chest Supported Row","Rug","hpull2","gd","","c"],["Renegade Row","Rug","hpull2","d","o","c"],
+["Bicep Curl (gebogen stang)","Biceps","bi","g","",""],["Hammer Curls","Biceps","bi","d","",""],["Ring Bicep Curl","Biceps","bi","r","",""],["Band Curl","Biceps","bi","b","",""],
+["Tricep Cable Pulldown","Triceps","tri","g","",""],["Tricep Overhead Extension","Triceps","tri","d","s",""],["Diamond Push-up","Triceps","tri","b","",""],["Tricep Extension (ringen)","Triceps","tri","r","s",""],["Tricep Dips","Triceps","tri","b","s",""],
+["Hanging Leg Raise","Core","core","p","",""],["Planking","Core","core","b","","h"],["Dead Bug","Core","core","b","",""],["Ab-Wheel Rollout","Core","core","gb","o",""],["Hollow Body Hold","Core","core","b","","h"],["Crunches","Core","core","b","",""],["Cable Woodchopper","Core","core","g","",""],
+["Dead Hang","Onderarmen","grip","p","","h"],["Forearm Curl","Onderarmen","grip","d","",""]
+].map(([n,g,sl,eq,av,x])=>({n,g,sl:sl.split(" "),eq,av:av||"",x:x||""}));
+const HX=[["Burpees","b","ks"],["Jump Squats","b","k"],["Mountain Climbers","b",""],["Kettlebell Swings","g","o"],["Push-ups","b",""],["High Knees","b","k"],["Dumbbell Thrusters","d","s"],["Battle Ropes","g",""],["Roeien (roeitrainer, sprint)","g",""],["Plank Jacks","b",""],["Skater Jumps","b","k"],["Squat to Press (DB)","d","s"],["Fietsen (sprint, hometrainer)","g",""],["Step-ups (snel)","b",""]].map(([n,eq,av])=>({n,g:"Full body",eq,av}));
+const TPL_DAY={
+  FB_A:["squat","hpush","vpull","hinge","delt","core","bi","tri"],FB_B:["hinge","vpush","hpull","lunge","hpush2","core","rear","calf"],FB_C:["lunge","hpush","vpull","glute","delt","core","tri","bi"],
+  UP_A:["hpush","vpull","vpush","hpull","delt","tri","bi","core"],UP_B:["vpush","hpull","hpush2","vpull","rear","bi","tri","chest"],
+  LO_A:["squat","hinge","lunge","quad","ham","calf","core","glute"],LO_B:["hinge","squat","glute","ham","quad","calf","core","lunge"],
+  PUSH:["hpush","vpush","hpush2","delt","tri","chest","core","tri"],PULL:["vpull","hpull","hpull2","rear","bi","grip","core","bi"],LEGS:["squat","hinge","lunge","quad","ham","calf","glute","core"]};
+const DAY_NAME={FB_A:"Full body A",FB_B:"Full body B",FB_C:"Full body C",UP_A:"Bovenlichaam A",UP_B:"Bovenlichaam B",LO_A:"Onderlichaam A",LO_B:"Onderlichaam B",PUSH:"Push (borst, schouders, triceps)",PULL:"Pull (rug, biceps)",LEGS:"Benen"};
+const FOCUS=[["borst","Borst",["chest","hpush2"]],["rug","Rug",["hpull2","vpull"]],["schouders","Schouders",["delt","rear"]],["armen","Armen",["bi","tri"]],["benen","Benen",["quad","ham"]],["billen","Billen",["glute"]],["core","Buik / core",["core"]]];
+const FOCUS_REGION={chest:"up",hpush2:"up",hpull2:"up",vpull:"up",delt:"up",rear:"up",bi:"up",tri:"up",quad:"lo",ham:"lo",glute:"lo",core:"any"};
+const LIKES=[["kracht","Krachttraining (sportschool)"],["cali","Calisthenics / eigen gewicht"],["hiit","HIIT"],["cardio","Cardio (duur)"]];
+const CGOALS=[["massa","Spiermassa"],["kracht","Sterker worden"],["vet","Vetverlies / conditie"],["fit","Algemeen fit"]];
+const LEVELS=[["beg","Beginner","korter dan 6 maanden"],["int","Gemiddeld","6 maanden tot 2 jaar"],["adv","Gevorderd","langer dan 2 jaar"]];
+const EQUIP=[["g","Sportschool"],["d","Dumbbells thuis"],["p","Optrekstang"],["r","Ringen"]];
+const INJ=[["k","Knie"],["o","Onderrug"],["s","Schouder"]];
+const CSPORT=[["Hardlopen","Hardlopen"],["Wielrennen","Fietsen"],["Zwemmen","Zwemmen"],["Roeien","Roeien"]];
+const ALIAS=[["deadlift","Deadlifts"],["bankdruk","Bench Press"],["bench","Bench Press"],["squat","Squats"],["pull-up","Pull-ups"],["pullup","Pull-ups"],["optrek","Pull-ups"],["chin","Chin-up (supinatie)"],["dips","Dips"],["hip thrust","Hip Thrust (barbell)"],["push-up","Push-up (wijd, slow ecc.)"],["opdruk","Push-up (wijd, slow ecc.)"],["lunge","Walking Lunges"],["leg press","Leg Press"],["shoulder press","Dumbbell Shoulder Press"],["roeien","Cable Row"],["row","Cable Row"],["curl","Hammer Curls"],["plank","Planking"],["leg raise","Hanging Leg Raise"]];
+const ALIAS_FOCUS=[["borst","borst"],["rug","rug"],["schouder","schouders"],["arm","armen"],["biceps","armen"],["triceps","armen"],["been","benen"],["benen","benen"],["bil","billen"],["glute","billen"],["buik","core"],["sixpack","core"],["six pack","core"],["core","core"]];
+function coachDefaults(){
+  const b=bodyMeta(),saved=S.meta.coach||{};
+  const goal=saved.goal||(isBulk(b.goal)?"massa":isCut(b.goal)?"vet":b.goal==="onderhoud"?"fit":"");
+  const days=saved.days||Math.min(6,Math.max(2,Object.values(b.sports||{}).reduce((s,x)=>s+(x.n||0),0)||3));
+  return{likes:saved.likes||[],goal,days,level:saved.level||"",min:saved.min||"",equip:saved.equip||[],focus:saved.focus||[],inj:saved.inj||null,csport:saved.csport||"",wish:saved.wish||"",seed:0};
+}
+function parseWish(txt,eqOk){
+  const t=" "+String(txt||"").toLowerCase().replace(/[^a-z0-9ëéï\- ]/g," ")+" ",inc=[],exc=[],focus=[];
+  for(const [k,n] of ALIAS){const i=t.indexOf(k);if(i<0)continue;const before=t.slice(Math.max(0,i-12),i);const neg=/(geen|niet|hekel aan|zonder)\s+(\w+\s+)?$/.test(before);
+    const ex=CX.find(x=>x.n===n);if(!ex)continue;
+    if(neg){for(const x of CX)if(x.n===n||x.n.toLowerCase().includes(k))exc.includes(x.n)||exc.push(x.n)}else inc.includes(n)||inc.push(n)}
+  for(const [k,f] of ALIAS_FOCUS)if(new RegExp("\\b"+k).test(t)&&!focus.includes(f))focus.push(f);
+  return{inc:inc.filter(n=>!exc.includes(n)),exc,focus};
+}
+function equipOf(c){if((c.equip||[]).length)return c.equip;return c.likes.includes("kracht")?["g"]:c.likes.includes("cali")?["p"]:[]}
+function eqAllowed(c){const s=new Set(["b",...equipOf(c)]);if(s.has("g")){s.add("d");s.add("p")}return s}
+const famOf=n=>n.toLowerCase().replace(/\(.*?\)/g,"").replace(/\b(band|cable|db|dumbbell|ring|barbell|machine)\b|\//g,"").replace(/\s+/g," ").trim();
+function pickEx(slot,c,used,offset,prefBw,exc){
+  const ok=eqAllowed(c),inj=c.inj||[];
+  let list=CX.filter(x=>x.sl.includes(slot)&&[...x.eq].some(e=>ok.has(e))&&!inj.some(i=>x.av.includes(i))&&!used.has(x.n)&&!used.has("f:"+famOf(x.n))&&!exc.includes(x.n)&&!(c.level==="beg"&&x.x.includes("a")));
+  if(c.level==="adv")list.sort((a,b)=>(b.x.includes("a")?1:0)-(a.x.includes("a")?1:0));
+  if(prefBw!=null)list.sort((a,b)=>{const bw=x=>/[bpr]/.test(x.eq)&&!/[gd]/.test(x.eq)?1:0;return prefBw?bw(b)-bw(a):bw(a)-bw(b)});
+  if(!list.length)return null;return list[offset%list.length];
+}
+function doseFor(ex,c,isFocus){
+  const comp=ex.x.includes("c"),hold=ex.x.includes("h"),beg=c.level==="beg",adv=c.level==="adv";
+  let sets,reps,rest;
+  if(c.goal==="kracht"){sets=comp?5:3;reps=comp?"4-6":"8-10";rest=comp?"Rust 2-3 min":"Rust 90 s"}
+  else if(c.goal==="massa"){sets=comp?4:3;reps=comp?"8-10":"10-15";rest=comp?"Rust 90 s":"Rust 60 s"}
+  else if(c.goal==="vet"){sets=3;reps=comp?"10-12":"12-15";rest=comp?"Rust 45-60 s":"Rust 30-45 s, eventueel als superset"}
+  else{sets=3;reps=comp?"8-12":"10-12";rest="Rust 60-90 s"}
+  if(beg)sets=Math.max(2,sets-1);if(adv&&!comp)sets++;if(isFocus)sets++;
+  if(hold)reps=beg?"20-30 s":"30-45 s";
+  else if(ex.x.includes("a")&&!comp)reps="4-8";
+  else if(!/[gd]/.test(ex.eq)&&comp&&c.goal==="kracht")reps="5-8 (zwaarste variant)";
+  const tip=beg?"Kies een gewicht of variant waarbij je nog 2-3 herhalingen over hebt.":comp&&c.goal!=="vet"?"Lukt de bovenkant van de herhalingen bij alle sets? Volgende keer iets zwaarder.":"";
+  return{sets:String(sets),reps,note:[rest,tip,isFocus?"Focusoefening":""].filter(Boolean).map(x=>x.replace(/\.$/,"")).join(". ")+"."};
+}
+function allocDays(c){
+  const L=new Set(c.likes),D=+c.days,str=L.has("kracht")||L.has("cali");let S=0,H=0,C=0;
+  if(str){S=D;if(L.has("hiit")&&D>=3){H=1;S--}if(L.has("cardio")&&D>=3){C=D>=6?2:1;S-=C}if(L.has("cardio")&&D===2&&!L.has("hiit")){}if(S<2&&D>=2){const need=2-S;S=2;if(C>=need)C-=need;else{H-=need-C;C=0}}}
+  else if(L.has("hiit")&&L.has("cardio")){H=Math.min(3,Math.ceil(D/2));C=D-H}
+  else if(L.has("hiit")){H=Math.min(D,4);C=D-H}
+  else{C=D}
+  return{S,H,C};
+}
+function strengthSplit(S,c){
+  if(S<=0)return[];if(S===1)return["FB_A"];if(S===2)return["FB_A","FB_B"];
+  if(S===3)return c.level==="adv"&&c.goal!=="vet"?["PUSH","PULL","LEGS"]:["FB_A","FB_B","FB_C"];
+  if(S===4)return["UP_A","LO_A","UP_B","LO_B"];if(S===5)return["UP_A","LO_A","PUSH","PULL","LEGS"];
+  return["PUSH","PULL","LEGS","PUSH","PULL","LEGS"];
+}
+function buildPlan(c){
+  const w=parseWish(c.wish),focus=[...new Set([...(c.focus||[]),...w.focus])],al=allocDays(c),L=new Set(c.likes);
+  const prefBw=L.has("cali")&&!L.has("kracht")?true:L.has("kracht")&&!L.has("cali")?false:null;
+  const perMin={30:4,45:5,60:6,75:7,90:8}[c.min||60]||6,count=Math.max(3,Math.min(9,perMin+(c.goal==="vet"?1:0)-(c.goal==="kracht"?1:0)));
+  const split=strengthSplit(al.S,c),routines=[],mustAdd=[...w.inc],slotUse={};
+  split.forEach((tpl,di)=>{
+    const used=new Set(),items=[];
+    let slots=[...TPL_DAY[tpl]];
+    const region=/^(UP|PUSH|PULL)/.test(tpl)?"up":/^(LO|LEGS)/.test(tpl)?"lo":"fb";
+    const fslots=focus.flatMap(f=>(FOCUS.find(x=>x[0]===f)||[,,[]])[2]).filter(s=>{const r=FOCUS_REGION[s];return r==="any"||region==="fb"||r===region});
+    for(const fs of fslots.slice(0,2)){slots.splice(Math.min(4,slots.length),0,"F:"+fs)}
+
+    const dayPrefBw=prefBw==null?(di%2===1):prefBw;
+    for(const sl of slots){if(items.length>=count)break;const isF=sl.startsWith("F:"),s=isF?sl.slice(2):sl,off=(slotUse[s]=(slotUse[s]||0)+1)-1+(c.seed||0);
+      let ex=null;const mi=mustAdd.findIndex(n=>{const x=CX.find(y=>y.n===n);return x&&x.sl.includes(s)&&!used.has(n)});
+      if(mi>=0){ex=CX.find(y=>y.n===mustAdd[mi]);mustAdd.splice(mi,1)}else ex=pickEx(s,c,used,off,dayPrefBw,w.exc);
+      if(!ex)continue;used.add(ex.n);used.add("f:"+famOf(ex.n));items.push({name:ex.n,group:ex.g,...doseFor(ex,c,isF)})}
+    routines.push({key:tpl,name:`Dag ${di+1} · ${DAY_NAME[tpl]}`,items});
+  });
+  const hiit=[];const ok=eqAllowed(c),inj=c.inj||[];
+  for(let i=0;i<al.H;i++){const pool=HX.filter(x=>[...x.eq].some(e=>ok.has(e))&&!inj.some(j=>x.av.includes(j)));const n=c.min&&c.min<=30?5:6,beg=c.level==="beg";
+    const o=(i*n+(c.seed||0)*2)%Math.max(1,pool.length),uniq=pool.slice(o).concat(pool.slice(0,o)).slice(0,n);
+    hiit.push({key:"HIIT",name:`HIIT ${al.H>1?"ABCD"[i]:""}`.trim(),items:uniq.map(x=>({name:x.n,group:"Full body",sets:beg?"3":"4",reps:beg?"30 s":"40 s",note:beg?"30 s werk, 30 s rust. Na elke ronde 1 min rust.":"40 s werk, 20 s rust. Na elke ronde 1 min rust."}))});
+  }
+  const cs=c.csport||"Hardlopen",cardio=[];
+  for(let i=0;i<al.C;i++){const lng=i===1||(al.C===1&&c.goal!=="vet"&&c.goal!=="fit");
+    const t=c.goal==="vet"?(i===0?"Rustige duurtraining (zone 2)":"Intervaltraining"):lng?"Lange rustige duurtraining":i===0?"Rustige duurtraining (zone 2)":"Tempotraining";
+    cardio.push({sport:cs,title:`${cs==="Wielrennen"?"Fietsen":cs}: ${t}`,durMin:lng?(c.min&&c.min>60?c.min:60):(c.min||45)})}
+  if(!routines.length&&!hiit.length)routines.push({key:"CORE",name:"Kracht & stabiliteit (15-20 min)",items:["Planking","Dead Bug","Glute Bridge (single leg)","Walking Lunges","Band Face Pull"].map(n=>CX.find(x=>x.n===n)).filter(x=>x&&!inj.some(j=>x.av.includes(j))).map(x=>({name:x.n,group:x.g,sets:"2",reps:x.x.includes("h")?"30 s":"10-12",note:"Doe dit 1-2× per week na een rustige duurtraining. Helpt blessures voorkomen."}))});
+  // weekvolgorde: kracht verspreid, hiit/cardio ertussen
+  const strDays=routines.filter(r=>r.key!=="CORE"),other=[...hiit.map(h=>({t:"h",r:h})),...cardio.map(x=>({t:"c",x}))];
+  const total=strDays.length+other.length,opos=new Set(other.map((_,j)=>Math.min(total-1,Math.round((j+0.5)*total/other.length))));
+  const seq=[];let si=0,oi=0;
+  for(let k=0;k<total;k++){if((opos.has(k)&&oi<other.length)||si>=strDays.length)seq.push(other[oi++]);else seq.push({t:"s",r:strDays[si++]})}
+  const DAYPOS={1:[0],2:[0,3],3:[0,2,4],4:[0,1,3,4],5:[0,1,2,4,5],6:[0,1,2,3,4,5],7:[0,1,2,3,4,5,6]}[seq.length]||[0,1,2,3,4,5,6];
+  const week=seq.map((s,i)=>({...s,dow:DAYPOS[i]}));
+  // persoonlijk
+  const opt=[["level",!!c.level,"je niveau"],["min",!!c.min,"hoe lang een training mag duren"],["equip",(c.equip||[]).length>0,"welk materiaal je hebt"],["focus",focus.length>0,"welke spiergroepen je extra wilt trainen"],["inj",c.inj!=null,"of je blessures of klachten hebt"],["wish",!!(c.wish||"").trim(),"je eigen wensen (oefeningen die je wel of niet wilt)"]];
+  if(L.has("cardio"))opt.push(["csport",!!c.csport,"je favoriete duursport"]);
+  const done=opt.filter(o=>o[1]).length;
+  return{routines:[...routines,...hiit],cardio,week,al,count,focus,wish:w,score:Math.round(done/opt.length*100),missing:opt.filter(o=>!o[1]).map(o=>o[2]),notIncl:mustAdd};
+}
+function coachExplain(c,P){
+  const g=(CGOALS.find(x=>x[0]===c.goal)||[,""])[1].toLowerCase(),L=c.likes,parts=[];
+  parts.push(`Een week van ${c.days} dagen${P.al.S?`: ${P.al.S}× kracht`:""}${P.al.H?`${P.al.S?", ":": "}${P.al.H}× HIIT`:""}${P.al.C?`${P.al.S||P.al.H?", ":": "}${P.al.C}× ${(c.csport||"duurtraining").toLowerCase()}`:""}, gericht op ${g||"algemene fitheid"}.`);
+  if(P.al.S>=4)parts.push(P.al.S===4?"Je traint boven- en onderlichaam om en om; zo krijgt elke spiergroep 2× per week een prikkel en genoeg herstel.":"Elke spiergroep wordt 2× per week getraind, met een rustdag of lichte dag ertussen.");
+  else if(P.al.S===3&&/PUSH/.test(P.routines[0]?.key||""))parts.push("Push, pull en benen: elke training richt zich op andere spieren, zodat je goed herstelt.");
+  else if(P.al.S)parts.push("Full body: elke training raakt alle grote spiergroepen. Ideaal bij 2-3 trainingen per week.");
+  if(c.goal==="kracht")parts.push("Zware basisoefeningen met weinig herhalingen en lange rust: zo word je het snelst sterker.");
+  if(c.goal==="massa")parts.push("8-15 herhalingen met genoeg volume: de beste prikkel voor spiergroei. Combineer met je voedingsdoel.");
+  if(c.goal==="vet")parts.push("Kortere rust en wat meer oefeningen houden je hartslag hoog. Je voeding bepaalt het meeste van je vetverlies.");
+  if(!(c.equip||[]).length&&(L.includes("kracht")||L.includes("cali")))parts.push(L.includes("kracht")?"Je hebt geen materiaal gekozen; de coach gaat uit van een sportschool.":"Je hebt geen materiaal gekozen; de coach gaat uit van eigen gewicht en een optrekstang.");
+  if((c.inj||[]).length)parts.push(`Oefeningen die je ${c.inj.map(i=>(INJ.find(x=>x[0]===i)||[,""])[1].toLowerCase()).join(" en ")} zwaar belasten zijn weggelaten. Voel je pijn, stop dan en overleg met een fysiotherapeut.`);
+  if(P.wish.inc.length||P.wish.exc.length||P.wish.focus.length)parts.push(`Uit je wensen: ${[P.wish.inc.length?`${P.wish.inc.join(", ")} toegevoegd`:"",P.wish.exc.length?`${P.wish.exc.join(", ")} weggelaten`:"",P.wish.focus.length?`extra aandacht voor ${P.wish.focus.join(", ")}`:""].filter(Boolean).join("; ")}.`);
+  if(P.notIncl.length)parts.push(`${P.notIncl.join(", ")} paste niet in dit schema (bijvoorbeeld door je materiaal of de indeling). Je kunt het zelf toevoegen.`);
+  return parts;
+}
+const DOW=["maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag","zondag"];
+function viewCoachGen(){
+  const c=UI.cg;
+  if(c.result){const P=c.result,ex=coachExplain(c,P);
+    let h=`<div class="wohead"><div class="title">Jouw schema</div><button class="linkbtn" data-act="cg-back">← Wensen aanpassen</button></div>
+      <div class="card stack" style="margin-top:10px"><div class="pmeter"><span>Hoe persoonlijk</span><b>${P.score}%</b></div><div class="pt"><span style="width:${P.score}%"></span></div>
+      ${P.missing.length?`<p class="small muted" style="margin:0">Nog persoonlijker? Vul ook in: ${P.missing.join(", ")}.</p>`:`<p class="small muted" style="margin:0">Je hebt alles ingevuld; dit schema is zo persoonlijk als de coach het kan maken.</p>`}</div>
+      <div class="card" style="margin-top:10px"><ul class="hl">${ex.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>
+      <h2>Je week</h2><div class="recgroup">${P.week.map(d=>`<div class="row" style="cursor:default"><span class="n">${DOW[d.dow].charAt(0).toUpperCase()+DOW[d.dow].slice(1)}</span><span class="b none">${d.t==="s"?"Kracht":d.t==="h"?"HIIT":"Duur"}</span><span class="l">${esc(d.t==="c"?`${d.x.title} · ± ${d.x.durMin} min`:d.r.name)}</span></div>`).join("")}</div>`;
+    for(const r of P.routines)h+=`<h2>${esc(r.name)}</h2><div class="card" style="padding:6px 14px">${r.items.map(it=>`<div class="fline"><span class="fq">${esc(it.sets)} × ${esc(it.reps)}</span><span class="fn">${esc(it.name)}</span><span class="fm">${esc(it.note)}</span></div>`).join("")}</div>`;
+    h+=`<div class="card stack" style="margin-top:14px"><label class="check"><input type="checkbox" id="cg-plan" checked><span>Zet de trainingen ook in mijn planning, vanaf volgende week maandag</span></label><label class="f">Hoeveel weken<select id="cg-weeks">${[1,2,4,6,8].map(v=>`<option value="${v}" ${v===4?"selected":""}>${v} ${v===1?"week":"weken"}</option>`).join("")}</select></label>
+      <button class="btn primary" data-act="cg-save">Opslaan als map</button><button class="btn" data-act="cg-again">Andere oefeningen kiezen</button></div>
+      <p class="small muted">De coach maakt een schema volgens algemene trainingsrichtlijnen; het is geen persoonlijk advies van een trainer of fysiotherapeut. Je kunt alles daarna zelf aanpassen.</p>`;
+    return h;}
+  const chips=(key,opts,multi)=>`<div class="chips">${opts.map(([v,l,sub])=>`<button class="chipb" data-act="cg-set" data-k="${key}" data-v="${v}" data-m="${multi?1:""}" aria-pressed="${multi?(c[key]||[]).includes(v):String(c[key])===String(v)}">${esc(l)}${sub?` <span class="small muted">· ${esc(sub)}</span>`:""}</button>`).join("")}</div>`;
+  return `<div class="wohead"><div class="title">Schema op maat</div><button class="linkbtn" data-act="cg-close">Annuleren</button></div>
+    <p class="hp small muted" style="margin-top:8px">Vertel wat je leuk vindt en wat je wilt bereiken. Hoe meer je invult, hoe beter het schema bij je past.</p>
+    <div class="card stack">
+      <div class="f">Wat vind je leuk? <i>meerdere mogelijk</i>${chips("likes",LIKES,true)}</div>
+      <div class="f">Wat wil je bereiken?${chips("goal",CGOALS)}</div>
+      <div class="f">Hoeveel dagen per week?${chips("days",[2,3,4,5,6].map(v=>[v,String(v)]))}</div>
+    </div>
+    <h2>Maak het persoonlijker <span class="small muted">· optioneel</span></h2><div class="card stack">
+      <div class="f">Je niveau${chips("level",LEVELS)}</div>
+      <div class="f">Hoe lang mag een training duren?${chips("min",[30,45,60,75,90].map(v=>[v,v+" min"]))}</div>
+      <div class="f">Welk materiaal heb je? <i>eigen gewicht kan altijd</i>${chips("equip",EQUIP,true)}</div>
+      <div class="f">Extra aandacht voor <i>maximaal 2</i>${chips("focus",FOCUS.map(f=>[f[0],f[1]]),true)}</div>
+      <div class="f">Blessures of klachten?<div class="chips"><button class="chipb" data-act="cg-noinj" aria-pressed="${Array.isArray(c.inj)&&!c.inj.length}">Geen</button>${INJ.map(([v,l])=>`<button class="chipb" data-act="cg-set" data-k="inj" data-v="${v}" data-m="1" aria-pressed="${(c.inj||[]).includes(v)}">${l}</button>`).join("")}</div></div>
+      ${c.likes.includes("cardio")?`<div class="f">Favoriete duursport${chips("csport",CSPORT)}</div>`:""}
+      <label class="f">Nog wensen? <i>bijv. "graag deadlifts en pull-ups, geen squats, sterkere billen"</i><textarea id="cg-wish" rows="2">${esc(c.wish)}</textarea></label>
+    </div>
+    <button class="btn primary block" style="margin-top:14px" data-act="cg-make">Maak mijn schema</button>`;
+}
+async function coachSave(){
+  const c=UI.cg,P=c.result,withPlan=document.getElementById("cg-plan")?.checked,weeks=+(document.getElementById("cg-weeks")?.value||4);
+  const L=c.likes.map(l=>({kracht:"kracht",cali:"calisthenics",hiit:"HIIT",cardio:"cardio"})[l]).join(" + ");
+  let nm=`Coach · ${c.days} dagen ${L}`;if(folderList().some(f=>norm(f.name)===norm(nm)))nm+=` (${dateTxt(today())})`;
+  const fid="fd-"+uid();await put("folders",fid,{name:nm.slice(0,60),order:folderList().length});UI.open["f:"+fid]=true;lsSet(LS_OPEN,UI.open);
+  const ids=await addRoutinesTo(P.routines.map(r=>({name:r.name,items:r.items})),fid),idOf=new Map(P.routines.map((r,i)=>[r,ids[i]]));
+  let n=0;
+  if(withPlan){const t=today(),mon=addDays(weekStart(t),7),jobs=[],stem=uid();
+    for(let w=0;w<weeks;w++)P.week.forEach((d,i)=>{const date=addDays(mon,w*7+d.dow);
+      if(d.t==="c")jobs.push(["plan",stem+"c"+w+"_"+i,{type:"cardio",sport:["Hardlopen","Wielrennen"].includes(d.x.sport)?d.x.sport:"Anders",title:d.x.title,durMin:d.x.durMin,own:true,date,updated:Date.now()}]);
+      else{const rid=idOf.get(d.r);if(rid)jobs.push(["plan",stem+"r"+w+"_"+i,{type:"routine",routineId:rid,routineName:d.r.name,own:true,date,updated:Date.now()}])}});
+    await runJobs(jobs,put);n=jobs.length}
+  await put("meta","coach",{likes:c.likes,goal:c.goal,days:c.days,level:c.level,min:c.min,equip:c.equip,focus:c.focus,inj:c.inj,csport:c.csport,wish:c.wish});
+  UI.cg=null;UI.tab="schemas";lsSet(LS_TAB,"schemas");toastOk(`Map "${nm}" gemaakt${n?` en ${n} trainingen ingepland`:""}`);render();window.scrollTo(0,0);
+}
+document.addEventListener("click",async ev=>{
+  const b=ev.target.closest("[data-act]");if(!b)return;const act=b.dataset.act;
+  if(!act.startsWith("cg-"))return;
+  const c=UI.cg;
+  switch(act){
+    case "cg-open":UI.cg=coachDefaults();UI.tab="schemas";lsSet(LS_TAB,"schemas");render();window.scrollTo(0,0);break;
+    case "cg-close":UI.cg=null;render();window.scrollTo(0,0);break;
+    case "cg-set":{const k=b.dataset.k,raw=b.dataset.v,v=/^\d+$/.test(raw)?+raw:raw;c.wish=document.getElementById("cg-wish")?.value??c.wish;
+      if(b.dataset.m){const a=c[k]=Array.isArray(c[k])?c[k]:[];const i=a.indexOf(v);if(i>=0)a.splice(i,1);else{if(k==="focus"&&a.length>=2)a.shift();a.push(v)}}
+      else c[k]=c[k]===v?"":v;render();break}
+    case "cg-noinj":c.wish=document.getElementById("cg-wish")?.value??c.wish;c.inj=Array.isArray(c.inj)&&!c.inj.length?null:[];render();break;
+    case "cg-make":{c.wish=document.getElementById("cg-wish")?.value||"";
+      if(!c.likes.length){toast("Kies minstens één soort training die je leuk vindt.");return}
+      if(!c.goal){toast("Kies wat je wilt bereiken.");return}
+      if(!c.days){toast("Kies hoeveel dagen per week.");return}
+      c.result=buildPlan(c);render();window.scrollTo(0,0);break}
+    case "cg-again":c.seed=(c.seed||0)+1;c.result=buildPlan(c);render();window.scrollTo(0,0);toast("Andere oefeningen gekozen");break;
+    case "cg-back":c.result=null;render();window.scrollTo(0,0);break;
+    case "cg-save":await coachSave();break;
+  }
+});
+
+/* ---------- als app installeren ---------- */
+let installEvt=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;if(UI.tab==="profile"||UI.tab==="help")render()});
+const isStandalone=()=>window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+function installCard(){
+  if(isStandalone())return "";
+  return `<div class="card start installcard"><span><span class="name">Installeer als app</span><br><span class="muted small">Eigen icoon op je beginscherm, opent zonder adresbalk en werkt offline.</span></span><button class="btn primary" data-act="inst">Installeren</button></div>`;
+}
+function installSheet(){
+  const ios=isIOS();
+  return `<div class="sh"><h2>Installeren als app</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card stack">
+    ${ios?`<ol class="hl"><li>Open deze pagina in <b>Safari</b> (niet in een andere app of browser).</li><li>Tik onderaan op het <b>deel-icoon</b> (vierkantje met pijl omhoog).</li><li>Scroll en kies <b>Zet op beginscherm</b>, dan <b>Voeg toe</b>.</li><li>Open voortaan het Krachtlogboek-icoon op je beginscherm.</li></ol>`
+    :`<ol class="hl"><li>Open deze pagina in <b>Chrome</b>.</li><li>Tik rechtsboven op de <b>drie puntjes</b>.</li><li>Kies <b>App installeren</b> of <b>Toevoegen aan startscherm</b>.</li></ol>`}
+    <p class="small muted" style="margin:0">Op het beginscherm blijft je login ook bewaard; in Safari worden gegevens anders na 7 dagen zonder gebruik gewist.</p></div>`;
+}
+EXTRA_SHEETS["install"]=installSheet;
+document.addEventListener("click",async ev=>{const b=ev.target.closest('[data-act="inst"]');if(!b)return;
+  if(installEvt){installEvt.prompt();try{const r=await installEvt.userChoice;if(r.outcome==="accepted")toast("De app wordt geïnstalleerd")}catch(e){}installEvt=null;render()}
+  else{UI.sheet={type:"install"};render()}});
+
+/* ---------- voortgang: statistieken, samenhang en advies ---------- */
+const ST={good:["Goed","st-good"],warn:["Let op","st-warn"],bad:["Bijsturen","st-bad"],none:["Te weinig gegevens","st-none"]};
+const e1rm=s=>s.k>0?s.k*(1+s.r/30):s.r;
+function daysBetween(a,b){return Math.round((Date.parse(b+"T12:00:00")-Date.parse(a+"T12:00:00"))/864e5)}
+function weightTrend(from,to){
+  const l=weightList().filter(x=>x.date>=from&&x.date<=to);if(l.length<2)return null;
+  const span=daysBetween(l[0].date,l[l.length-1].date);if(span<6)return null;
+  const xs=l.map(x=>daysBetween(from,x.date)),ys=l.map(x=>x.kg),n=l.length,mx=xs.reduce((a,b)=>a+b)/n,my=ys.reduce((a,b)=>a+b)/n;
+  let sxy=0,sxx=0;for(let i=0;i<n;i++){sxy+=(xs[i]-mx)*(ys[i]-my);sxx+=(xs[i]-mx)**2}
+  const perDay=sxx?sxy/sxx:0;return{perWeek:perDay*7,n,span,first:l[0],last:l[l.length-1],list:l};
+}
+function periodStats(days){
+  const t=today(),from=addDays(t,-(days-1)),pFrom=addDays(from,-days),pTo=addDays(from,-1);
+  const n=nutrition(),b=bodyMeta();
+  const fdays=[];for(let i=0;i<days;i++){const d=addDays(from,i),its=logDay(d);if(its.length){const m=sumM(its);if(m.k>300)fdays.push({d,...m})}}
+  const avg=k=>fdays.length?fdays.reduce((s,x)=>s+x[k],0)/fdays.length:null;
+  const ses=sortedSessions().filter(s=>s.date>=from&&s.date<=t),prev=sortedSessions().filter(s=>s.date>=pFrom&&s.date<=pTo);
+  const perWeekTarget=Object.values(b.sports||{}).reduce((s,x)=>s+(x.n||0),0);
+  const plan=planList().filter(p=>p.date>=from&&p.date<=t&&planKind(p)!=="rest"),planDone=plan.filter(p=>planDoneFor(p)).length;
+  const best=(list)=>{const m={};for(const s of list)for(const e of s.entries||[]){const k=entryKey(e);for(const x of e.sets||[]){if(!(x.r>0))continue;const v=e1rm(x);if(!m[k]||v>m[k].v)m[k]={v,name:exName(e.exId,e.name),set:x}}}return m};
+  const bNow=best(ses),bPrev=best(prev);let up=0,same=0,down=0;const ups=[],downs=[];
+  for(const [k,x] of Object.entries(bNow)){const p=bPrev[k];if(!p)continue;const d=(x.v-p.v)/p.v;if(d>0.015){up++;ups.push(x.name)}else if(d<-0.03){down++;downs.push(x.name)}else same++}
+  const km=l=>l.filter(s=>s.kind==="cardio").reduce((s,x)=>s+(x.km||0),0),mins=l=>l.filter(s=>s.kind==="cardio").reduce((s,x)=>s+(x.durMin||0),0);
+  const wt=weightTrend(addDays(t,-Math.max(days,14)+1),t);
+  return{days,from,t,n,b,fdays,kcal:avg("k"),prot:avg("p"),carb:avg("c"),fat:avg("f"),ses,prev,str:ses.filter(s=>s.kind!=="cardio").length,cardio:ses.filter(s=>s.kind==="cardio").length,
+    perWeekTarget,plan:plan.length,planDone,up,same,down,ups,downs,compared:up+same+down,km:km(ses),kmPrev:km(prev),min:mins(ses),wt,weighIns:weightList().filter(x=>x.date>=from).length};
+}
+function rateEval(g,pct){
+  if(g==="onderhoud"){const a=Math.abs(pct);return a<=0.25?"good":a<=0.5?"warn":"bad"}
+  const target=GOAL_RATE[g]||0;
+  if(Math.sign(pct)!==Math.sign(target)||Math.abs(pct)<0.05)return Math.abs(pct)<0.1?"warn":"bad";
+  const r=pct/target;return r>2?"bad":r>=0.5&&r<=1.6?"good":"warn";
+}
+function progressTiles(P){
+  const n=P.n,g=P.b.goal,w=currentWeight(),tiles=[];
+  if(P.wt&&w){const pct=P.wt.perWeek/w*100,st=g?rateEval(g,pct):"none";
+    tiles.push({k:"gewicht",l:"Gewicht",v:Math.abs(P.wt.perWeek)<0.05?"± 0 kg/week":`${P.wt.perWeek>=0?"+":"−"}${fmt1(Math.abs(P.wt.perWeek))} kg/week`,sub:`${fmt1(P.wt.first.kg)} → ${fmt1(P.wt.last.kg)} kg`,st})}
+  else tiles.push({k:"gewicht",l:"Gewicht",v:"—",sub:"Weeg je minstens 2× met een week ertussen",st:"none"});
+  const minDays=Math.min(4,Math.ceil(P.days/2));
+  if(P.fdays.length>=minDays&&!n.miss){const d=(P.kcal-n.kcal)/n.kcal,a=Math.abs(d);
+    tiles.push({k:"kcal",l:"Calorieën",v:`${nl(r10(P.kcal))} kcal`,sub:`doel ${nl(r10(n.kcal))} · ${d>=0?"+":"−"}${Math.round(a*100)}%`,st:a<=0.07?"good":a<=0.15?"warn":"bad"});
+    const pr=P.prot/n.protein;tiles.push({k:"eiwit",l:"Eiwit",v:`${Math.round(P.prot)} g`,sub:`doel ${r5(n.protein)} g · ${Math.round(pr*100)}%`,st:pr>=0.9?"good":pr>=0.75?"warn":"bad"})}
+  else{tiles.push({k:"kcal",l:"Calorieën",v:"—",sub:`Log je eten minstens ${minDays} dagen`,st:"none"});tiles.push({k:"eiwit",l:"Eiwit",v:"—",sub:"Komt uit je voedingsdagboek",st:"none"})}
+  const weeks=P.days/7,tot=P.str+P.cardio;
+  if(P.perWeekTarget){const r=tot/(P.perWeekTarget*weeks);tiles.push({k:"train",l:"Trainingen",v:`${tot}×`,sub:`doel ${Math.round(P.perWeekTarget*weeks)}× (${P.perWeekTarget}× per week)`,st:r>=0.9?"good":r>=0.6?"warn":"bad"})}
+  else if(P.plan){const r=P.planDone/P.plan;tiles.push({k:"train",l:"Trainingen",v:`${P.planDone} van ${P.plan}`,sub:"geplande trainingen gedaan",st:r>=0.9?"good":r>=0.6?"warn":"bad"})}
+  else tiles.push({k:"train",l:"Trainingen",v:`${tot}×`,sub:"Vul je sportweek in bij Profiel voor een doel",st:tot?"good":"none"});
+  if(P.compared){const st=P.down>P.up?"bad":P.up>0?"good":"warn";tiles.push({k:"kracht",l:"Kracht",v:`${P.up} ↑ · ${P.same} = · ${P.down} ↓`,sub:"oefeningen t.o.v. de periode ervoor",st})}
+  else if(P.str)tiles.push({k:"kracht",l:"Kracht",v:"—",sub:"Doe oefeningen vaker om te vergelijken",st:"none"});
+  if(P.cardio||P.kmPrev){const d=P.kmPrev?(P.km-P.kmPrev)/P.kmPrev:1;tiles.push({k:"duur",l:"Duursport",v:`${fmt1(P.km)} km`,sub:P.kmPrev?`${d>=0?"+":"−"}${Math.round(Math.abs(d)*100)}% t.o.v. de periode ervoor`:`${P.cardio}× deze periode`,st:d>=-0.1?"good":d>=-0.35?"warn":"bad"})}
+  if(P.plan&&P.perWeekTarget){const r=P.planDone/P.plan;tiles.push({k:"plan",l:"Planning",v:`${P.planDone} van ${P.plan}`,sub:"geplande trainingen gedaan",st:r>=0.9?"good":r>=0.6?"warn":"bad"})}
+  return tiles;
+}
+function progressInsights(P,tiles){
+  const n=P.n,g=P.b.goal,T=Object.fromEntries(tiles.map(t=>[t.k,t])),w=currentWeight(),out=[];
+  const logged=P.fdays.length,wt=P.wt,pct=wt&&w?wt.perWeek/w*100:null,kcalDiff=P.kcal!=null&&!n.miss?P.kcal-n.kcal:null;
+  // werkelijk verbruik uit dagboek + gewicht
+  if(wt&&logged>=Math.min(10,P.days-2)&&P.days>=14){const real=P.kcal-wt.perWeek/7*7700;
+    if(Math.abs(real-n.tdee)>150)var tdeeIns=({st:"info",t:`Op basis van wat je eet en hoe je gewicht verandert, lijkt je werkelijke verbruik ± ${nl(r10(real))} kcal per dag. De app rekende met ${nl(r10(n.tdee))} kcal. ${real>n.tdee?"Je verbrandt dus meer dan verwacht.":"Je verbrandt dus minder dan verwacht."} Pas je dagdoel gerust aan bij Voeding → Zelf aanpassen: ± ${nl(r10(real+(n.kcal-n.tdee)))} kcal past dan bij je doel.`})}
+  if(g&&wt&&T.gewicht.st!=="good"){
+    if(isBulk(g)){
+      if(pct<=0.05){if(kcalDiff!=null&&kcalDiff< -100)out.push({st:"bad",t:`Je komt niet aan, en je eet gemiddeld ${nl(r10(-kcalDiff))} kcal per dag minder dan je doel. Dat verklaart het: zonder overschot groeit je lichaam niet. Voeg dagelijks iets calorierijks toe, zoals een extra boterham met pindakaas, een handje noten of een shake met volle melk.`});
+        else if(kcalDiff!=null)out.push({st:"warn",t:`Je eet volgens je dagboek op je doel, maar je gewicht stijgt niet. Je verbruikt waarschijnlijk meer dan berekend. Verhoog je dagdoel met 150 à 200 kcal en kijk over 2 weken opnieuw.`});
+        else out.push({st:"warn",t:"Je gewicht stijgt niet. Houd een paar weken je eten bij in het dagboek, dan ziet de app of je genoeg eet."})}
+      else if(pct>GOAL_RATE[g]*1.6)out.push({st:"warn",t:`Je komt ${fmt1(wt.perWeek)} kg per week aan; dat is sneller dan bij een ${g==="bulk_lean"?"lean":"heavy"} bulk past. Een deel daarvan is waarschijnlijk vet. Verlaag je dagdoel met 100 à 200 kcal.`});
+    }else if(isCut(g)){
+      if(pct>=-0.05){if(kcalDiff!=null&&kcalDiff>100)out.push({st:"bad",t:`Je valt niet af, en je eet gemiddeld ${nl(r10(kcalDiff))} kcal per dag boven je doel. Kijk in je dagboek waar dat zit: vaak zijn het snacks, sauzen en drinken.`});
+        else if(kcalDiff!=null)out.push({st:"warn",t:"Je eet volgens je dagboek op je doel, maar je gewicht daalt niet. Controleer of je alles registreert (ook olie, sauzen en drinken) of verlaag je dagdoel met 150 kcal."});
+        else out.push({st:"warn",t:"Je gewicht daalt niet. Houd een paar weken je eten bij, dan ziet de app waar het zit."})}
+      else if(pct<GOAL_RATE[g]*1.6||pct<-1)out.push({st:"warn",t:`Je valt ${fmt1(-wt.perWeek)} kg per week af. Dat is snel: je loopt kans op spierverlies en je houdt het moeilijker vol. Verklein je tekort met 150 à 250 kcal.`});
+    }else if(g==="onderhoud")out.push({st:"warn",t:`Je gewicht ${pct>0?"stijgt":"daalt"} met ${fmt1(Math.abs(wt.perWeek))} kg per week, terwijl je op gewicht wilt blijven. Pas je dagdoel met ± ${nl(r10(Math.abs(wt.perWeek)/7*7700))} kcal per dag ${pct>0?"omlaag":"omhoog"} aan.`});
+  }
+  if(isCut(g)&&P.down>P.up&&P.down>0)out.push({st:"bad",t:`Je kracht daalt (${P.downs.slice(0,3).join(", ")}). Tijdens droogtrainen is dat een signaal dat je tekort te groot is of je te weinig eiwit eet. ${T.eiwit&&T.eiwit.st!=="good"&&T.eiwit.st!=="none"?"Je eiwit zit ook onder je doel; begin daar.":"Verklein je tekort wat en blijf zwaar trainen."}`});
+  else if(P.down>P.up&&P.down>0)out.push({st:"warn",t:`Bij ${P.downs.slice(0,3).join(", ")} ben je minder sterk dan de periode ervoor. Slaap, stress, te weinig eten of te veel volume kunnen dat verklaren. Plan een lichtere week als het blijft dalen.`});
+  else if(P.up)out.push({st:"good",t:`Je wordt sterker: vooruitgang bij ${P.ups.slice(0,3).join(", ")}${P.up>3?` en ${P.up-3} andere`:""}.${T.eiwit&&T.eiwit.st==="good"?" Je eiwit zit ook goed; dat helpt.":""}`});
+  if(T.eiwit&&(T.eiwit.st==="bad"||T.eiwit.st==="warn")&&!out.some(o=>/eiwit/.test(o.t)))out.push({st:T.eiwit.st,t:`Je eet gemiddeld ${Math.round(P.prot)} g eiwit, je doel is ${r5(n.protein)} g. Een extra portie kwark, skyr, kipfilet of een shake overbrugt het verschil van ± ${Math.round(n.protein-P.prot)} g.`});
+  if(T.train&&T.train.st==="bad")out.push({st:"bad",t:`Je trainde ${P.str+P.cardio}× in deze periode, minder dan je van plan was. Plan je trainingen vooraf in bij Planning; dat helpt om ze ook echt te doen.`});
+  else if(T.train&&T.train.st==="warn")out.push({st:"warn",t:"Je trainde iets minder dan gepland. Een vaste dag en tijd per training maakt het makkelijker om vol te houden."});
+  if(T.duur&&T.duur.st!=="good")out.push({st:T.duur.st,t:`Je liep of fietste ${fmt1(P.km)} km, minder dan de periode ervoor (${fmt1(P.kmPrev)} km). Was dat bewust (rustweek), dan is dat prima.`});
+  if(typeof tdeeIns!=="undefined"&&tdeeIns)out.push(tdeeIns);
+  if(logged<Math.ceil(P.days*0.6))out.push({st:"info",t:`Je hebt ${logged} van de ${P.days} dagen je eten geregistreerd. Hoe vaker je registreert, hoe beter de app de relatie tussen je voeding, gewicht en kracht kan laten zien. Probeer minstens 5 dagen per week.`});
+  if(P.weighIns<Math.min(3,Math.ceil(P.days/7)+1))out.push({st:"info",t:"Weeg jezelf 2 à 3 keer per week, 's ochtends voor het ontbijt. Dan ziet de app je echte trend en niet de dagelijkse schommelingen."});
+  if(!out.some(o=>o.st==="bad"||o.st==="warn")&&tiles.filter(t=>t.st==="good").length>=2)out.unshift({st:"good",t:"Je bent goed op koers: je voeding, training en resultaten passen bij elkaar. Ga zo door."});
+  return out;
+}
+function progressChart(P){
+  const n=P.n,W=320,H=96,pad=4,days=P.days,bw=(W-2*pad)/days;
+  if(n.miss)return "";
+  const map=Object.fromEntries(P.fdays.map(x=>[x.d,x.k])),max=Math.max(n.kcal*1.4,...P.fdays.map(x=>x.k));
+  let bars="";for(let i=0;i<days;i++){const d=addDays(P.from,i),k=map[d];if(!k)continue;const h=(H-14)*k/max,a=Math.abs(k-n.kcal)/n.kcal,c=a<=0.07?"var(--good)":a<=0.15?"var(--warn)":"var(--bad)";bars+=`<rect x="${(pad+i*bw+bw*0.15).toFixed(1)}" y="${(H-h).toFixed(1)}" width="${(bw*0.7).toFixed(1)}" height="${h.toFixed(1)}" rx="2" fill="${c}"/>`}
+  const ty=H-(H-14)*n.kcal/max;
+  return `<div class="card"><div class="mh"><b>Calorieën per dag</b><span class="small muted">lijn = je doel</span></div><svg class="pchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Calorieën per dag ten opzichte van je doel">${bars}<line x1="0" x2="${W}" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}" stroke="var(--fg)" stroke-dasharray="4 4" stroke-width="1.2" opacity=".6"/></svg>${P.fdays.length?"":`<p class="small muted" style="margin:0">Nog geen dagen geregistreerd.</p>`}</div>`;
+}
+function viewProgress(){
+  const days=UI.progDays||28,P=periodStats(days),tiles=progressTiles(P),ins=progressInsights(P,tiles);
+  const g=GOALS.find(x=>x[0]===P.b.goal);
+  const cnt={good:0,warn:0,bad:0};tiles.forEach(t=>{if(cnt[t.st]!=null)cnt[t.st]++});
+  const known=cnt.good+cnt.warn+cnt.bad,overall=!known?"none":cnt.bad>=2||(cnt.bad&&cnt.bad>=cnt.good)?"bad":cnt.bad||cnt.warn>cnt.good?"warn":"good";
+  const head={good:"Op koers",warn:"Bijna op koers",bad:"Bijsturen nodig",none:"Nog te weinig gegevens"}[overall];
+  let h=`<div class="seg seg2" style="margin-top:12px"><button class="segb" data-act="pg-days" data-v="7" aria-pressed="${days===7}">Afgelopen week</button><button class="segb" data-act="pg-days" data-v="28" aria-pressed="${days===28}">Afgelopen 4 weken</button></div>
+    <div class="card overall ${ST[overall][1]}"><span class="ml">${g?`Doel: ${esc(g[1])}`:"Nog geen doel gekozen"}</span><b>${head}</b><span class="small">${cnt.good} goed · ${cnt.warn} let op · ${cnt.bad} bijsturen</span></div>
+    <div class="ptiles">${tiles.map(t=>`<div class="ptile ${ST[t.st][1]}"><span class="ml">${t.l}</span><b>${t.v}</b><span class="small">${esc(t.sub)}</span><span class="pst">${ST[t.st][0]}</span></div>`).join("")}</div>`;
+  h+=`<h2>Wat dit betekent</h2>`+(ins.length?`<div class="stack">${ins.map(i=>`<div class="card insight in-${i.st}"><p>${esc(i.t)}</p></div>`).join("")}</div>`:`<p class="small muted">Registreer je trainingen, voeding en gewicht, dan verschijnt hier wat goed gaat en waar je kunt bijsturen.</p>`);
+  if(P.wt)h+=`<h2>Gewicht</h2><div class="card">${sparkline(P.wt.list)}<p class="small muted" style="margin:6px 0 0">${P.wt.n} metingen · trend ${P.wt.perWeek>=0?"+":"−"}${fmt1(Math.abs(P.wt.perWeek))} kg per week${P.b.targetWeight?` · doel ${fmt1(P.b.targetWeight)} kg`:""}</p></div>`;
+  h+=`<h2>Voeding</h2>`+progressChart(P);
+  h+=`<p class="small muted" style="margin-top:12px">Groen = goed, oranje = let op, rood = bijsturen. Dit is een automatische inschatting op basis van wat je hebt geregistreerd, geen medisch advies.</p>`;
+  return h;
+}
+
+document.addEventListener("click",ev=>{const b=ev.target.closest("[data-act]");if(!b)return;
+  if(b.dataset.act==="rec-tab"){UI.recTab=b.dataset.v;render()}
+  else if(b.dataset.act==="pg-days"){UI.progDays=+b.dataset.v;render()}});
 /* ---------- sheets ---------- */
 function renderSheet(){
   const el=document.getElementById("sheet");
