@@ -294,6 +294,19 @@ a.btn{text-decoration:none;color:var(--fg);text-align:center;display:grid;place-
 .mulsel{min-height:28px;padding:2px 4px;width:auto;font-size:13px;display:inline-block}
 .hintline.tl-warn{color:var(--pr);font-weight:600}.hintline.tl-info{color:var(--accent)}.hintline.tl-ok{color:#2E9E5B}
 .shopsum{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:3;margin-top:10px}
+
+.mealhead{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:12px 2px 6px}
+.storehead{display:grid;gap:4px;margin-top:12px}.storehead b{font-family:var(--display);font-size:24px}
+.storerow{grid-template-columns:1fr auto;align-items:center;min-height:56px}
+.storerow .n{display:flex;align-items:center;gap:12px;font-size:17px}
+.storerow .box{width:28px;height:28px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;font-weight:700;color:var(--accent-ink);flex:none}
+.storerow.got .box{background:#2E9E5B;border-color:#2E9E5B}
+.chipbtn{border:0;cursor:pointer;font-family:inherit}
+.storerow.got .n{text-decoration:line-through;color:var(--muted)}
+.has-badge{position:relative}.has-badge::after{content:"";position:absolute;top:4px;left:calc(50% + 8px);width:10px;height:10px;border-radius:50%;background:var(--pr);border:2px solid var(--bg)}
+.cnt{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 7px;border-radius:12px;background:var(--pr);color:#fff;font-weight:700;font-size:13px}
+.permbox{background:var(--sunk);border-radius:8px;padding:10px}
+.reqcard{border-left:4px solid var(--pr)}.inboxcard{border-left:4px solid var(--accent)}
 .banner{margin-top:12px;background:var(--pr-bg);color:var(--fg);border-radius:8px;padding:10px 12px;font-size:13px}
 @media (prefers-reduced-motion:no-preference){.sheet{animation:up .18s ease-out}@keyframes up{from{transform:translateY(24px);opacity:.6}}}
 </style>
@@ -365,7 +378,7 @@ a.btn{text-decoration:none;color:var(--fg);text-align:center;display:grid;place-
 <div id="toast" class="toast" hidden></div>
 
 <script>
-const GROUPS=["Borst","Rug","Schouders","Biceps","Triceps","Onderarmen","Core","Benen","Billen","Kuiten","Full body","Overig"];
+const GROUPS=["Borst","Rug","Schouders","Biceps","Triceps","Onderarmen","Core","Quadriceps","Hamstrings","Billen","Kuiten","Full body","Overig"];
 const LS_DATA="krachtlogboek.data.v2", LS_PROFILE="krachtlogboek.profile", LS_TAB="krachtlogboek.tab";
 const S={me:null,people:null,profilesReady:false,exercises:{},routines:{},sessions:{},meta:{},weights:{},plan:{},folders:{},foodlog:{},foods:{},archive:{},meals:{},mealplans:{},prices:null,ready:false,mode:"loading",readonly:false,template:null};
 const UI={tab:"train",sheet:null,edit:null,recQ:"",pickQ:"",pickG:"Borst",confirm:null,login:"ask",newName:"",useTemplate:true,pf:null,cardio:null,pinOpen:false,pinFor:null,loginName:"",coach:null,delWho:null,folderEdit:null,week:null,pendingShare:null};
@@ -386,7 +399,7 @@ function better(a,b){return !b||a.k>b.k||(a.k===b.k&&a.r>b.r)}
 function norm(s){return String(s||"").trim().toLowerCase().replace(/\s+/g," ")}
 const draftKey=()=>"krachtlogboek.draft."+pid;
 
-const savedTab=lsGet(LS_TAB); if(savedTab&&["train","plan","schemas","records","profile","food","help","news","privacy"].includes(savedTab))UI.tab=savedTab;
+const savedTab=lsGet(LS_TAB); if(savedTab&&["train","plan","schemas","records","profile","food","help","news","privacy","together"].includes(savedTab))UI.tab=savedTab;
 
 const TEMPLATE={"exercises": {"r-dip": {"name": "Ring Dip", "group": "Borst"}, "r-widepull": {"name": "Wide Ring Pull-up", "group": "Rug"}, "r-archerpush": {"name": "Ring Archer Push-up", "group": "Borst"}, "r-archerrow": {"name": "Ring Archer Row", "group": "Rug"}, "r-shoulderpush": {"name": "Ring Shoulder Push-up", "group": "Schouders"}, "r-pelican": {"name": "Pelican Curl", "group": "Biceps"}, "r-tricepext": {"name": "Ring Tricep Extension", "group": "Triceps"}, "r-facepull": {"name": "Ring Face Pull", "group": "Schouders"}, "r-rollout": {"name": "Ring Rollout", "group": "Core"}, "c-dip": {"name": "Dips (parallel bar)", "group": "Borst"}, "c-pullup": {"name": "Pull-up", "group": "Rug"}, "c-archerpush": {"name": "Archer Push-up", "group": "Borst"}, "c-austrow": {"name": "Australian Row", "group": "Rug"}, "c-pike": {"name": "Pike Push-up", "group": "Schouders"}, "c-chinup": {"name": "Chin-up", "group": "Biceps"}, "c-diamond": {"name": "Diamond Push-up", "group": "Triceps"}, "c-legraise": {"name": "Hanging Leg Raise", "group": "Core"}, "c-bss": {"name": "Bulgarian Split Squat (BW)", "group": "Benen"}, "f-bench": {"name": "Bench Press", "group": "Borst"}, "f-latpull": {"name": "Lat Pulldown", "group": "Rug"}, "f-ohp": {"name": "Overhead Press", "group": "Schouders"}, "f-row": {"name": "Barbell Row", "group": "Rug"}, "f-squat": {"name": "Squat", "group": "Benen"}, "f-rdl": {"name": "Romanian Deadlift", "group": "Billen"}, "f-fly": {"name": "Dumbbell Chest Fly", "group": "Borst"}, "f-facepull": {"name": "Cable Face Pull", "group": "Schouders"}, "f-curl": {"name": "EZ-bar Curl", "group": "Biceps"}, "f-pushdown": {"name": "Triceps Pushdown", "group": "Triceps"}}, "routines": {"rt-ringen": {"items": [{"exId": "r-dip", "reps": "8-10", "sets": "3"}, {"exId": "r-widepull", "reps": "6-8", "sets": "3"}, {"exId": "r-archerpush", "reps": "6-8", "sets": "3"}, {"exId": "r-archerrow", "reps": "8-10", "sets": "3"}, {"exId": "r-shoulderpush", "reps": "8-10", "sets": "3"}, {"exId": "r-pelican", "reps": "6-8", "sets": "3"}, {"exId": "r-tricepext", "reps": "10-12", "sets": "3"}, {"exId": "r-facepull", "reps": "12-15", "sets": "3"}, {"exId": "r-rollout", "reps": "8-10", "sets": "3"}], "name": "Ringen — Push/Pull", "order": 0}, "rt-fitness": {"items": [{"exId": "f-bench", "reps": "6-8", "sets": "4"}, {"exId": "f-latpull", "reps": "8-10", "sets": "4"}, {"exId": "f-ohp", "reps": "6-8", "sets": "3"}, {"exId": "f-row", "reps": "8-10", "sets": "3"}, {"exId": "f-squat", "reps": "6-8", "sets": "4"}, {"exId": "f-rdl", "reps": "8-10", "sets": "3"}, {"exId": "f-fly", "reps": "10-12", "sets": "3"}, {"exId": "f-facepull", "reps": "12-15", "sets": "3"}, {"exId": "f-curl", "reps": "10-12", "sets": "3"}, {"exId": "f-pushdown", "reps": "10-12", "sets": "3"}], "name": "Fitness — Gewichten", "order": 2}, "rt-cali": {"items": [{"exId": "c-dip", "reps": "8-10", "sets": "3"}, {"exId": "c-pullup", "reps": "6-8", "sets": "3"}, {"exId": "c-archerpush", "reps": "6-8", "sets": "3"}, {"exId": "c-austrow", "reps": "10-12", "sets": "3"}, {"exId": "c-pike", "reps": "8-10", "sets": "3"}, {"exId": "c-chinup", "reps": "6-8", "sets": "3"}, {"exId": "c-diamond", "reps": "10-12", "sets": "3"}, {"exId": "c-bss", "reps": "10-12", "sets": "3"}, {"exId": "c-legraise", "reps": "10", "sets": "3"}], "name": "Calisthenics — Full body", "order": 1}}};
 S.template=TEMPLATE;
@@ -411,7 +424,7 @@ async function rpc(fn,args){
   catch(e){const err=new Error("offline");err.code="net";throw err}
   if(!r.ok){let m="";try{m=(await r.json()).message||""}catch(e){}
     const err=new Error(m||("HTTP "+r.status));
-    err.code=/groepscode/i.test(m)?"bad_code":/persoonlijke code/i.test(m)?"bad_pin":/te kort/i.test(m)?"short_pin":/beheerder/i.test(m)?"not_admin":/bestaat al/i.test(m)?"dup_name":/eigen account/i.test(m)?"self":/naam ontbreekt/i.test(m)?"no_name":/niet gevonden/i.test(m)?"no_share":/te groot/i.test(m)?"too_big":"net";throw err}
+    err.code=/groepscode/i.test(m)?"bad_code":/persoonlijke code/i.test(m)?"bad_pin":/te kort/i.test(m)?"short_pin":/beheerder/i.test(m)?"not_admin":/bestaat al/i.test(m)?"dup_name":/eigen account/i.test(m)?"self":/naam ontbreekt/i.test(m)?"no_name":/geen toestemming/i.test(m)?"no_perm":/te veel/i.test(m)?"too_many":/niet gevonden/i.test(m)?"no_share":/te groot/i.test(m)?"too_big":"net";throw err}
   const t=await r.text();return t?JSON.parse(t):null;
 }
 function initStore(){
@@ -451,8 +464,8 @@ async function submitFirstPin(){
 }
 function enterProfile(me){
   pid=me.id;S.me={name:me.name,isAdmin:!!me.isAdmin};lsSet(LS_ME,{id:me.id,name:me.name,isAdmin:!!me.isAdmin});lsSet(LS_PROFILE,me.id);
-  COLLS.forEach(c=>S[c]={});S.ready=false;S.people=null;
-  draft=lsGet(draftKey());UI.cardio=lsGet(cardioKey());UI.sheet=null;UI.edit=null;UI.confirm=null;UI.coach=null;UI.login="login";UI.pinFor=null;
+  COLLS.forEach(c=>S[c]={});S.ready=false;S.people=null;S.social=null;inboxDone.clear();loadedAt=0;
+  draft=lsGet(draftKey());UI.cardio=lsGet(cardioKey());UI.sheet=null;UI.edit=null;UI.confirm=null;UI.coach=null;UI.login="login";UI.pinFor=null;UI.shop2=null;UI.planEdit=null;UI.mealEdit=null;UI.shopMode=null;UI.foodTab=null;
   const cache=lsGet(cacheKey(me.id));
   if(cache){COLLS.forEach(c=>S[c]=cache[c]||{});applyQueue();S.ready=true}
   render();reloadData(me.id);
@@ -472,6 +485,8 @@ async function reloadData(id){
     try{const nc=await rpc("kl_current_code",{p_code:code,p_profile:id,p_pin:lsGet(pinKey(id))});if(nc&&nc!==code){code=nc;lsSet(LS_CODE,nc)}}catch(e){}
     loadPrices();
     await compactOld();
+    await migrateGroups();
+    loadSocial();
     if(UI.pendingShare&&pid===id){const c=UI.pendingShare;UI.pendingShare=null;lookupShare(c)}
   }catch(e){if(pid===id)handleErr(e)}
 }
@@ -519,7 +534,7 @@ function handleErr(e){
 function logout(){
   const n=queue().length;
   if(pid){lsSet(pinKey(pid),null);lsSet(cacheKey(pid),null)}
-  pid=null;draft=null;S.me=null;S.people=null;S.ready=false;lsSet(LS_ME,null);lsSet(LS_PROFILE,null);
+  pid=null;draft=null;S.me=null;S.people=null;S.social=null;S.ready=false;lsSet(LS_ME,null);lsSet(LS_PROFILE,null);
   UI.tab="train";lsSet(LS_TAB,"train");UI.login=code?"login":"code";UI.loginName="";UI.sheet=null;UI.edit=null;UI.cardio=null;UI.coach=null;UI.confirm=null;render();window.scrollTo(0,0);
   if(n)toast(`${n} wijziging${n>1?"en zijn":" is"} nog niet verstuurd. Die blijven op deze telefoon bewaard en worden verstuurd als je weer inlogt.`);
 }
@@ -676,16 +691,18 @@ function statusHtml(){
   return `<span class="dot ${m[0]}"></span><span>${m[1]}</span>`;
 }
 function render(){
+  if(pid&&S.meta)applyGroups();
   const a=document.activeElement,fid=a&&a.id;let s1=null,s2=null;try{s1=a.selectionStart;s2=a.selectionEnd}catch(e){}
   document.getElementById("status").innerHTML=statusHtml();
   const nav=document.querySelector("nav.tabs");nav.hidden=!pid||(S.ready&&!consentOk());
-  document.querySelectorAll("nav.tabs button").forEach(b=>{if(b.dataset.tab===UI.tab)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
+  document.querySelectorAll("nav.tabs button").forEach(b=>{if(b.dataset.tab===UI.tab||(UI.tab==="together"&&b.dataset.tab==="profile"))b.setAttribute("aria-current","page");else b.removeAttribute("aria-current")});
+  document.querySelector('nav.tabs [data-tab="profile"]')?.classList.toggle("has-badge",!!pid&&socialCount()>0);
   const v=document.getElementById("view");
   if(!S.profilesReady){renderSheet();return}
   if(!pid){v.innerHTML=viewLogin();renderSheet();restore(fid,s1,s2);return}
   if(!S.ready){v.innerHTML=`<div class="card empty" style="margin-top:16px"><strong>${S.mode==="offline"?"Geen internet":"Logboek laden"}</strong><p class="muted">${S.mode==="offline"?"Je logboek kon niet geladen worden. Open de app opnieuw zodra je verbinding hebt.":`De schema's en records van ${esc(S.me?.name||"")} verschijnen zo.`}</p></div>`;renderSheet();return}
   if(!consentOk()){v.innerHTML=viewConsent();renderSheet();restore(fid,s1,s2);return}
-  v.innerHTML=(S.readonly?`<div class="banner">Je hebt alleen leesrechten. Wijzigingen worden niet opgeslagen.</div>`:"")+({train:viewTrain,plan:viewPlan,schemas:viewSchemas,records:viewRecords,profile:viewProfile,food:viewFood,help:viewHelp,news:viewNews,privacy:viewPrivacy}[UI.tab]||viewTrain)();
+  v.innerHTML=(S.readonly?`<div class="banner">Je hebt alleen leesrechten. Wijzigingen worden niet opgeslagen.</div>`:"")+({train:viewTrain,plan:viewPlan,schemas:viewSchemas,records:viewRecords,profile:viewProfile,food:viewFood,help:viewHelp,news:viewNews,privacy:viewPrivacy,together:viewTogether}[UI.tab]||viewTrain)();
   renderSheet();restore(fid,s1,s2);
 }
 function restore(fid,s1,s2){if(fid){const el=document.getElementById(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});try{if(s1!=null)el.setSelectionRange(s1,s2)}catch(e){}}}}
@@ -713,7 +730,7 @@ function viewTrain(){
   if(draft)return viewWorkout();
   if(UI.cardio)return viewCardio();
   if(UI.coach&&S.me&&S.me.isAdmin)return viewCoach();
-  let h=newsBanner()+queueBanner()+viewPlanCard()+`<h2>Training starten</h2>`+trainStartList();
+  let h=socialBanner()+newsBanner()+queueBanner()+viewPlanCard()+`<h2>Training starten</h2>`+trainStartList();
   h+=`<h2>Duurtraining</h2><div class="btnrow"><button class="btn" data-act="c-new" data-v="Hardlopen">+ Hardlopen</button><button class="btn" data-act="c-new" data-v="Wielrennen">+ Wielrennen</button><button class="btn" data-act="c-new" data-v="Anders">+ Anders</button></div>`;
   const recent=sortedSessions().slice(0,6);
   if(recent.length){
@@ -721,7 +738,7 @@ function viewTrain(){
       if(s.kind==="cardio")return `<button class="row" data-act="open-session" data-id="${s.id}"><span class="n">${esc(s.sport)}${s.purpose?` <span class="chip">${esc(s.purpose)}</span>`:""}</span><span class="b none">${dateTxt(s.date)}</span><span class="l">${cardioSummary(s)}</span></button>`;
       return `<button class="row" data-act="open-session" data-id="${s.id}"><span class="n">${esc(s.routineName||"Training")}</span><span class="b none">${dateTxt(s.date)}</span><span class="l">${(s.entries||[]).length} oefeningen · ${nSets} sets</span></button>`}).join("")+`</div>`;
   }
-  if(S.me&&S.me.isAdmin)h+=`<h2>Coachen</h2><button class="btn block" data-act="coach-open">Trainingen inplannen voor anderen</button>`;
+
   return h;
 }
 
@@ -757,7 +774,7 @@ function viewEditor(){
   const e=UI.edit;
   let h=`<h2>${e.id&&S.routines[e.id]?"Schema bewerken":"Nieuw schema"}</h2><div class="card stack"><label class="f">Naam<input type="text" id="re-name" value="${esc(e.name)}" placeholder="Bijv. Dag 1 — Push"></label><label class="f">Map<select id="re-folder"><option value="">Zonder map</option>${folderList().map(f=>`<option value="${f.id}" ${e.folderId===f.id?"selected":""}>${esc(f.name)}</option>`).join("")}</select></label><div>`;
   if(!e.items.length)h+=`<p class="muted small" style="margin:4px 0">Voeg je eerste oefening toe.</p>`;
-  e.items.forEach((it,i)=>{h+=`<div class="edititem"><div><strong>${esc(exName(it.exId))}</strong> <span class="chip">${esc(exGroup(it.exId))}</span></div><div class="icons">
+  e.items.forEach((it,i)=>{h+=`<div class="edititem"><div><strong>${esc(exName(it.exId))}</strong> <button class="chip chipbtn" data-act="open-ex" data-id="${it.exId}" aria-label="Spiergroep van ${esc(exName(it.exId))} aanpassen">${esc(exGroup(it.exId))} ✎</button></div><div class="icons">
     <button class="ib" data-act="it-up" data-i="${i}" aria-label="Omhoog" ${i===0?"disabled":""}>↑</button><button class="ib" data-act="it-down" data-i="${i}" aria-label="Omlaag" ${i===e.items.length-1?"disabled":""}>↓</button><button class="ib" data-act="it-remove" data-i="${i}" aria-label="Verwijder">✕</button></div>
     <div class="tg"><label class="f">Doel sets<input type="text" inputmode="numeric" id="re-s-${i}" value="${esc(it.sets)}" placeholder="3"></label><label class="f">Doel reps<input type="text" id="re-r-${i}" value="${esc(it.reps)}" placeholder="8-10"></label><label class="f nf">Notitie <i>optioneel</i><input type="text" id="re-n-${i}" value="${esc(it.note||"")}" placeholder="Tempo, rust, gewicht of tip"></label></div></div>`});
   h+=`</div><button class="btn block" data-act="pick" data-mode="routine">+ Oefening toevoegen</button></div><div style="margin-top:12px" class="stack">`;
@@ -801,6 +818,7 @@ function viewHelp(){
     ["Eerdere resultaten overzetten","Heb jij al eerdere resultaten van trainingen in notities bijgehouden? Bijvoorbeeld wekelijks je resultaten opgeschreven, of al je persoonlijke records en hoogst behaalde kg per oefening? App deze statistieken dan naar Jitse. Hij zet ze om in een code die je zelf invult bij <b>Schema's → Gedeeld schema toevoegen</b>. Al deze resultaten (met trainingsdatum als je die erbij hebt gezet) komen dan in je account te staan."],
     ["Voeding","In <b>Voeding</b> zie je je dagdoel op basis van je profiel en sportweek. Je kunt het zelf aanpassen, je voorkeuren voor eten instellen, drie voorbeelddagen met grammen bekijken, je eten registreren in het dagboek en een boodschappenlijst maken."],
     ["Privacy en bewaren","Details van trainingen, je voedingsdagboek en je planning worden 3 maanden bewaard en daarna samengevat; je records blijven altijd staan. Lees de <b>Privacyverklaring</b> onder Profiel. Daar kun je ook je account verwijderen."],
+    ["Samen trainen","Onder <b>Profiel → Samen trainen</b> vraag je iemand op naam of je iets voor diegene mag klaarzetten. Accepteert die persoon, dan kies jij of hij of zij trainingen in je planning mag zetten, schema's of maaltijden mag sturen, of je resultaten mag zien, en of dat direct mag of eerst als voorstel komt. Intrekken kan altijd."],
     ["Suggesties","Mis je iets of werkt iets niet? Meld het via <b>Wat is er nieuw</b> (onder Profiel of bovenaan deze pagina). Jitse ziet je melding en laat weten wat ermee gebeurt."],
     ["Geplande trainingen","Maakt Jitse een training voor je, dan staat die bovenaan in <b>Trainen</b> onder <b>Op je planning</b>, met datum en uitleg. Tik op <b>Training loggen</b> als je hem gedaan hebt: je resultaat wordt gekoppeld en Jitse ziet het terug."],
     ["Vul je profiel in","In <b>Profiel</b> vul je je leeftijd, lengte, doel en trainingen per week in, en houd je je gewicht bij. Op basis daarvan berekent <b>Voeding</b> je dagelijkse calorieën, eiwit, koolhydraten en vet."]
@@ -839,8 +857,8 @@ function sparkline(list){
   return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Gewichtsverloop van ${fmt1(ks[0])} naar ${fmt1(ks[ks.length-1])} kg"><path d="${d} L${last[0]} ${H} L${pts[0][0]} ${H} Z" fill="var(--accent)" opacity=".12"/><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round"/><circle cx="${last[0]}" cy="${last[1]}" r="4" fill="var(--accent)"/></svg>`;
 }
 function viewProfile(){
-  const f=pfDraft(),p=S.me||{},wl=weightList(),cw=currentWeight(),g=GOALS.find(x=>x[0]===f.goal);
-  let h=`<h2>Mijn gegevens</h2><div class="card stack">
+  const f=pfDraft(),p=S.me||{},wl=weightList(),cw=currentWeight(),g=GOALS.find(x=>x[0]===f.goal),sc=socialCount();
+  let h=`<button class="card start" style="margin-top:16px" data-act="go-together"><span><span class="name">Samen trainen</span><br><span class="muted small">Elkaar trainingen, schema's en maaltijden sturen, met toestemming</span></span><span class="go">${sc?`<span class="cnt">${sc}</span>`:"Open"}</span></button><h2>Mijn gegevens</h2><div class="card stack">
     <div class="grid2"><label class="f">Leeftijd<input type="text" inputmode="numeric" id="pf-age" value="${esc(f.age)}" placeholder="jaar"></label>
     <label class="f">Lengte<input type="text" inputmode="decimal" id="pf-height" value="${esc(f.height)}" placeholder="cm"></label></div>
     <div class="f">Geslacht<div class="seg">${["Man","Vrouw","Anders"].map(s=>`<button class="segb" data-act="pf-sex" data-v="${s}" aria-pressed="${f.sex===s}">${s}</button>`).join("")}</div></div>
@@ -1138,7 +1156,7 @@ function foodAddSheet(sh){
       ${f.u?`<div class="chips">${[1,2,3].map(x=>`<button class="chipb" data-act="n-fa-q" data-v="${f.u*x}">${x} × ${f.u} g</button>`).join("")}</div>`:f.por?`<div class="chips">${[0.5,1,1.5,2].map(x=>`<button class="chipb" data-act="n-fa-q" data-v="${Math.round(f.por*x)}">${Math.round(f.por*x)} g</button>`).join("")}</div>`:""}
       <div class="livespeed" id="fa-live">${mTxt(m)}</div>
       <button class="btn primary" data-act="n-fa-add">Toevoegen aan ${esc((MEALS.find(x=>x[0]===sh.meal)||MEALS[0])[1].toLowerCase())}</button>
-      ${f.off?`<button class="btn ghost" data-act="n-fa-save">Bewaren bij mijn producten</button>`:""}
+      ${f.off?`<span class="small muted">Wordt automatisch onthouden bij je producten.</span>`:""}
       <button class="linkbtn" data-act="n-fa-back">← Ander product</button></div>`}
   if(sh.custom)return `<div class="sh"><h2>Eigen product</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card stack">
     <label class="f">Naam<input type="text" id="cf-n" value="${esc(sh.custom.n||"")}" placeholder="Bijv. proteïnepudding vanille"></label>
@@ -1374,7 +1392,7 @@ function viewAdmin(){
   const others=people.filter(p=>p.id!==pid);
   h+=`<div class="card stack"><div class="adhead"><strong>Accounts (${people.length})</strong><button class="linkbtn" data-act="ad-refresh">Vernieuwen</button></div><div class="wlist">${people.map(p=>`<div class="arow"><span><b>${esc(p.name)}</b>${p.isAdmin?' <span class="chip">beheerder</span>':""}${p.hasPin?"":' <span class="chip">geen code</span>'}</span><span class="muted small">${p.sessions} training${p.sessions===1?"":"en"}${p.last?" · actief "+dateTxt(String(p.last).slice(0,10)):""}</span></div>`).join("")}</div>
     <p class="hp small muted">Alleen jij ziet deze lijst. Anderen loggen in met hun naam en code.</p>
-    <button class="btn" data-act="coach-open">Trainingen inplannen</button></div>`;
+    <p class="hp small muted">Trainingen inplannen voor iemand anders gaat via Samen trainen, met toestemming van die persoon.</p></div>`;
   if(!others.length)return h+`<p class="muted small">Er zijn nog geen andere accounts.</p>`;
   const opts=others.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
   h+=`<div class="card stack"><strong>Code vergeten</strong><p class="hp">Stel een nieuwe code in en geef die door. Diegene kan hem daarna zelf weer wijzigen.</p>
@@ -1387,7 +1405,7 @@ function viewAdmin(){
 }
 
 /* ---------- mappen, bibliotheek & delen ---------- */
-const LIB=[{"id": "kt3", "name": "Krachttraining 3 dagen split", "std": true, "desc": "Standaard voor iedereen", "routines": [{"name": "Borst/schouder/triceps", "items": [{"name": "Bench Press", "group": "Borst"}, {"name": "Dips", "group": "Borst"}, {"name": "Dumbbell Incline Bench Press", "group": "Borst"}, {"name": "Dumbbell Shoulder Press", "group": "Schouders"}, {"name": "Side Fly's", "group": "Schouders"}, {"name": "Front Fly's", "group": "Schouders"}, {"name": "Tricep Overhead Extension", "group": "Triceps"}, {"name": "Tricep Cable Pulldown", "group": "Triceps"}, {"name": "Tricep Dips", "group": "Triceps"}]}, {"name": "Rug/biceps/onderarmen", "items": [{"name": "Pull-ups", "group": "Rug"}, {"name": "Deadlifts", "group": "Rug"}, {"name": "Cable Row", "group": "Rug"}, {"name": "Bicep Curl (gebogen stang)", "group": "Biceps"}, {"name": "Hammer Curls", "group": "Biceps"}, {"name": "Reverse Grip Cable Curl", "group": "Onderarmen"}, {"name": "Forearm Curl", "group": "Onderarmen"}]}, {"name": "Legs/abs", "items": [{"name": "Squats", "group": "Benen"}, {"name": "Straight Leg Deadlifts", "group": "Benen"}, {"name": "Romanian Lunges", "group": "Benen"}, {"name": "Quadricep Extension", "group": "Benen"}, {"name": "Hamstring Extension", "group": "Benen"}, {"name": "Calf Raise", "group": "Kuiten"}, {"name": "Hanging Leg Raise", "group": "Core"}, {"name": "Crunches", "group": "Core"}, {"name": "Planking", "group": "Core"}]}]}, {"id": "cali-r", "name": "Calisthenics schema 4 dagen split met ringen", "desc": "4 schema's met tempo, rust en tips", "routines": [{"name": "Dag 1 — Push · borst, schouder, triceps", "items": [{"name": "Ring Dip", "group": "Borst", "sets": "4", "reps": "6-10", "note": "tempo 30X1 · 90s rust · BW / +5-10kg gordel · Ringen stabiel, licht voorover"}, {"name": "Ring Archer Push-up", "group": "Borst", "sets": "3", "reps": "6-8", "note": "tempo 30X0 · 75s rust · BW · Niet-dominante arm gestrekt"}, {"name": "Ring Chest Fly", "group": "Borst", "sets": "3", "reps": "10-12", "note": "tempo 30X0 · 60s rust · BW · Elbows licht gebogen"}, {"name": "Ring Push-up (turned out)", "group": "Borst", "sets": "3", "reps": "10-15", "note": "tempo 20X0 · 60s rust · BW · Ringen draaien naar buiten bovenaan"}, {"name": "Tricep Extension (ringen)", "group": "Triceps", "sets": "3", "reps": "8-12", "note": "tempo 30X1 · 60s rust · BW · Ellebogen vast naast hoofd"}, {"name": "Ring Shoulder Push-up", "group": "Schouders", "sets": "3", "reps": "6-10", "note": "tempo 40X1 · 90s rust · BW · Heupen hoog, hoofd naar vloer"}, {"name": "Ring Planche Lean", "group": "Schouders", "sets": "3", "reps": "20-30s", "note": "60s rust · BW · Protractie, licht voorover"}, {"name": "Pseudo Planche Push-up", "group": "Schouders", "sets": "3", "reps": "6-10", "note": "tempo 30X0 · 90s rust · BW · Handen richting heupen"}]}, {"name": "Dag 2 — Pull · rug, biceps, achterschouder", "items": [{"name": "Wide Ring Pull-up", "group": "Rug", "sets": "4", "reps": "5-8", "note": "tempo 30X0 · 120s rust · BW / +5-10kg gordel · Schouderbladen neerhalen"}, {"name": "Ring Row Archer", "group": "Rug", "sets": "3", "reps": "8-10", "note": "tempo 20X0 · 75s rust · BW · Vrije arm gestrekt"}, {"name": "Pelican Curl", "group": "Biceps", "sets": "3", "reps": "6-8", "note": "tempo 30X0 · 90s rust · BW · Langzaam zakken = key"}, {"name": "Rear Delt Ring Fly", "group": "Schouders", "sets": "3", "reps": "12-15", "note": "tempo 30X0 · 60s rust · BW · Pinkje omhoog bovenaan"}, {"name": "Ring Rollout", "group": "Core", "sets": "3", "reps": "6-10", "note": "tempo 40X0 · 60s rust · BW · Bekken neutraal houden"}, {"name": "Archer Chin-up", "group": "Rug", "sets": "3", "reps": "5-7", "note": "tempo 30X0 · 90s rust · BW · Trek naar dominante hand"}, {"name": "Ring L-Row", "group": "Rug", "sets": "3", "reps": "8-10", "note": "tempo 30X0 · 75s rust · BW · Benen horizontaal, row vanuit hang"}, {"name": "One Arm Hang", "group": "Onderarmen", "sets": "3", "reps": "20-40s", "note": "60s rust · BW · Schouder actief ingetrokken"}, {"name": "Face Pull (ringen laag)", "group": "Schouders", "sets": "3", "reps": "12-15", "note": "tempo 30X0 · 60s rust · BW · Externe rotatie, pinkje hoog"}]}, {"name": "Dag 3 — Benen + kracht", "items": [{"name": "Bulgarian Split Squat (ringen bal.)", "group": "Benen", "sets": "4", "reps": "8-10", "note": "tempo 30X0 · 90s rust · BW / +10-20kg · Ringen voor balans"}, {"name": "Romanian Deadlift", "group": "Billen", "sets": "4", "reps": "8-10", "note": "tempo 30X1 · 120s rust · 40-80kg · Rug recht, heupen terug"}, {"name": "Hip Thrust (barbell)", "group": "Billen", "sets": "3", "reps": "10-12", "note": "tempo 20X1 · 90s rust · 30-60kg · Squeeze 1s bovenaan"}, {"name": "Nordic Curl", "group": "Benen", "sets": "3", "reps": "5-8", "note": "tempo 50X0 · 90s rust · BW · Excentrisch = primair"}, {"name": "Ring Pistol Squat Progressie", "group": "Benen", "sets": "3", "reps": "6-8", "note": "tempo 30X0 · 75s rust · BW · Ringen voor balans, gecontroleerd"}, {"name": "Goblet Squat", "group": "Benen", "sets": "3", "reps": "12-15", "note": "tempo 30X0 · 75s rust · 16-24kg · Elbow-to-knee onderaan"}, {"name": "Ring Fallout", "group": "Core", "sets": "3", "reps": "8-10", "note": "tempo 30X1 · 60s rust · BW · Core+hip flexor"}, {"name": "Calf Raise (verzwaard)", "group": "Kuiten", "sets": "3", "reps": "15-20", "note": "tempo 20X1 · 60s rust · BW / +20kg · Volledig stretch onderaan"}, {"name": "Glute Bridge (single leg)", "group": "Billen", "sets": "3", "reps": "10-12", "note": "tempo 20X1 · 60s rust · BW · Niet-actieve been omhoog"}]}, {"name": "Dag 4 — Schouder, core + posterior chain", "items": [{"name": "Ring Shoulder Push-up (pike)", "group": "Schouders", "sets": "4", "reps": "6-10", "note": "tempo 40X1 · 90s rust · BW · Oren richting polsen"}, {"name": "Ring Dip (schouder focus)", "group": "Schouders", "sets": "3", "reps": "8-10", "note": "tempo 30X1 · 90s rust · BW · Meer rechtop dan dag 1"}, {"name": "Bulgarian Push-up (ringen)", "group": "Borst", "sets": "3", "reps": "8-12", "note": "tempo 20X0 · 75s rust · BW · Explosief omhoog"}, {"name": "Hanging Leg Raise", "group": "Core", "sets": "3", "reps": "8-12", "note": "tempo 20X0 · 60s rust · BW · Geen swing"}, {"name": "L-sit (ringen)", "group": "Core", "sets": "3", "reps": "10-20s", "note": "60s rust · BW · Benen gestrekt = doel"}, {"name": "Ring Tuck Planche Hold", "group": "Schouders", "sets": "3", "reps": "10-20s", "note": "90s rust · BW · Progressie naar planche"}, {"name": "Ring Back Lever Progressie", "group": "Rug", "sets": "3", "reps": "10-15s", "note": "90s rust · BW · Begin tuck, bouw uit"}, {"name": "Skin the Cat", "group": "Schouders", "sets": "3", "reps": "5-8", "note": "75s rust · BW · Schouder mobiliteit"}]}]}, {"id": "cali-z", "name": "Calisthenics schema 4 dagen split zonder ringen", "desc": "Zelfde opbouw zonder ringen · 4 schema's met rust en tips", "routines": [{"name": "Dag 1 — Push · borst, schouder, triceps", "items": [{"name": "Dips (parallettes/stoel)", "group": "Borst", "sets": "4", "reps": "6-10", "note": "90s rust · BW / +5-10kg gordel · Licht voorover voor borst"}, {"name": "Archer Push-up", "group": "Borst", "sets": "3", "reps": "6-8", "note": "75s rust · BW · Zijwaartse hand gestrekt"}, {"name": "Push-up (wijd, slow ecc.)", "group": "Borst", "sets": "3", "reps": "10-15", "note": "60s rust · BW · 3s naar beneden"}, {"name": "Pike Push-up", "group": "Schouders", "sets": "3", "reps": "8-12", "note": "60s rust · BW · Heupen hoog, V-positie"}, {"name": "Diamond Push-up", "group": "Triceps", "sets": "3", "reps": "10-15", "note": "60s rust · BW · Duimen raken elkaar"}, {"name": "Handstand Wall Hold", "group": "Schouders", "sets": "3", "reps": "20-40s", "note": "90s rust · BW · Actief duwen door schouders"}, {"name": "Planche Lean (vloer)", "group": "Schouders", "sets": "3", "reps": "20-30s", "note": "60s rust · BW · Schouders voor handen"}, {"name": "Pseudo Planche Push-up", "group": "Schouders", "sets": "3", "reps": "6-10", "note": "90s rust · BW · Handen richting heupen"}]}, {"name": "Dag 2 — Pull · rug, biceps, achterschouder", "items": [{"name": "Pull-up (overhand)", "group": "Rug", "sets": "4", "reps": "5-8", "note": "120s rust · BW / +5-10kg gordel · Schouderbladen neerhalen"}, {"name": "Australian Row (tafel/stang)", "group": "Rug", "sets": "3", "reps": "8-10", "note": "75s rust · BW · Borst naar stang"}, {"name": "Chin-up (supinatie)", "group": "Biceps", "sets": "3", "reps": "6-8", "note": "90s rust · BW · Biceps focus"}, {"name": "DB / Band Rear Delt Fly", "group": "Schouders", "sets": "3", "reps": "12-15", "note": "60s rust · 5-10kg · Pinkje omhoog"}, {"name": "Ab-wheel Rollout", "group": "Core", "sets": "3", "reps": "6-10", "note": "60s rust · BW · Bekken neutraal"}, {"name": "Archer Pull-up", "group": "Rug", "sets": "3", "reps": "5-7", "note": "90s rust · BW · Trek naar dominante hand"}, {"name": "Renegade Row", "group": "Rug", "sets": "3", "reps": "8-10", "note": "75s rust · 10-15kg · Core stijf"}, {"name": "Dead Hang", "group": "Onderarmen", "sets": "3", "reps": "30-60s", "note": "60s rust · BW · Schouder actief ingetrokken"}, {"name": "Band Face Pull", "group": "Schouders", "sets": "3", "reps": "12-15", "note": "60s rust · BW / lichte band · Externe rotatie"}]}, {"name": "Dag 3 — Benen + kracht", "items": [{"name": "Bulgarian Split Squat (DB)", "group": "Benen", "sets": "4", "reps": "8-10", "note": "90s rust · BW / 2×10-20kg · Achterste voet verhoogd"}, {"name": "Romanian Deadlift", "group": "Billen", "sets": "4", "reps": "8-10", "note": "120s rust · 40-80kg · Rug recht, heupen terug"}, {"name": "Hip Thrust (barbell)", "group": "Billen", "sets": "3", "reps": "10-12", "note": "90s rust · 30-60kg · Schouderbladen op bank"}, {"name": "Nordic Curl (bank/deur)", "group": "Benen", "sets": "3", "reps": "5-8", "note": "90s rust · BW · Excentrisch = primair"}, {"name": "Pistol Squat (geassisteerd)", "group": "Benen", "sets": "3", "reps": "6-8", "note": "75s rust · BW · Vasthouden aan steun"}, {"name": "Goblet Squat", "group": "Benen", "sets": "3", "reps": "12-15", "note": "75s rust · 16-24kg · Elbow-to-knee onderaan"}, {"name": "Hollow Body Hold", "group": "Core", "sets": "3", "reps": "20-30s", "note": "60s rust · BW · Rug volledig plat"}, {"name": "Calf Raise (trap/stap)", "group": "Kuiten", "sets": "3", "reps": "15-20", "note": "60s rust · BW / +10-20kg · Stap voor extra ROM"}, {"name": "Single Leg RDL", "group": "Billen", "sets": "3", "reps": "10/zijde", "note": "75s rust · BW / 10-15kg · Balans+hamstring"}]}, {"name": "Dag 4 — Schouder, core + posterior chain", "items": [{"name": "Pike Push-up (voeten verhoogd)", "group": "Schouders", "sets": "4", "reps": "6-10", "note": "90s rust · BW · Voeten op stoel/bank"}, {"name": "Handstand Push-up (muur)", "group": "Schouders", "sets": "3", "reps": "5-8", "note": "90s rust · BW · Hoofd raakt grond"}, {"name": "Korean Dip (stang achter)", "group": "Schouders", "sets": "3", "reps": "6-10", "note": "75s rust · BW · Max schouder stretch"}, {"name": "Dragon Flag", "group": "Core", "sets": "3", "reps": "5-8", "note": "90s rust · BW · Gecontroleerd zakken"}, {"name": "Toes to Bar", "group": "Core", "sets": "3", "reps": "8-12", "note": "60s rust · BW · Houd stang stijf"}, {"name": "Planche Lean (vloer)", "group": "Schouders", "sets": "3", "reps": "20-30s", "note": "60s rust · BW · Schouders voor handen"}, {"name": "Back Extension (roman chair)", "group": "Rug", "sets": "3", "reps": "12-15", "note": "60s rust · BW / 5-10kg · Lage rug focus"}, {"name": "Ab-Wheel Rollout", "group": "Core", "sets": "3", "reps": "6-10", "note": "60s rust · BW · Idem dag 2"}]}]}];
+const LIB=[{"id": "kt3", "name": "Krachttraining 3 dagen split", "std": true, "desc": "Standaard voor iedereen", "routines": [{"name": "Borst/schouder/triceps", "items": [{"name": "Bench Press", "group": "Borst"}, {"name": "Dips", "group": "Borst"}, {"name": "Dumbbell Incline Bench Press", "group": "Borst"}, {"name": "Dumbbell Shoulder Press", "group": "Schouders"}, {"name": "Side Fly's", "group": "Schouders"}, {"name": "Front Fly's", "group": "Schouders"}, {"name": "Tricep Overhead Extension", "group": "Triceps"}, {"name": "Tricep Cable Pulldown", "group": "Triceps"}, {"name": "Tricep Dips", "group": "Triceps"}]}, {"name": "Rug/biceps/onderarmen", "items": [{"name": "Pull-ups", "group": "Rug"}, {"name": "Deadlifts", "group": "Rug"}, {"name": "Cable Row", "group": "Rug"}, {"name": "Bicep Curl (gebogen stang)", "group": "Biceps"}, {"name": "Hammer Curls", "group": "Biceps"}, {"name": "Reverse Grip Cable Curl", "group": "Onderarmen"}, {"name": "Forearm Curl", "group": "Onderarmen"}]}, {"name": "Legs/abs", "items": [{"name": "Squats", "group": "Quadriceps"}, {"name": "Straight Leg Deadlifts", "group": "Hamstrings"}, {"name": "Romanian Lunges", "group": "Quadriceps"}, {"name": "Quadricep Extension", "group": "Quadriceps"}, {"name": "Hamstring Extension", "group": "Hamstrings"}, {"name": "Calf Raise", "group": "Kuiten"}, {"name": "Hanging Leg Raise", "group": "Core"}, {"name": "Crunches", "group": "Core"}, {"name": "Planking", "group": "Core"}]}]}, {"id": "cali-r", "name": "Calisthenics schema 4 dagen split met ringen", "desc": "4 schema's met tempo, rust en tips", "routines": [{"name": "Dag 1 — Push · borst, schouder, triceps", "items": [{"name": "Ring Dip", "group": "Borst", "sets": "4", "reps": "6-10", "note": "tempo 30X1 · 90s rust · BW / +5-10kg gordel · Ringen stabiel, licht voorover"}, {"name": "Ring Archer Push-up", "group": "Borst", "sets": "3", "reps": "6-8", "note": "tempo 30X0 · 75s rust · BW · Niet-dominante arm gestrekt"}, {"name": "Ring Chest Fly", "group": "Borst", "sets": "3", "reps": "10-12", "note": "tempo 30X0 · 60s rust · BW · Elbows licht gebogen"}, {"name": "Ring Push-up (turned out)", "group": "Borst", "sets": "3", "reps": "10-15", "note": "tempo 20X0 · 60s rust · BW · Ringen draaien naar buiten bovenaan"}, {"name": "Tricep Extension (ringen)", "group": "Triceps", "sets": "3", "reps": "8-12", "note": "tempo 30X1 · 60s rust · BW · Ellebogen vast naast hoofd"}, {"name": "Ring Shoulder Push-up", "group": "Schouders", "sets": "3", "reps": "6-10", "note": "tempo 40X1 · 90s rust · BW · Heupen hoog, hoofd naar vloer"}, {"name": "Ring Planche Lean", "group": "Schouders", "sets": "3", "reps": "20-30s", "note": "60s rust · BW · Protractie, licht voorover"}, {"name": "Pseudo Planche Push-up", "group": "Schouders", "sets": "3", "reps": "6-10", "note": "tempo 30X0 · 90s rust · BW · Handen richting heupen"}]}, {"name": "Dag 2 — Pull · rug, biceps, achterschouder", "items": [{"name": "Wide Ring Pull-up", "group": "Rug", "sets": "4", "reps": "5-8", "note": "tempo 30X0 · 120s rust · BW / +5-10kg gordel · Schouderbladen neerhalen"}, {"name": "Ring Row Archer", "group": "Rug", "sets": "3", "reps": "8-10", "note": "tempo 20X0 · 75s rust · BW · Vrije arm gestrekt"}, {"name": "Pelican Curl", "group": "Biceps", "sets": "3", "reps": "6-8", "note": "tempo 30X0 · 90s rust · BW · Langzaam zakken = key"}, {"name": "Rear Delt Ring Fly", "group": "Schouders", "sets": "3", "reps": "12-15", "note": "tempo 30X0 · 60s rust · BW · Pinkje omhoog bovenaan"}, {"name": "Ring Rollout", "group": "Core", "sets": "3", "reps": "6-10", "note": "tempo 40X0 · 60s rust · BW · Bekken neutraal houden"}, {"name": "Archer Chin-up", "group": "Rug", "sets": "3", "reps": "5-7", "note": "tempo 30X0 · 90s rust · BW · Trek naar dominante hand"}, {"name": "Ring L-Row", "group": "Rug", "sets": "3", "reps": "8-10", "note": "tempo 30X0 · 75s rust · BW · Benen horizontaal, row vanuit hang"}, {"name": "One Arm Hang", "group": "Onderarmen", "sets": "3", "reps": "20-40s", "note": "60s rust · BW · Schouder actief ingetrokken"}, {"name": "Face Pull (ringen laag)", "group": "Schouders", "sets": "3", "reps": "12-15", "note": "tempo 30X0 · 60s rust · BW · Externe rotatie, pinkje hoog"}]}, {"name": "Dag 3 — Benen + kracht", "items": [{"name": "Bulgarian Split Squat (ringen bal.)", "group": "Quadriceps", "sets": "4", "reps": "8-10", "note": "tempo 30X0 · 90s rust · BW / +10-20kg · Ringen voor balans"}, {"name": "Romanian Deadlift", "group": "Billen", "sets": "4", "reps": "8-10", "note": "tempo 30X1 · 120s rust · 40-80kg · Rug recht, heupen terug"}, {"name": "Hip Thrust (barbell)", "group": "Billen", "sets": "3", "reps": "10-12", "note": "tempo 20X1 · 90s rust · 30-60kg · Squeeze 1s bovenaan"}, {"name": "Nordic Curl", "group": "Hamstrings", "sets": "3", "reps": "5-8", "note": "tempo 50X0 · 90s rust · BW · Excentrisch = primair"}, {"name": "Ring Pistol Squat Progressie", "group": "Quadriceps", "sets": "3", "reps": "6-8", "note": "tempo 30X0 · 75s rust · BW · Ringen voor balans, gecontroleerd"}, {"name": "Goblet Squat", "group": "Quadriceps", "sets": "3", "reps": "12-15", "note": "tempo 30X0 · 75s rust · 16-24kg · Elbow-to-knee onderaan"}, {"name": "Ring Fallout", "group": "Core", "sets": "3", "reps": "8-10", "note": "tempo 30X1 · 60s rust · BW · Core+hip flexor"}, {"name": "Calf Raise (verzwaard)", "group": "Kuiten", "sets": "3", "reps": "15-20", "note": "tempo 20X1 · 60s rust · BW / +20kg · Volledig stretch onderaan"}, {"name": "Glute Bridge (single leg)", "group": "Billen", "sets": "3", "reps": "10-12", "note": "tempo 20X1 · 60s rust · BW · Niet-actieve been omhoog"}]}, {"name": "Dag 4 — Schouder, core + posterior chain", "items": [{"name": "Ring Shoulder Push-up (pike)", "group": "Schouders", "sets": "4", "reps": "6-10", "note": "tempo 40X1 · 90s rust · BW · Oren richting polsen"}, {"name": "Ring Dip (schouder focus)", "group": "Schouders", "sets": "3", "reps": "8-10", "note": "tempo 30X1 · 90s rust · BW · Meer rechtop dan dag 1"}, {"name": "Bulgarian Push-up (ringen)", "group": "Borst", "sets": "3", "reps": "8-12", "note": "tempo 20X0 · 75s rust · BW · Explosief omhoog"}, {"name": "Hanging Leg Raise", "group": "Core", "sets": "3", "reps": "8-12", "note": "tempo 20X0 · 60s rust · BW · Geen swing"}, {"name": "L-sit (ringen)", "group": "Core", "sets": "3", "reps": "10-20s", "note": "60s rust · BW · Benen gestrekt = doel"}, {"name": "Ring Tuck Planche Hold", "group": "Schouders", "sets": "3", "reps": "10-20s", "note": "90s rust · BW · Progressie naar planche"}, {"name": "Ring Back Lever Progressie", "group": "Rug", "sets": "3", "reps": "10-15s", "note": "90s rust · BW · Begin tuck, bouw uit"}, {"name": "Skin the Cat", "group": "Schouders", "sets": "3", "reps": "5-8", "note": "75s rust · BW · Schouder mobiliteit"}]}]}, {"id": "cali-z", "name": "Calisthenics schema 4 dagen split zonder ringen", "desc": "Zelfde opbouw zonder ringen · 4 schema's met rust en tips", "routines": [{"name": "Dag 1 — Push · borst, schouder, triceps", "items": [{"name": "Dips (parallettes/stoel)", "group": "Borst", "sets": "4", "reps": "6-10", "note": "90s rust · BW / +5-10kg gordel · Licht voorover voor borst"}, {"name": "Archer Push-up", "group": "Borst", "sets": "3", "reps": "6-8", "note": "75s rust · BW · Zijwaartse hand gestrekt"}, {"name": "Push-up (wijd, slow ecc.)", "group": "Borst", "sets": "3", "reps": "10-15", "note": "60s rust · BW · 3s naar beneden"}, {"name": "Pike Push-up", "group": "Schouders", "sets": "3", "reps": "8-12", "note": "60s rust · BW · Heupen hoog, V-positie"}, {"name": "Diamond Push-up", "group": "Triceps", "sets": "3", "reps": "10-15", "note": "60s rust · BW · Duimen raken elkaar"}, {"name": "Handstand Wall Hold", "group": "Schouders", "sets": "3", "reps": "20-40s", "note": "90s rust · BW · Actief duwen door schouders"}, {"name": "Planche Lean (vloer)", "group": "Schouders", "sets": "3", "reps": "20-30s", "note": "60s rust · BW · Schouders voor handen"}, {"name": "Pseudo Planche Push-up", "group": "Schouders", "sets": "3", "reps": "6-10", "note": "90s rust · BW · Handen richting heupen"}]}, {"name": "Dag 2 — Pull · rug, biceps, achterschouder", "items": [{"name": "Pull-up (overhand)", "group": "Rug", "sets": "4", "reps": "5-8", "note": "120s rust · BW / +5-10kg gordel · Schouderbladen neerhalen"}, {"name": "Australian Row (tafel/stang)", "group": "Rug", "sets": "3", "reps": "8-10", "note": "75s rust · BW · Borst naar stang"}, {"name": "Chin-up (supinatie)", "group": "Biceps", "sets": "3", "reps": "6-8", "note": "90s rust · BW · Biceps focus"}, {"name": "DB / Band Rear Delt Fly", "group": "Schouders", "sets": "3", "reps": "12-15", "note": "60s rust · 5-10kg · Pinkje omhoog"}, {"name": "Ab-wheel Rollout", "group": "Core", "sets": "3", "reps": "6-10", "note": "60s rust · BW · Bekken neutraal"}, {"name": "Archer Pull-up", "group": "Rug", "sets": "3", "reps": "5-7", "note": "90s rust · BW · Trek naar dominante hand"}, {"name": "Renegade Row", "group": "Rug", "sets": "3", "reps": "8-10", "note": "75s rust · 10-15kg · Core stijf"}, {"name": "Dead Hang", "group": "Onderarmen", "sets": "3", "reps": "30-60s", "note": "60s rust · BW · Schouder actief ingetrokken"}, {"name": "Band Face Pull", "group": "Schouders", "sets": "3", "reps": "12-15", "note": "60s rust · BW / lichte band · Externe rotatie"}]}, {"name": "Dag 3 — Benen + kracht", "items": [{"name": "Bulgarian Split Squat (DB)", "group": "Quadriceps", "sets": "4", "reps": "8-10", "note": "90s rust · BW / 2×10-20kg · Achterste voet verhoogd"}, {"name": "Romanian Deadlift", "group": "Billen", "sets": "4", "reps": "8-10", "note": "120s rust · 40-80kg · Rug recht, heupen terug"}, {"name": "Hip Thrust (barbell)", "group": "Billen", "sets": "3", "reps": "10-12", "note": "90s rust · 30-60kg · Schouderbladen op bank"}, {"name": "Nordic Curl (bank/deur)", "group": "Hamstrings", "sets": "3", "reps": "5-8", "note": "90s rust · BW · Excentrisch = primair"}, {"name": "Pistol Squat (geassisteerd)", "group": "Quadriceps", "sets": "3", "reps": "6-8", "note": "75s rust · BW · Vasthouden aan steun"}, {"name": "Goblet Squat", "group": "Quadriceps", "sets": "3", "reps": "12-15", "note": "75s rust · 16-24kg · Elbow-to-knee onderaan"}, {"name": "Hollow Body Hold", "group": "Core", "sets": "3", "reps": "20-30s", "note": "60s rust · BW · Rug volledig plat"}, {"name": "Calf Raise (trap/stap)", "group": "Kuiten", "sets": "3", "reps": "15-20", "note": "60s rust · BW / +10-20kg · Stap voor extra ROM"}, {"name": "Single Leg RDL", "group": "Billen", "sets": "3", "reps": "10/zijde", "note": "75s rust · BW / 10-15kg · Balans+hamstring"}]}, {"name": "Dag 4 — Schouder, core + posterior chain", "items": [{"name": "Pike Push-up (voeten verhoogd)", "group": "Schouders", "sets": "4", "reps": "6-10", "note": "90s rust · BW · Voeten op stoel/bank"}, {"name": "Handstand Push-up (muur)", "group": "Schouders", "sets": "3", "reps": "5-8", "note": "90s rust · BW · Hoofd raakt grond"}, {"name": "Korean Dip (stang achter)", "group": "Schouders", "sets": "3", "reps": "6-10", "note": "75s rust · BW · Max schouder stretch"}, {"name": "Dragon Flag", "group": "Core", "sets": "3", "reps": "5-8", "note": "90s rust · BW · Gecontroleerd zakken"}, {"name": "Toes to Bar", "group": "Core", "sets": "3", "reps": "8-12", "note": "60s rust · BW · Houd stang stijf"}, {"name": "Planche Lean (vloer)", "group": "Schouders", "sets": "3", "reps": "20-30s", "note": "60s rust · BW · Schouders voor handen"}, {"name": "Back Extension (roman chair)", "group": "Rug", "sets": "3", "reps": "12-15", "note": "60s rust · BW / 5-10kg · Lage rug focus"}, {"name": "Ab-Wheel Rollout", "group": "Core", "sets": "3", "reps": "6-10", "note": "60s rust · BW · Idem dag 2"}]}]}];
 const OLD_TPL_ROUTINES=["rt-ringen","rt-cali","rt-fitness"];
 const LS_OPEN="krachtlogboek.open";
 let seeding=false;
@@ -1397,7 +1415,7 @@ function toggleOpen(k){UI.open[k]=!isOpen(k);lsSet(LS_OPEN,UI.open);render()}
 function folderList(){return Object.entries(S.folders||{}).map(([id,f])=>({id,...f})).sort((a,b)=>(a.order??0)-(b.order??0)||String(a.name).localeCompare(String(b.name)))}
 function routinesIn(fid){return Object.entries(S.routines).filter(([,r])=>((r.folderId&&S.folders[r.folderId])?r.folderId:null)===fid).sort((a,b)=>(a[1].order??0)-(b[1].order??0)||a[1].name.localeCompare(b[1].name))}
 async function runJobs(jobs,fn){for(let i=0;i<jobs.length;i+=8)await Promise.all(jobs.slice(i,i+8).map(j=>fn(...j)))}
-function cleanItem(it){return{name:String(it&&it.name||"").trim().slice(0,80),group:GROUPS.includes(it&&it.group)?it.group:"Overig",sets:String(it&&it.sets||"").slice(0,10),reps:String(it&&it.reps||"").slice(0,20),note:String(it&&it.note||"").slice(0,200)}}
+function cleanItem(it){return{name:String(it&&it.name||"").trim().slice(0,80),group:it&&it.group==="Benen"?legGroup(it.name):GROUPS.includes(it&&it.group)?it.group:"Overig",sets:String(it&&it.sets||"").slice(0,10),reps:String(it&&it.reps||"").slice(0,20),note:String(it&&it.note||"").slice(0,200)}}
 async function addFolderSet(pkg,fid){
   const exMap=new Map(Object.entries(S.exercises).map(([id,x])=>[norm(x.name),id]));
   const ex=[],rest=[];
@@ -1445,7 +1463,7 @@ async function shareThing(kind,id){
   else{const r=S.routines[id];if(!r)return;pkg={type:"routine",name:r.name,routines:[pkgRoutine(r)]}}
   if(!pkg.routines.some(r=>r.items.length)){toast("Er staan nog geen oefeningen in om te delen.");return}
   pkg.by=S.me?.name||"";pkg.v=1;
-  try{const c=await rpc("kl_share_create",{p_code:code,p_profile:pid,p_pin:myPin(),p_data:pkg});UI.sheet={type:"share",code:c,name:pkg.name,kind};UI.confirm=null;render()}
+  try{const c=await rpc("kl_share_create",{p_code:code,p_profile:pid,p_pin:myPin(),p_data:pkg});UI.sheet={type:"share",code:c,name:pkg.name,kind,pkg};UI.confirm=null;render()}
   catch(e){if(e.code==="net")toast("Delen lukt alleen met internet.");else if(e.code==="too_big")toast("Dit is te groot om te delen. Deel de schema's los.");else handleErr(e)}
 }
 function shareUrl(c){return location.origin+location.pathname+"#deel="+c}
@@ -1580,6 +1598,8 @@ function plAddSheet(sh){
   const kinds=[["routine","Schema"],["cardio","Duur"],["rest","Rust"],["other","Anders"]];
   const hasR=Object.keys(S.routines).length>0;
   let h=`<div class="sh"><h2>${esc(dayName(sh.date))}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card stack">
+    ${linksWith("plan").length?`<div class="f">Voor wie?<div class="chips"><button class="chipb" data-act="pa-for" data-id="" aria-pressed="${!sh.forLink}">Mezelf</button>${linksWith("plan").map(l=>`<button class="chipb" data-act="pa-for" data-id="${l.id}" aria-pressed="${sh.forLink===l.id}">${esc(l.name)}</button>`).join("")}</div></div>`:""}
+    ${sh.forLink?`<label class="f">Datum<input type="date" id="pa-date" value="${esc(sh.date)}"></label>`:""}
     <div class="f">Wat plan je?<div class="seg seg4">${kinds.map(([k,l])=>`<button class="segb" data-act="pa-kind" data-v="${k}" aria-pressed="${sh.kind===k}">${l}</button>`).join("")}</div></div>`;
   if(sh.kind==="routine")h+=hasR?`<label class="f">Schema${routineSelect("pa-routine",sh.routineId)}</label>`:`<p class="muted" style="margin:0">Je hebt nog geen schema's. Maak er eerst een onder Schema's.</p>`;
   if(sh.kind==="cardio")h+=`<div class="f">Sport<div class="seg seg3">${CARDIO.map(s=>`<button class="segb" data-act="pa-sport" data-v="${s}" aria-pressed="${sh.sport===s}">${s}</button>`).join("")}</div></div>
@@ -1588,7 +1608,7 @@ function plAddSheet(sh){
   if(sh.kind==="other")h+=`<label class="f">Wat ga je doen?<input type="text" id="pa-title" value="${esc(sh.title)}" placeholder="Bijv. Voetbal, zwemmen, padel"></label>`;
   if(sh.kind!=="rest")h+=`<label class="f">Notitie <i>optioneel</i><textarea id="pa-note" rows="2" placeholder="Bijv. samen met een vriend, of: rustig aan na beendag">${esc(sh.note)}</textarea></label>`;
   h+=`<label class="f">Herhalen<select id="pa-rep">${[["1","Alleen deze dag"],["2","2 weken, elke week"],["4","4 weken, elke week"],["8","8 weken, elke week"],["12","12 weken, elke week"]].map(([v,l])=>`<option value="${v}" ${sh.repeat===v?"selected":""}>${l}</option>`).join("")}</select></label>
-    <button class="btn primary" data-act="pa-save" ${sh.kind==="routine"&&!hasR?"disabled":""}>Inplannen</button></div>`;
+    <button class="btn primary" data-act="pa-save" ${sh.kind==="routine"&&!hasR?"disabled":""}>${sh.forLink?`Versturen naar ${esc((soc().outgoing.find(l=>l.id===sh.forLink)||{}).name||"")}`:"Inplannen"}</button></div>`;
   return h;
 }
 async function planAddSave(){
@@ -1598,6 +1618,9 @@ async function planAddSave(){
   if(k==="cardio")Object.assign(base,{sport:sh.sport||"Hardlopen",title:(sh.title||"").trim()||sh.sport||"Hardlopen",durMin:num(sh.durMin),km:num(sh.km)});
   if(k==="other"){if(!(sh.title||"").trim()){toast("Vul in wat je gaat doen, bijvoorbeeld Voetbal.");document.getElementById("pa-title")?.focus();return}base.title=sh.title.trim()}
   const n=Math.max(1,parseInt(sh.repeat)||1),stem=uid();
+  if(sh.forLink){if(!sh.date){toast("Kies een datum.");return}const pl={...base};delete pl.own;delete pl.updated;delete pl.routineId;
+    const data={name:planTitle(base),dates:[...Array(n)].map((_,i)=>addDays(sh.date,7*i)),plan:pl};if(k==="routine")data.routine=pkgRoutine(S.routines[base.routineId]);
+    if(await sendTo(sh.forLink,"plan",data)){UI.sheet=null;render()}return}
   await runJobs([...Array(n)].map((_,i)=>["plan",stem+"p"+i,{...base,date:addDays(sh.date,7*i)}]),put);
   UI.sheet=null;toastOk(n>1?`${n} weken ingepland`:"Ingepland");render();
 }
@@ -1644,45 +1667,28 @@ const EXTRA_SHEETS={"pl-add":plAddSheet,"pl-item":plItemSheet,"share":shareSheet
 const APP_VERSION="6.0";
 const CHANGELOG=[
  {v:"6.0",date:"2026-10-19",items:[
-  ["Privacyverklaring in de app en een eenmalige toestemmingsvraag, ook voor wie al een account had.","Op verzoek van Jitse: de app bewaart gezondheidsgegevens (gewicht, hartslag, voeding), daarvoor is uitdrukkelijke toestemming nodig volgens de AVG."],
-  ["Je kunt je account en al je gegevens nu zelf verwijderen onder Profiel.","AVG: iedereen moet zijn gegevens zelf kunnen laten wissen."],
-  ["Trainingen, voedingsdagboek en planning worden 3 maanden in detail bewaard en daarna samengevat. Je records, aantallen en maandtotalen blijven altijd bewaard.","Op verzoek van Jitse: niet meer gegevens bewaren dan nodig, en de database blijft zo ruim binnen het gratis abonnement."],
-  ["Lettertypes zitten nu in de app zelf in plaats van bij Google.","AVG: je IP-adres werd anders naar Google gestuurd."],
-  ["De verwijzing naar een commercieel trainingsprogramma bij de calisthenics-mappen is weggehaald.","Voorzorg rond merknamen."],
-  ["Doelgewicht met een datum: de app laat zien of je tempo past bij je doel, of dat het eigenlijk een dirty bulk of te snel afvallen is.","Op verzoek van Jitse: zo word je je bewust van een realistisch tempo."],
-  ["Veel meer producten bij voorkeuren en in het dagboek: broodjes, krieltjes en friet, meer vlees en vis, vanillekwark en Griekse yoghurt, typisch Nederlands beleg, sauzen, snacks en snoep. Glutenvrij als dieetoptie. De belangrijkste voedingswaarden zijn opnieuw gecontroleerd.","Op verzoek van Jitse: ook producten die je niet elke dag eet moeten erin staan."],
-  ["Vaste maaltijden: kies een complete maaltijd in plaats van losse producten, of sla je eigen maaltijd op. Met voorbeelden zoals overnight oats, kip kerrie met rijst, macaroni bolognese en stamppot.","Op verzoek van Jitse."],
-  ["Maaltijdplannen: stel zelf je dag samen uit maaltijden en producten en zie direct hoeveel kcal, eiwit, koolhydraten en vet er nog over is.","Op verzoek van Jitse."],
-  ["Kosten per maaltijd en per dag, en een nieuwe boodschappenpagina waar je maaltijden en producten aan- of uitvinkt.","Op verzoek van Jitse: direct zien wat je per maaltijd uitgeeft."],
-  ["Sterkere groepscode voor nieuwe apparaten; wie al ingelogd is merkt er niets van.","Op verzoek van Jitse: extra beveiliging."],
-  ["Onder Records staan alleen nog oefeningen die je minstens één keer hebt gedaan.","Op verzoek van Jitse: overzichtelijker."]]},
- {v:"5.0",date:"2026-10-19",items:[
-  ["Voeding: zes doelen (afvallen, heavy en lean droogtrainen, onderhoud, lean en heavy bulk), vijf activiteitsniveaus en je gemiddelde aantal stappen per dag.","Op verzoek van Jitse: het advies sloot niet goed aan bij verschillende doelen en dagelijkse beweging."],
-  ["Voeding past de macro's aan op je sportweek: meer koolhydraten bij veel duursport, meer nadruk op eiwit bij krachttraining.","Op verzoek van Jitse."],
-  ["Je kunt je dagdoel en de verdeling eiwit/koolhydraten/vet zelf aanpassen.","Op verzoek van Jitse: iedereen heeft eigen voorkeuren."],
-  ["Nieuw: voorkeuren voor eten, drie voorbeelddagen met grammen en macro's per product, een voedingsdagboek met zoeken in Open Food Facts, en een boodschappenlijst met geschatte prijzen.","Op verzoek van Jitse."],
-  ["Bij duurtraining kies je onder Anders nu je sport (voetbal, handbal, volleybal …) of vul je die zelf in.","Op verzoek van Jitse: de inhoud klopte niet voor andere sporten."],
-  ["Records voor hardlopen (1 km t/m marathon) en wielrennen (10 t/m 150 km), alleen afstanden die je gehaald hebt.","Op verzoek van Jitse."],
-  ["Optioneel een GPX-bestand van je sporthorloge of sportapp importeren. De app berekent dan je echte snelste afstanden.","Op verzoek van Jitse. Een directe koppeling met sportapps is bewust niet gebouwd vanwege hun voorwaarden."],
-  ["Oude resultaten uit je notities laten omzetten naar je account. Zie Uitleg.","Op verzoek van Jitse."],
-  ["Deze pagina, met de mogelijkheid om suggesties en problemen door te geven.","Op verzoek van Jitse."]]},
- {v:"4.0",date:"2026-10-18",items:[
-  ["Mappen voor schema's, de standaardmap Krachttraining 3 dagen split en twee calisthenics-voorbeeldmappen (met en zonder ringen).","Op verzoek van Jitse."],
-  ["Schema's en mappen delen met een code of link.","Op verzoek van Jitse: zo hoeft niemand schema's over te typen."],
-  ["Tabblad Planning om je sportweek vooraf in te delen.","Op verzoek van Jitse."],
-  ["Rustige achtergrond met verschillende sporten.","Op verzoek van Jitse."]]},
- {v:"3.0",date:"2026-10-18",items:[
-  ["Inloggen met naam en persoonlijke code; de namenlijst is niet meer zichtbaar.","Op verzoek van Jitse: meer privacy."],
-  ["Trainingen worden bewaard zonder internet en later automatisch verstuurd.","Uit een test: zonder internet kon een training verloren gaan."],
-  ["Jitse kan trainingen inplannen voor anderen en accounts beheren.","Op verzoek van Jitse."]]},
- {v:"2.0",date:"2026-10-18",items:[
-  ["Profiel, gewicht bijhouden, voedingsadvies en duurtraining loggen.","Op verzoek van Jitse."]]},
- {v:"1.0",date:"2026-10-18",items:[["Eerste versie: schema's, trainingen loggen en records.","Start van het Krachtlogboek."]]}
+  ["Privacyverklaring, eenmalige toestemming en zelf je account verwijderen.","Nodig volgens de AVG, omdat de app gezondheidsgegevens bewaart."],
+  ["Details ouder dan 3 maanden worden samengevat; je records blijven altijd bewaard.","Niet meer gegevens bewaren dan nodig."],
+  ["Lettertypes zitten in de app zelf.","Je IP-adres gaat niet meer naar Google."],
+  ["Sterkere groepscode voor nieuwe apparaten.","Extra beveiliging; wie al ingelogd is merkt niets."],
+  ["Doelgewicht met datum: de app laat zien of je tempo realistisch is.",""],
+  ["Veel meer producten en sauzen, snacks en glutenvrij als dieet.",""],
+  ["Vaste maaltijden (ontbijt, lunch, diner, snack) en zelf maaltijdplannen samenstellen, met kosten per maaltijd.",""],
+  ["Maaltijden en producten delen met een code; zelf toegevoegde producten worden onthouden.",""],
+  ["Boodschappenlijst met losse producten, gedeeld tussen je apparaten, en afvinken in de winkel.",""],
+  ["Spiergroepen: quadriceps en hamstrings apart, en zelf een spiergroep toevoegen.",""],
+  ["Samen trainen: met jouw toestemming kan iemand trainingen voor je inplannen of schema's en maaltijden sturen. Jij kiest per persoon waarvoor.","Ook de beheerder plant alleen nog met toestemming."],
+  ["Records tonen alleen oefeningen die je hebt gedaan.",""]]},
+ {v:"5.0",date:"2026-10-19",items:[["Uitgebreid voedingsadvies, voorbeelddagen, dagboek en boodschappen.",""],["Records per afstand en optioneel een GPX-bestand importeren.",""],["Oude resultaten laten omzetten naar je account.",""],["Suggesties en problemen melden via deze pagina.",""]]},
+ {v:"4.0",date:"2026-10-18",items:[["Mappen voor schema's, schema's delen met een code en een weekplanning.",""]]},
+ {v:"3.0",date:"2026-10-18",items:[["Inloggen met naam en persoonlijke code.","Meer privacy: de namenlijst is niet meer zichtbaar."],["Trainingen worden bewaard zonder internet.",""]]},
+ {v:"2.0",date:"2026-10-18",items:[["Profiel, gewicht, voedingsadvies en duurtraining.",""]]},
+ {v:"1.0",date:"2026-10-18",items:[["Eerste versie: schema's, trainingen en records.",""]]}
 ];
 const FB_STATUS={nieuw:"Nieuw",bekeken:"Bekeken",gepland:"Gepland",opgelost:"Opgelost",niet:"Niet gepland"};
 function newsBanner(){
   if(lsGet("krachtlogboek.seen")===APP_VERSION)return "";
-  return `<div class="banner newsb"><span><b>Nieuw in versie ${APP_VERSION}</b> · privacyverklaring, zelf je account verwijderen en meer.</span><span class="nbtns"><button class="linkbtn" data-act="go-news">Bekijken</button><button class="ib" data-act="news-dismiss" aria-label="Melding sluiten">✕</button></span></div>`;
+  return `<div class="banner newsb"><span><b>Nieuw in versie ${APP_VERSION}</b> · maaltijden, boodschappenlijst, privacy en meer.</span><span class="nbtns"><button class="linkbtn" data-act="go-news">Bekijken</button><button class="ib" data-act="news-dismiss" aria-label="Melding sluiten">✕</button></span></div>`;
 }
 async function loadFeedback(){
   try{UI.fb=(await rpc(S.me&&S.me.isAdmin?"kl_admin_feedback_list":"kl_feedback_mine",S.me&&S.me.isAdmin?{p_code:code,p_admin:pid,p_admin_pin:myPin()}:{p_code:code,p_profile:pid,p_pin:myPin()}))||[]}
@@ -1693,7 +1699,7 @@ function viewNews(){
   if(lsGet("krachtlogboek.seen")!==APP_VERSION)lsSet("krachtlogboek.seen",APP_VERSION);
   if(UI.fb===undefined){UI.fb=null;loadFeedback()}
   const adm=S.me&&S.me.isAdmin,f=UI.fbDraft||(UI.fbDraft={kind:"idee",body:""});
-  const card=c=>`<div class="card stack changelog"><div class="clh"><b>Versie ${c.v}</b><span class="small muted">${dateTxt(c.date)}</span></div><ul class="hl">${c.items.map(([t,w])=>`<li>${esc(t)}<br><span class="small muted">${esc(w)}</span></li>`).join("")}</ul></div>`;
+  const card=c=>`<div class="card stack changelog"><div class="clh"><b>Versie ${c.v}</b><span class="small muted">${dateTxt(c.date)}</span></div><ul class="hl">${c.items.map(([t,w])=>`<li>${esc(t)}${w?`<br><span class="small muted">${esc(w)}</span>`:""}</li>`).join("")}</ul></div>`;
   let h=`<h2>Wat is er nieuw</h2>`+card(CHANGELOG[0])+`<h2>Suggestie of probleem melden</h2><div class="card stack">
     <div class="seg seg2"><button class="segb" data-act="fb-kind" data-v="idee" aria-pressed="${f.kind==="idee"}">Idee voor de app</button><button class="segb" data-act="fb-kind" data-v="probleem" aria-pressed="${f.kind==="probleem"}">Iets werkt niet</button></div>
     <label class="f">${f.kind==="probleem"?"Wat ging er mis? Wat deed je net daarvoor?":"Wat zou je graag zien?"}<textarea id="fb-body" rows="4" placeholder="${f.kind==="probleem"?"Bijv. de app hangt als ik bij Planning op + Plannen tik.":"Bijv. graag meer uitleg over voeding na de training."}">${esc(f.body)}</textarea></label>
@@ -1749,7 +1755,7 @@ async function importResults(d){
   await runJobs(ex,put);await runJobs(ses,put);
   return ses.length;
 }
-function importSheet(sh){
+function importSheetV5(sh){
   const d=sh.data||{};
   if(d.type==="results"){let n=0;try{n=checkResults(d)}catch(e){}
     return `<div class="sh"><h2>Resultaten importeren</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card stack"><div><strong style="font-family:var(--display);font-size:22px">${esc(d.name||"Resultaten")}</strong>${d.by?`<div class="muted small">Klaargezet door ${esc(d.by)}</div>`:""}</div>
@@ -1762,7 +1768,7 @@ function importSheet(sh){
     <p class="small muted" style="margin:0">${d.type==="folder"?"Wordt toegevoegd als nieuwe map.":"Komt bij je schema's onder \"Zonder map\". Je kunt het daarna in een map zetten."} Oefeningen die je al hebt, delen hun records met je bestaande geschiedenis.</p>
     <button class="btn primary" data-act="sh-import">Toevoegen aan mijn schema's</button></div>`;
 }
-async function importShare(){
+async function importShareV5(){
   const d=UI.sheet&&UI.sheet.data;if(!d)return;UI.sheet=null;render();toast("Toevoegen…");
   if(d.type==="results"){const n=await importResults(d);UI.tab="records";lsSet(LS_TAB,"records");toastOk(`${n} training${n===1?"":"en"} toegevoegd aan je account`);render();window.scrollTo(0,0);return}
   if(d.type==="folder"){let name=String(d.name||"Gedeelde map");if(folderList().some(f=>norm(f.name)===norm(name)))name+=` (van ${d.by||"iemand"})`;await addFolderSet({name,routines:d.routines},"fd-"+uid())}
@@ -1811,7 +1817,8 @@ document.addEventListener("click",async ev=>{
     case "n-fa-q":UI.sheet.g=v;renderSheet();break;
     case "n-fa-back":UI.sheet.pick=null;UI.sheet.custom=null;renderSheet();break;
     case "n-fa-add":{const sh=UI.sheet,f=sh.pick,g=num(document.getElementById("fa-g")?.value)||0;if(g<=0||g>3000){toast("Vul een geldig aantal gram in.");return}
-      const d=UI.logDate||today();await logAdd(d,{meal:sh.meal,fid:f.id&&!f.off?f.id:null,name:f.n+(f.brand?` (${f.brand})`:""),g,k:Math.round(f.k*g/100),p:+(f.p*g/100).toFixed(1),c:+(f.c*g/100).toFixed(1),f:+(f.f*g/100).toFixed(1)});
+      let fid=f.id&&!f.off?f.id:null;if(f.off){fid=await ensureFood({n:f.n+(f.brand?` (${f.brand})`:""),k:f.k,p:f.p,c:f.c,f:f.f,por:f.por||100})}
+      const d=UI.logDate||today();await logAdd(d,{meal:sh.meal,fid,name:f.n+(f.brand?` (${f.brand})`:""),g,k:Math.round(f.k*g/100),p:+(f.p*g/100).toFixed(1),c:+(f.c*g/100).toFixed(1),f:+(f.f*g/100).toFixed(1)});
       UI.sheet=null;toastOk(`${f.n} toegevoegd`);render();break}
     case "n-fa-save":{const f=UI.sheet.pick,id=uid();await put("foods",id,{n:f.n+(f.brand?` (${f.brand})`:""),k:f.k,p:f.p,c:f.c,f:f.f,por:f.por||100});UI.sheet.pick={...f,id:"c:"+id,off:false};toastOk("Bewaard bij je producten");renderSheet();break}
     case "n-off":{const q=(document.getElementById("fa-q")?.value||"").trim();if(q.length<3)return;await offSearch(q);break}
@@ -1865,7 +1872,7 @@ function privacyHtml(){
   <h4>Welke gegevens?</h4><ul><li>Je naam en je persoonlijke code (versleuteld opgeslagen, niemand kan hem terugzien).</li><li>Je schema's, trainingen, planning en records.</li><li>Je profiel: leeftijd, lengte, geslacht, gewicht, doelgewicht, doel, werk, stappen en sportweek.</li><li>Hartslag bij duurtrainingen, je voedingsdagboek en je voorkeuren voor eten.</li><li>Meldingen en suggesties die je instuurt.</li></ul>
   <p>Gewicht, hartslag en voeding zijn gezondheidsgegevens. Die worden alleen opgeslagen met je uitdrukkelijke toestemming.</p>
   <h4>Waarvoor?</h4><p>Alleen om de functies van de app te laten werken: je trainingen en voortgang bijhouden, je voedingsadvies berekenen en trainingen inplannen. Er zijn geen advertenties, er wordt niets verkocht of gedeeld met bedrijven, en er wordt niets gevolgd of gemeten.</p>
-  <h4>Wie ziet wat?</h4><ul><li>Je eigen gegevens zie alleen jij.</li><li>Jitse ziet als beheerder: de namen van de accounts, het aantal trainingen, wanneer iemand laatst actief was, ingestuurde meldingen, en bij trainingen die hij voor jou inplant ook je resultaat daarvan.</li><li>Als beheerder van de database kan Jitse technisch bij alle gegevens. Hij kijkt daar alleen in als dat nodig is, bijvoorbeeld om een probleem op te lossen of een back-up terug te zetten.</li><li>Andere gebruikers zien niets van jou, ook je naam niet. Deel je zelf een schema, dan staat je naam als afzender bij dat schema.</li></ul>
+  <h4>Wie ziet wat?</h4><ul><li>Je eigen gegevens zie alleen jij.</li><li>Jitse ziet als beheerder: de namen van de accounts, het aantal trainingen, wanneer iemand laatst actief was en ingestuurde meldingen.</li><li><b>Samen trainen:</b> geef je iemand toestemming, dan mag die persoon alleen wat jij aanvinkt: trainingen in je planning zetten, schema's of maaltijden sturen. Hij of zij ziet van jou alleen de trainingen die hij of zij zelf voor je inplande en of je die gedaan hebt, en alleen als jij dat aanvinkt ook het resultaat daarvan. Je kunt toestemming altijd intrekken. Dit geldt ook voor Jitse.</li><li>Als beheerder van de database kan Jitse technisch bij alle gegevens. Hij kijkt daar alleen in als dat nodig is, bijvoorbeeld om een probleem op te lossen of een back-up terug te zetten.</li><li>Andere gebruikers zien verder niets van jou, ook je naam niet, tenzij je met iemand samen traint. Deel je zelf een schema, dan staat je naam als afzender bij dat schema.</li></ul>
   <h4>Waar staan de gegevens?</h4><ul><li>In een online database bij Supabase.</li><li>De app zelf staat op GitHub Pages.</li><li>Eén keer per week wordt een back-up gemaakt in een afgeschermde, privé GitHub-omgeving waar alleen Jitse bij kan.</li><li>Op je eigen telefoon staat een kopie, zodat de app ook zonder internet werkt. Bij uitloggen wordt die gewist.</li><li>Zoek je in het dagboek in Open Food Facts, dan gaat je zoekterm naar Open Food Facts. Verder gaan er geen gegevens naar andere partijen; de lettertypes zitten in de app zelf.</li></ul>
   <h4>Hoe lang?</h4><ul><li>Trainingen, je voedingsdagboek en je planning worden 3 maanden in detail bewaard. Daarna worden ze samengevat: je records, aantallen en maandtotalen blijven, de details verdwijnen.</li><li>Je profiel, gewicht en schema's blijven tot je ze zelf aanpast of verwijdert.</li><li>Back-ups worden maximaal 3 maanden bewaard.</li><li>Verwijder je je account, dan worden al je gegevens, meldingen en deelcodes direct gewist. Uit de back-ups verdwijnen ze binnen 3 maanden.</li></ul>
   <h4>Jouw rechten</h4><p>Je kunt je gegevens altijd inzien en downloaden (Uitleg → Back-up downloaden), aanpassen en zelf verwijderen (Profiel → Account verwijderen). Je toestemming intrekken doe je door je account te verwijderen. Vragen? Stuur Jitse een bericht of gebruik Wat is er nieuw → Suggestie. Ben je het ergens niet mee eens, dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens.</p>
@@ -1986,23 +1993,25 @@ document.addEventListener("click",async ev=>{
 
 /* ---------- v6: maaltijden, maaltijdplannen, boodschappen ---------- */
 const MEAL_LIB=[
- {id:"m-oats",n:"Overnight oats met koffie en jus",cat:"ontbijt",items:[["havermout",60],["griekse_van",100],["chiazaad",5],["noten_mix",10],["melk_vol",80],["whey",20],["aardbei",100],["pindakaas",20],["koffie",150],["jus_sinaas",200]]},
- {id:"m-eggs",n:"Eieren met brood, paprika en tomaat",cat:"ontbijt",items:[["ei",165],["paprika",75],["tomaat",100],["brood_vk",70],["melk_hv",200]]},
- {id:"m-kwarkbowl",n:"Kwark met banaan en granola",cat:"ontbijt",items:[["kwark_mager",250],["banaan",120],["granola",30]]},
- {id:"m-boterham",n:"Boterhammen met kaas en kipfilet",cat:"lunch",items:[["brood_vk",105],["halvarine",10],["kaas_30",30],["kipbeleg",30],["komkommer",50]]},
- {id:"m-wrap",n:"Wraps met kip en groente",cat:"lunch",items:[["wrap",120],["kipfilet_b",100],["sla",30],["tomaat",75],["knoflooksaus",20]]},
- {id:"m-eiersalade",n:"Bolletjes met eiersalade",cat:"lunch",items:[["bol_vk",120],["eiersalade",40],["tomaat",75]]},
- {id:"m-kipkerrie",n:"Kip kerrie met rijst en sperziebonen",cat:"diner",items:[["rijst",75],["kipfilet",75],["roomboter",6],["cremefraiche",50],["sperzie",150]]},
- {id:"m-rijstsate",n:"Rijst met kip, wokgroente en satésaus",cat:"diner",items:[["rijst",75],["kipfilet",125],["wokmix",200],["satesaus",50],["olijfolie",5]]},
- {id:"m-bolognese",n:"Macaroni bolognese",cat:"diner",items:[["pasta_vk",75],["ui",50],["wortel",50],["ontbijtspek",25],["olijfolie",4],["gehakt_mager",75],["passata",170],["melk_vol",25],["parmezaan",12]]},
- {id:"m-pesto",n:"Pasta pesto met kip en tomaat",cat:"diner",items:[["pasta",75],["kipfilet_b",50],["tomaat",125],["sla",20],["pesto",24],["kaas_jong",19]]},
- {id:"m-avg",n:"Aardappelen, sperziebonen en gehaktbal",cat:"diner",items:[["aardappel",250],["sperzie",200],["gehaktbal",100],["jus",50]]},
- {id:"m-stamppot",n:"Stamppot boerenkool met rookworst",cat:"diner",items:[["aardappel",250],["boerenkool",200],["rookworst",75],["melk_hv",30],["roomboter",10]]},
- {id:"m-krieltjes",n:"Krieltjes met kipfilet en broccoli",cat:"diner",items:[["krieltjes",250],["kipfilet",150],["broccoli",200]]},
- {id:"m-shake",n:"Eiwitshake met melk",cat:"snack",items:[["whey",30],["melk_hv",300]]},
- {id:"m-rijstwafel",n:"Rijstwafels met pindakaas",cat:"snack",items:[["rijstwafel",16],["pindakaas",15]]},
- {id:"m-kwarkfruit",n:"Kwark met blauwe bessen",cat:"snack",items:[["kwark_mager",150],["blauwebes",75]]}
+ {id:"m-oats",n:"Overnight oats met koffie en jus",cats:["ontbijt"],items:[["havermout",60],["griekse_van",100],["chiazaad",5],["noten_mix",10],["melk_vol",80],["whey",20],["aardbei",100],["pindakaas",20],["koffie",150],["jus_sinaas",200]]},
+ {id:"m-eggs",n:"Eieren met brood, paprika en tomaat",cats:["ontbijt", "lunch"],items:[["ei",165],["paprika",75],["tomaat",100],["brood_vk",70],["melk_hv",200]]},
+ {id:"m-kwarkbowl",n:"Kwark met banaan en granola",cats:["ontbijt", "snack"],items:[["kwark_mager",250],["banaan",120],["granola",30]]},
+ {id:"m-boterham",n:"Boterhammen met kaas en kipfilet",cats:["lunch", "ontbijt"],items:[["brood_vk",105],["halvarine",10],["kaas_30",30],["kipbeleg",30],["komkommer",50]]},
+ {id:"m-wrap",n:"Wraps met kip en groente",cats:["lunch", "diner"],items:[["wrap",120],["kipfilet_b",100],["sla",30],["tomaat",75],["knoflooksaus",20]]},
+ {id:"m-eiersalade",n:"Bolletjes met eiersalade",cats:["lunch"],items:[["bol_vk",120],["eiersalade",40],["tomaat",75]]},
+ {id:"m-kipkerrie",n:"Kip kerrie met rijst en sperziebonen",cats:["diner"],items:[["rijst",75],["kipfilet",75],["roomboter",6],["cremefraiche",50],["sperzie",150]]},
+ {id:"m-rijstsate",n:"Rijst met kip, wokgroente en satésaus",cats:["diner"],items:[["rijst",75],["kipfilet",125],["wokmix",200],["satesaus",50],["olijfolie",5]]},
+ {id:"m-bolognese",n:"Macaroni bolognese",cats:["diner"],items:[["pasta_vk",75],["ui",50],["wortel",50],["ontbijtspek",25],["olijfolie",4],["gehakt_mager",75],["passata",170],["melk_vol",25],["parmezaan",12]]},
+ {id:"m-pesto",n:"Pasta pesto met kip en tomaat",cats:["diner"],items:[["pasta",75],["kipfilet_b",50],["tomaat",125],["sla",20],["pesto",24],["kaas_jong",19]]},
+ {id:"m-avg",n:"Aardappelen, sperziebonen en gehaktbal",cats:["diner"],items:[["aardappel",250],["sperzie",200],["gehaktbal",100],["jus",50]]},
+ {id:"m-stamppot",n:"Stamppot boerenkool met rookworst",cats:["diner"],items:[["aardappel",250],["boerenkool",200],["rookworst",75],["melk_hv",30],["roomboter",10]]},
+ {id:"m-krieltjes",n:"Krieltjes met kipfilet en broccoli",cats:["diner"],items:[["krieltjes",250],["kipfilet",150],["broccoli",200]]},
+ {id:"m-shake",n:"Eiwitshake met melk",cats:["snack"],items:[["whey",30],["melk_hv",300]]},
+ {id:"m-rijstwafel",n:"Rijstwafels met pindakaas",cats:["snack"],items:[["rijstwafel",16],["pindakaas",15]]},
+ {id:"m-kwarkfruit",n:"Kwark met blauwe bessen",cats:["snack", "ontbijt"],items:[["kwark_mager",150],["blauwebes",75]]}
 ].map(m=>({...m,lib:true,items:m.items.map(([fid,g])=>({fid,g}))}));
+function mealCats(m){return m.cats&&m.cats.length?m.cats:[m.cat||"ontbijt"]}
+const catNames=m=>mealCats(m).map(c=>(MEALS.find(x=>x[0]===c)||["",""])[1]).join(" · ");
 function mealsAll(){return [...Object.entries(S.meals||{}).map(([id,m])=>({...m,id:"u:"+id})),...MEAL_LIB]}
 function mealById(id){return id&&id.startsWith("u:")?(S.meals[id.slice(2)]?{...S.meals[id.slice(2)],id}:null):MEAL_LIB.find(m=>m.id===id)||null}
 function partFood(it){return it.food||anyFood(it.fid)}
@@ -2048,10 +2057,15 @@ function viewPlans(n){
     h+=`</section>`;
   });
   h+=`<div class="btnrow" style="margin-top:8px"><button class="btn" data-act="n-reroll">Andere voorbeelden</button></div>`;
-  h+=`<h2>Maaltijden</h2><p class="small muted" style="margin:0 0 8px">Vaste combinaties die je met één tik in je dagboek of plan zet.</p><div class="recgroup">${mealsAll().map(m=>{const ps=mealParts(m,1),mm=partsMacros(ps),c=partsCost(ps),open=UI.mealOpen===m.id;
-    return `<div class="row mealrow"><button class="mrowbtn" data-act="ml-toggle" data-v="${m.id}"><span class="n">${esc(m.n)}${m.lib?"":` <span class="chip">eigen</span>`}${mealAllowed(m)?"":` <span class="chip warnchip">past niet bij voorkeuren</span>`}</span><span class="b none">${nl(mm.k)} kcal</span><span class="l">${MEALS.find(x=>x[0]===m.cat)?.[1]||""} · ${Math.round(mm.p)} E · ${Math.round(mm.c)} K · ${Math.round(mm.f)} V · ${eur(c.use)} per keer</span></button>
-      ${open?`<div class="mdetail">${ps.map(x=>`<div class="fline"><span class="fq">${Math.round(x.g)} g</span><span class="fn">${esc(x.f.n)}</span><span class="fm">${nl(x.f.k*x.g/100)} kcal${x.fid&&FOOD[x.fid]?` · ${eur(x.g/1000*priceOf(FOOD[x.fid]))}`:""}</span></div>`).join("")}<p class="small muted" style="margin:6px 0">Verpakkingen samen ${eur(c.pkg)}${c.unknown?` · ${c.unknown} product zonder prijs`:""}</p>${m.lib?`<button class="btn" data-act="ml-copy" data-v="${m.id}">Kopiëren en aanpassen</button>`:`<div class="btnrow"><button class="btn" data-act="ml-edit" data-v="${m.id}">Bewerken</button><button class="btn ghost danger" data-act="ml-del" data-v="${m.id}">Verwijderen</button></div>`}</div>`:""}</div>`}).join("")}</div>
-    <button class="btn block" style="margin-top:10px" data-act="ml-new">+ Eigen maaltijd samenstellen</button>`;
+  h+=`<h2>Maaltijden</h2><p class="small muted" style="margin:0 0 8px">Vaste combinaties die je met één tik in je dagboek of plan zet. Een maaltijd staat onder elk kopje waarvoor hij is aangevinkt.</p>`;
+  for(const [k,l] of MEALS){const ms=mealsAll().filter(m=>mealCats(m).includes(k));if(!ms.length)continue;
+    h+=`<div class="mealhead">${l}</div><div class="recgroup">${ms.map(m=>{const ps=mealParts(m,1),mm=partsMacros(ps),c=partsCost(ps),key=k+"|"+m.id,open=UI.mealOpen===key;
+      return `<div class="row mealrow"><button class="mrowbtn" data-act="ml-toggle" data-v="${esc(key)}"><span class="n">${esc(m.n)}${m.lib?"":` <span class="chip">eigen</span>`}${mealAllowed(m)?"":` <span class="chip warnchip">past niet bij voorkeuren</span>`}</span><span class="b none">${nl(mm.k)} kcal</span><span class="l">${Math.round(mm.p)} E · ${Math.round(mm.c)} K · ${Math.round(mm.f)} V · ${eur(c.use)} per keer${mealCats(m).length>1?` · ook bij ${esc(catNames(m))}`:""}</span></button>
+        ${open?`<div class="mdetail">${ps.map(x=>`<div class="fline"><span class="fq">${Math.round(x.g)} g</span><span class="fn">${esc(x.f.n)}</span><span class="fm">${nl(x.f.k*x.g/100)} kcal${x.fid&&FOOD[x.fid]?` · ${eur(x.g/1000*priceOf(FOOD[x.fid]))}`:""}</span></div>`).join("")}<p class="small muted" style="margin:6px 0">Verpakkingen samen ${eur(c.pkg)}${c.unknown?` · ${c.unknown} product zonder prijs`:""}</p><div class="btnrow">${m.lib?`<button class="btn" data-act="ml-copy" data-v="${m.id}">Kopiëren en aanpassen</button>`:`<button class="btn" data-act="ml-edit" data-v="${m.id}">Bewerken</button>`}<button class="btn" data-act="share-meal" data-v="${m.id}">Delen</button>${m.lib?"":`<button class="btn ghost danger" data-act="ml-del" data-v="${m.id}">Verwijderen</button>`}</div></div>`:""}</div>`}).join("")}</div>`}
+  h+=`<button class="btn block" style="margin-top:10px" data-act="ml-new">+ Eigen maaltijd samenstellen</button>`;
+  const mf=myFoods();
+  h+=`<h2>Mijn producten</h2>${mf.length?`<div class="recgroup">${mf.map(f=>`<div class="row logrow"><span class="n">${esc(f.n)}</span><span class="b none">${nl(f.k)} kcal</span><span class="l">per 100 g · ${fmt1(f.p)} E · ${fmt1(f.c)} K · ${fmt1(f.f)} V <button class="linkbtn" data-act="share-prod" data-v="${f.id}">delen</button> <button class="linkbtn danger" data-act="prod-del" data-v="${f.id}">verwijderen</button></span></div>`).join("")}</div>`:`<p class="small muted">Producten die je zelf toevoegt of opzoekt in Open Food Facts worden hier automatisch onthouden.</p>`}`;
+  h+=`<h2>Gedeelde maaltijd of product toevoegen</h2><div class="card stack"><p class="hp">Heeft iemand een maaltijd of product met je gedeeld? Vul de deelcode in.</p><div class="codeinput"><input type="text" id="nsh-code" placeholder="Bijv. 7KQ2MX" autocapitalize="characters" autocomplete="off" maxlength="8"><button class="btn primary" data-act="nsh-lookup">Bekijken</button></div></div>`;
   return h;
 }
 function viewPlanEditor(n){
@@ -2062,14 +2076,14 @@ function viewPlanEditor(n){
   for(const [m,l] of MEALS){const es=p.entries.map((e,i)=>({...e,i})).filter(e=>e.slot===m),sp=es.flatMap(entryParts),st=partsMacros(sp),sc=partsCost(sp);
     h+=`<h2>${l}${es.length?` · ${nl(st.k)} kcal · ${Math.round(st.k/n.kcal*100)}% van je dag`:""}</h2><div class="recgroup">${es.map(e=>{const ep=entryParts(e),em=partsMacros(ep),ec=partsCost(ep);
       return `<div class="row logrow"><span class="n">${esc(entryName(e))}</span><span class="b none">${e.t==="p"?Math.round(e.g)+" g":""}</span><span class="l">${nl(em.k)} kcal · ${Math.round(em.p)} E · ${Math.round(em.c)} K · ${Math.round(em.f)} V · ${eur(ec.use)}${e.t==="m"?` <select class="mulsel" id="mpmul-${e.i}" aria-label="Portie">${[0.5,1,1.5,2].map(x=>`<option value="${x}" ${(e.mul||1)===x?"selected":""}>${String(x).replace(".",",")}×</option>`).join("")}</select>`:""} <button class="linkbtn danger" data-act="mp-del-entry" data-v="${e.i}">verwijderen</button></span></div>`}).join("")}<button class="row addrow" data-act="mp-add" data-v="${m}"><span class="n">+ Maaltijd of product toevoegen</span></button></div>`}
-  h+=`<div class="stack" style="margin-top:14px"><button class="btn primary" data-act="mp-save">Plan opslaan</button><div class="btnrow"><button class="btn" data-act="mp-log">In dagboek van vandaag</button><button class="btn" data-act="mp-shop">Boodschappen</button></div>${p.id?(UI.confirm==="mp-del"?`<div class="confirm"><span>Dit maaltijdplan verwijderen?</span><div class="btnrow"><button class="btn danger" data-act="mp-del-yes">Verwijderen</button><button class="btn" data-act="confirm-no">Behouden</button></div></div>`:`<button class="btn ghost danger" data-act="mp-del">Plan verwijderen</button>`):""}</div>`;
+  h+=`<div class="stack" style="margin-top:14px"><button class="btn primary" data-act="mp-save">Plan opslaan</button><div class="btnrow"><button class="btn" data-act="mp-log">In dagboek van vandaag</button><button class="btn" data-act="mp-shop">Boodschappen</button></div>${sendRow("food","mp-send","")}${p.id?(UI.confirm==="mp-del"?`<div class="confirm"><span>Dit maaltijdplan verwijderen?</span><div class="btnrow"><button class="btn danger" data-act="mp-del-yes">Verwijderen</button><button class="btn" data-act="confirm-no">Behouden</button></div></div>`:`<button class="btn ghost danger" data-act="mp-del">Plan verwijderen</button>`):""}</div>`;
   return h;
 }
 function viewMealEditor(n){
   const m=UI.mealEdit,ps=m.items.map(it=>({f:partFood(it),fid:it.fid||null,g:it.g})).filter(x=>x.f),tot=partsMacros(ps),c=partsCost(ps);
   return `<div class="wohead"><div class="title">${m.id?"Maaltijd bewerken":"Eigen maaltijd"}</div><button class="linkbtn" data-act="ml-close">← Terug</button></div><div class="card stack" style="margin-top:10px">
     <label class="f">Naam<input type="text" id="ml-name" value="${esc(m.n)}" placeholder="Bijv. Mijn vaste ontbijt" autocomplete="off"></label>
-    <label class="f">Meestal als<select id="ml-cat">${MEALS.map(([k,l])=>`<option value="${k}" ${m.cat===k?"selected":""}>${l}</option>`).join("")}</select></label>
+    <div class="f">Laat zien bij <i>meerdere mogelijk</i><div class="chips">${MEALS.map(([k,l])=>`<button class="chipb" data-act="ml-cat-t" data-v="${k}" aria-pressed="${(m.cats||[]).includes(k)}">${l}</button>`).join("")}</div></div>
     <div>${m.items.map((it,i)=>{const f=partFood(it);return f?`<div class="edititem"><div><strong>${esc(f.n)}</strong><br><span class="small muted">${nl(f.k*it.g/100)} kcal · ${fmt1(f.p*it.g/100)} E</span></div><div class="icons"><input class="num gin" id="mlg-${i}" inputmode="decimal" value="${it.g}" aria-label="Gram ${esc(f.n)}"><span class="small muted">g</span><button class="ib" data-act="ml-rm" data-v="${i}" aria-label="Verwijder">✕</button></div></div>`:""}).join("")||`<p class="muted small" style="margin:0">Nog geen producten.</p>`}</div>
     <button class="btn" data-act="ml-add">+ Product toevoegen</button>
     <div class="daytot"><div><span class="ml">Totaal</span><b>${nl(tot.k)} kcal</b></div><div><span class="ml">Eiwit</span><b>${Math.round(tot.p)} g</b></div><div><span class="ml">Koolh.</span><b>${Math.round(tot.c)} g</b></div><div><span class="ml">Vet</span><b>${Math.round(tot.f)} g</b></div></div>
@@ -2092,12 +2106,12 @@ function pickSheet(sh){
       <div class="livespeed" id="pk-live">${mTxt(mm)}</div>${sh.target==="plan"?`<p class="small muted" style="margin:0">${Math.round(mm.k/n.kcal*100)}% van je dagdoel</p>`:""}
       <button class="btn primary" data-act="pk-add">Toevoegen</button><button class="linkbtn" data-act="pk-back">← Andere keuze</button></div>`;
   }
-  const mode=sh.target==="meal"?"p":(sh.mode||"m");
-  let h=`<div class="sh"><h2>${sh.target==="meal"?"Product toevoegen":esc((MEALS.find(x=>x[0]===sh.slot)||MEALS[0])[1])+" · toevoegen"}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>`;
-  if(sh.target!=="meal")h+=`<div class="seg seg2" style="margin-bottom:8px"><button class="segb" data-act="pk-mode" data-v="m" aria-pressed="${mode==="m"}">Maaltijden</button><button class="segb" data-act="pk-mode" data-v="p" aria-pressed="${mode==="p"}">Producten</button></div>`;
+  const mode=sh.target==="meal"||sh.target==="shop"?"p":(sh.mode||"m");
+  let h=`<div class="sh"><h2>${sh.target==="shop"?"Op je boodschappenlijst":sh.target==="meal"?"Product toevoegen":esc((MEALS.find(x=>x[0]===sh.slot)||MEALS[0])[1])+" · toevoegen"}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>`;
+  if(sh.target!=="meal"&&sh.target!=="shop")h+=`<div class="seg seg2" style="margin-bottom:8px"><button class="segb" data-act="pk-mode" data-v="m" aria-pressed="${mode==="m"}">Maaltijden</button><button class="segb" data-act="pk-mode" data-v="p" aria-pressed="${mode==="p"}">Producten</button></div>`;
   h+=`<input type="search" id="pk-search" placeholder="${mode==="m"?"Zoek een maaltijd":"Zoek een product"}" value="${esc(sh.q||"")}" autocomplete="off">`;
-  if(mode==="m"){const ms=mealsAll().filter(m=>!q||norm(m.n).includes(q)).sort((a,b)=>(b.cat===sh.slot)-(a.cat===sh.slot));
-    h+=`<div class="card" style="margin-top:10px;padding:4px 12px">${ms.map(m=>{const mm=partsMacros(mealParts(m,1));return `<button class="pickitem" data-act="pk-meal" data-v="${m.id}"><span>${esc(m.n)}${mealAllowed(m)?"":` <span class="muted small">· past niet bij voorkeuren</span>`}</span><span class="small muted">${nl(mm.k)} kcal · ${Math.round(mm.k/n.kcal*100)}%</span></button>`}).join("")||`<p class="muted small" style="padding:10px 0;margin:0">Geen maaltijd gevonden.</p>`}</div>`}
+  if(mode==="m"){const ms=mealsAll().filter(m=>(sh.all||mealCats(m).includes(sh.slot))&&(!q||norm(m.n).includes(q)));
+    h+=`<div class="card" style="margin-top:10px;padding:4px 12px">${ms.map(m=>{const mm=partsMacros(mealParts(m,1));return `<button class="pickitem" data-act="pk-meal" data-v="${m.id}"><span>${esc(m.n)}${mealAllowed(m)?"":` <span class="muted small">· past niet bij voorkeuren</span>`}</span><span class="small muted">${nl(mm.k)} kcal · ${Math.round(mm.k/n.kcal*100)}%</span></button>`}).join("")||`<p class="muted small" style="padding:10px 0;margin:0">Geen maaltijd gevonden.</p>`}</div>${sh.all?"":`<button class="linkbtn" data-act="pk-all">Ook maaltijden van andere kopjes tonen</button>`}`}
   else{const all=[...myFoods(),...FOODS],res=(q?all.filter(f=>norm(f.n).includes(q)):all.filter(f=>f.cat!=="snacks")).slice(0,q?40:25);
     h+=`<div class="card" style="margin-top:10px;padding:4px 12px">${res.map(f=>`<button class="pickitem" data-act="pk-prod" data-v="${f.id}"><span>${esc(f.n)}</span><span class="small muted">${nl(f.k)} kcal /100 g</span></button>`).join("")||`<p class="muted small" style="padding:10px 0;margin:0">Niet gevonden. Voeg het via het Dagboek toe als eigen product.</p>`}</div>${q?"":`<p class="small muted">Typ om in alle ${FOODS.length} producten te zoeken.</p>`}`}
   return h;
@@ -2154,8 +2168,8 @@ EXTRA_SHEETS["food-add"]=function(sh){
   if(sh.pickMeal)return diaryMealPick(sh);
   let h=_foodAddSheet(sh);
   if(!sh.pick&&!sh.custom&&!(sh.q||"").trim()){
-    const ms=mealsAll().sort((a,b)=>(b.cat===sh.meal)-(a.cat===sh.meal)).slice(0,8);
-    const block=`<h2>Maaltijden</h2><div class="card" style="padding:4px 12px">${ms.map(m=>`<button class="pickitem" data-act="dm-pick" data-v="${m.id}"><span>${esc(m.n)}</span><span class="small muted">${nl(partsMacros(mealParts(m,1)).k)} kcal</span></button>`).join("")}</div>`;
+    const ms=mealsAll().filter(m=>mealCats(m).includes(sh.meal));
+    const block=ms.length?`<h2>Maaltijden</h2><div class="card" style="padding:4px 12px">${ms.map(m=>`<button class="pickitem" data-act="dm-pick" data-v="${m.id}"><span>${esc(m.n)}</span><span class="small muted">${nl(partsMacros(mealParts(m,1)).k)} kcal</span></button>`).join("")}</div>`:"";
     h=h.replace(/(<input type="search" id="fa-q"[^>]*>)/,"$1"+block);
   }
   return h;
@@ -2208,7 +2222,7 @@ document.addEventListener("click",async ev=>{
     case "mp-shop":{const p=UI.planEdit;if(!p.id){toast("Sla het plan eerst op.");return}const st=shopState();st.src={["p:"+p.id]:7};shopSave();UI.planEdit=null;UI.foodTab="shop";render();window.scrollTo(0,0);break}
     case "pk-mode":UI.sheet.mode=v;UI.sheet.q="";renderSheet();break;
     case "pk-meal":UI.sheet.pick={t:"m",id:v,mul:1};renderSheet();break;
-    case "pk-prod":UI.sheet.pick={t:"p",fid:v,g:null};renderSheet();break;
+    case "pk-prod":if(UI.sheet.target==="shop"){const st=shopState();const x=st.extra.find(e=>e.fid===v);if(x)x.packs=(x.packs||1)+1;else st.extra.push({id:uid(),fid:v,packs:1});shopSave();UI.sheet=null;toast(`${anyFood(v)?.n||"Product"} op je lijst gezet`);render();break}UI.sheet.pick={t:"p",fid:v,g:null};renderSheet();break;
     case "pk-mul":UI.sheet.pick.mul=+v;renderSheet();break;
     case "pk-back":UI.sheet.pick=null;renderSheet();break;
     case "pk-add":{const sh=UI.sheet,pk=sh.pick;
@@ -2217,20 +2231,22 @@ document.addEventListener("click",async ev=>{
         planEntryAdd({slot:sh.slot,t:"p",fid:pk.fid,g})}
       else planEntryAdd({slot:sh.slot,t:"m",id:pk.id,mul:pk.mul||1});
       break}
+    case "ml-cat-t":{const c=UI.mealEdit.cats=UI.mealEdit.cats||[];const i=c.indexOf(v);if(i>=0)c.splice(i,1);else c.push(v);render();break}
+    case "pk-all":UI.sheet.all=true;renderSheet();break;
     case "ml-toggle":UI.mealOpen=UI.mealOpen===v?null:v;render();break;
-    case "ml-new":UI.mealEdit={id:null,n:"",cat:"ontbijt",items:[]};render();window.scrollTo(0,0);break;
-    case "ml-copy":{const m=mealById(v);UI.mealEdit={id:null,n:m.n+" (aangepast)",cat:m.cat,items:clone(m.items)};render();window.scrollTo(0,0);break}
-    case "ml-edit":{const m=mealById(v);UI.mealEdit={id:v.slice(2),n:m.n,cat:m.cat,items:clone(m.items)};render();window.scrollTo(0,0);break}
+    case "ml-new":UI.mealEdit={id:null,n:"",cats:[],items:[]};render();window.scrollTo(0,0);break;
+    case "ml-copy":{const m=mealById(v);UI.mealEdit={id:null,n:m.n+" (aangepast)",cats:[...mealCats(m)],items:clone(m.items)};render();window.scrollTo(0,0);break}
+    case "ml-edit":{const m=mealById(v);UI.mealEdit={id:v.slice(2),n:m.n,cats:[...mealCats(m)],items:clone(m.items)};render();window.scrollTo(0,0);break}
     case "ml-del":await del("meals",v.slice(2));UI.mealOpen=null;toastOk("Maaltijd verwijderd");render();break;
     case "ml-close":UI.mealEdit=null;render();window.scrollTo(0,0);break;
     case "ml-add":UI.sheet={type:"plan-pick",target:"meal",mode:"p",q:""};render();break;
     case "ml-rm":UI.mealEdit.items.splice(+v,1);render();break;
-    case "ml-save":{const m=UI.mealEdit,nm=(document.getElementById("ml-name")?.value||m.n||"").trim();if(!nm){toast("Geef de maaltijd een naam.");return}if(!m.items.length){toast("Voeg minstens één product toe.");return}
-      await put("meals",m.id||uid(),{n:nm,cat:m.cat,items:m.items});UI.mealEdit=null;toastOk(`Maaltijd "${nm}" opgeslagen`);render();window.scrollTo(0,0);break}
+    case "ml-save":{const m=UI.mealEdit,nm=(document.getElementById("ml-name")?.value||m.n||"").trim();if(!nm){toast("Geef de maaltijd een naam.");return}if(!m.items.length){toast("Voeg minstens één product toe.");return}if(!(m.cats||[]).length){toast("Kies bij welke maaltijd(en) hij hoort.");return}
+      await put("meals",m.id||uid(),{n:nm,cats:m.cats,items:m.items});UI.mealEdit=null;toastOk(`Maaltijd "${nm}" opgeslagen`);render();window.scrollTo(0,0);break}
     case "sm-open":UI.sheet={type:"save-meal",meal:v,date:UI.logDate||today()};render();setTimeout(()=>document.getElementById("sm-name")?.focus(),30);break;
     case "sm-save":{const sh=UI.sheet,nm=(document.getElementById("sm-name")?.value||"").trim();if(!nm){toast("Geef de maaltijd een naam.");return}
       const items=[];for(const it of logDay(sh.date).filter(x=>x.meal===sh.meal)){if(it.items)items.push(...it.items);else if(it.fid)items.push({fid:it.fid,g:it.g});else if(it.g)items.push({food:{n:it.name,k:it.k/it.g*100,p:it.p/it.g*100,c:it.c/it.g*100,f:it.f/it.g*100},g:it.g})}
-      await put("meals",uid(),{n:nm,cat:sh.meal,items});UI.sheet=null;toastOk(`Opgeslagen als maaltijd "${nm}"`);render();break}
+      await put("meals",uid(),{n:nm,cats:[sh.meal],items});UI.sheet=null;toastOk(`Opgeslagen als maaltijd "${nm}"`);render();break}
     case "dm-pick":UI.sheet.pickMeal=v;UI.sheet.mul=1;renderSheet();break;
     case "dm-mul":UI.sheet.mul=+v;renderSheet();break;
     case "dm-back":UI.sheet.pickMeal=null;renderSheet();break;
@@ -2260,6 +2276,328 @@ document.addEventListener("change",ev=>{
   else if(id.startsWith("shs-")){const st=shopState();st.src[id.slice(4)]=+t.value;shopSave();render()}
 });
 
+/* ---------- v6+: spiergroepen, delen voeding, boodschappenlijst ---------- */
+const BASE_GROUPS=["Borst","Rug","Schouders","Biceps","Triceps","Onderarmen","Core","Quadriceps","Hamstrings","Billen","Kuiten","Full body","Overig"];
+function legGroup(name){return /deadlift|rdl|nordic|hamstring|leg ?curl|good ?morning|single leg rdl/i.test(name||"")?"Hamstrings":"Quadriceps"}
+function applyGroups(){const custom=((S.meta.groups&&S.meta.groups.custom)||[]).filter(g=>g&&!BASE_GROUPS.includes(g));GROUPS.splice(0,GROUPS.length,...BASE_GROUPS.slice(0,-1),...custom,"Overig")}
+let migratingG=false;
+async function migrateGroups(){
+  applyGroups();
+  if(migratingG||!pid||S.mode!=="cloud"||queue().length||(S.meta.seed&&S.meta.seed.g))return;
+  migratingG=true;
+  try{
+    const jobs=Object.entries(S.exercises).filter(([,x])=>x.group==="Benen").map(([id,x])=>["exercises",id,{...x,group:legGroup(x.name)}]);
+    await runJobs(jobs,put);
+    await put("meta","seed",{...(S.meta.seed||{}),g:1});
+  }finally{migratingG=false}
+}
+function groupSelect(id,cur){const list=[...GROUPS];if(cur&&!list.includes(cur))list.splice(list.length-1,0,cur);return `<select id="${id}">${list.map(g=>`<option ${g===cur?"selected":""}>${esc(g)}</option>`).join("")}</select>`}
+async function addGroup(name){
+  name=String(name||"").trim().slice(0,30);if(!name){toast("Vul een naam in voor de spiergroep.");return null}
+  name=name.charAt(0).toUpperCase()+name.slice(1);
+  if(GROUPS.some(g=>norm(g)===norm(name))){toast("Deze spiergroep bestaat al.");return GROUPS.find(g=>norm(g)===norm(name))}
+  const custom=[...((S.meta.groups&&S.meta.groups.custom)||[]),name];
+  await put("meta","groups",{custom});applyGroups();toastOk(`Spiergroep "${name}" toegevoegd`);return name;
+}
+
+/* delen van maaltijden en producten */
+function foodPkg(f){return{n:f.n,k:+f.k||0,p:+f.p||0,c:+f.c||0,f:+f.f||0,por:f.por||100}}
+async function shareFood(kind,id){
+  let pkg;
+  if(kind==="meal"){const m=mealById(id);if(!m)return;pkg={type:"meal",name:m.n,cats:mealCats(m),items:(m.items||[]).map(it=>{const f=partFood(it);return f?{...foodPkg(f),g:it.g,fid:it.fid&&FOOD[it.fid]?it.fid:null}:null}).filter(Boolean)}}
+  else{const f=anyFood(id);if(!f)return;pkg={type:"product",name:f.n,...foodPkg(f)}}
+  pkg.by=S.me?.name||"";pkg.v=1;
+  try{const c=await rpc("kl_share_create",{p_code:code,p_profile:pid,p_pin:myPin(),p_data:pkg});UI.sheet={type:"share",code:c,name:pkg.name,kind,pkg};render()}
+  catch(e){if(e.code==="net")toast("Delen lukt alleen met internet.");else handleErr(e)}
+}
+const KIND_LBL={folder:"Map",routine:"Schema",meal:"Maaltijd",product:"Product",results:"Resultaten"};
+function shareText(sh){const food=sh.kind==="meal"||sh.kind==="product";return `${KIND_LBL[sh.kind]||"Schema"} "${sh.name}" uit het Krachtlogboek. Open de link, of vul ${food?"bij Voeding → Plannen":"bij Schema's"} de deelcode ${sh.code} in.`}
+EXTRA_SHEETS["share"]=function(sh){
+  const can=!!navigator.share,food=sh.kind==="meal"||sh.kind==="product";
+  return `<div class="sh"><h2>${KIND_LBL[sh.kind]||"Schema"} delen</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>
+    <div class="card stack"><p class="hp">Stuur deze code of link door. De ander kan "${esc(sh.name)}" dan met één tik toevoegen${food?", inclusief alle voedingswaarden":""}.</p>
+    <div class="sharecode" aria-label="Deelcode">${esc(sh.code)}</div>
+    ${can?`<button class="btn primary" data-act="sh-native">Delen via WhatsApp, berichten…</button>`:""}
+    <button class="btn ${can?"":"primary"}" data-act="sh-copy">Kopieer bericht met link</button>
+    <p class="small muted" style="margin:0">Ontvanger vult de code in bij <b>${food?"Voeding → Plannen → Gedeelde maaltijd of product":"Schema's → Gedeeld schema toevoegen"}</b>, of opent de link en logt in.</p></div>`;
+};
+const _importSheet=importSheetV5;
+function importSheet(sh){
+  const d=sh.data||{};
+  if(d.type==="meal"){const t=d.items.reduce((s,x)=>{const q=x.g/100;s.k+=x.k*q;s.p+=x.p*q;s.c+=x.c*q;s.f+=x.f*q;return s},{k:0,p:0,c:0,f:0});
+    return `<div class="sh"><h2>Gedeelde maaltijd</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card stack"><div><strong style="font-family:var(--display);font-size:22px">${esc(d.name)}</strong>${d.by?`<div class="muted small">Gedeeld door ${esc(d.by)}</div>`:""}</div>
+      ${d.items.map(x=>`<div class="fline"><span class="fq">${Math.round(x.g)} g</span><span class="fn">${esc(x.n)}</span><span class="fm">${nl(x.k*x.g/100)} kcal</span></div>`).join("")}
+      <div class="livespeed">${mTxt(t)}</div><button class="btn primary" data-act="sh-import">Toevoegen aan mijn maaltijden</button></div>`}
+  if(d.type==="product")return `<div class="sh"><h2>Gedeeld product</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card stack"><div><strong style="font-family:var(--display);font-size:22px">${esc(d.name)}</strong>${d.by?`<div class="muted small">Gedeeld door ${esc(d.by)}</div>`:""}</div>
+      <p class="hp">Per 100 g: ${nl(d.k)} kcal · ${fmt1(d.p)} g eiwit · ${fmt1(d.c)} g koolhydraten · ${fmt1(d.f)} g vet</p><button class="btn primary" data-act="sh-import">Toevoegen aan mijn producten</button></div>`;
+  return _importSheet(sh);
+}
+async function ensureFood(x){
+  const ex=Object.entries(S.foods||{}).find(([,f])=>norm(f.n)===norm(x.n)&&Math.abs((+f.k||0)-x.k)<1);
+  if(ex)return "c:"+ex[0];
+  const id=uid();await put("foods",id,foodPkg(x));return "c:"+id;
+}
+const _importShare=importShareV5;
+async function importShare(){
+  const d=UI.sheet&&UI.sheet.data;if(!d)return;
+  if(d.type!=="meal"&&d.type!=="product")return _importShare();
+  UI.sheet=null;render();
+  if(d.type==="product"){await ensureFood({...d,n:d.name||d.n});toastOk(`Product "${d.name}" toegevoegd`)}
+  else{const items=[];for(const x of d.items){items.push({fid:x.fid&&FOOD[x.fid]?x.fid:await ensureFood(x),g:x.g})}
+    await put("meals",uid(),{n:String(d.name).slice(0,80),cats:(d.cats||["ontbijt"]).filter(c=>MEALS.some(m=>m[0]===c)),items});toastOk(`Maaltijd "${d.name}" toegevoegd`)}
+  UI.tab="food";UI.foodTab="plannen";lsSet(LS_TAB,"food");render();window.scrollTo(0,0);
+}
+
+/* boodschappen: eigen lijst, gedeeld tussen je apparaten, afvinken in de winkel */
+let shopT=null;
+function shopState(){
+  if(!UI.shop2){const a=S.meta.shop||{},b=lsGet("krachtlogboek.shop2."+pid)||{},s=(b.ts||0)>(a.ts||0)?b:a;UI.shop2={src:s.src||null,off:s.off||{},have:s.have||{},extra:s.extra||[],got:s.got||{},ts:s.ts||0}}
+  return UI.shop2;
+}
+function shopFlush(){if(shopT&&UI.shop2&&pid){clearTimeout(shopT);shopT=null;put("meta","shop",clone(UI.shop2))}}
+function shopSave(){const st=UI.shop2;st.ts=Date.now();lsSet("krachtlogboek.shop2."+pid,st);clearTimeout(shopT);shopT=setTimeout(shopFlush,250)}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")shopFlush()});
+window.addEventListener("pagehide",shopFlush);
+function shopData(n){
+  const st=shopState(),srcs=shopSources(n);
+  if(!st.src){st.src={};const mine=srcs.filter(s=>s.key.startsWith("p:"));if(mine.length)st.src[mine[0].key]=7}
+  const units=[];
+  for(const s of srcs){const days=st.src[s.key]||0;if(!days)continue;
+    const grp={};for(const e of s.entries){if(e.t==="m")units.push({key:s.key+"|m|"+e.id+"|"+e.slot,n:entryName(e),src:s.n,days,parts:entryParts(e)});else(grp[e.slot]=grp[e.slot]||[]).push(e)}
+    for(const [slot,es] of Object.entries(grp))units.push({key:s.key+"|s|"+slot,n:(MEALS.find(x=>x[0]===slot)||MEALS[0])[1],src:s.n,days,parts:es.flatMap(entryParts)});
+  }
+  const prod={};let use=0;
+  for(const u of units){if(st.off[u.key])continue;const c=partsCost(u.parts);use+=c.use*u.days;for(const x of u.parts){if(!x.fid||!FOOD[x.fid])continue;prod[x.fid]=(prod[x.fid]||0)+x.g*u.days}}
+  const rows=Object.entries(prod).map(([fid,g])=>{const f=FOOD[fid],packs=Math.max(1,Math.ceil(g/f.pkg-0.05));return{key:"f:"+fid,f,g,packs,cost:packs*f.pkg/1000*priceOf(f),have:!!st.have[fid]}});
+  const extras=st.extra.map(x=>{const f=x.fid&&anyFood(x.fid);const dbf=x.fid&&FOOD[x.fid];return{key:"x:"+x.id,x,f,name:f?f.n:x.name,packs:x.packs||1,cost:dbf?(x.packs||1)*dbf.pkg/1000*priceOf(dbf):0,cat:dbf?dbf.cat:"eigen"}});
+  const buy=rows.filter(r=>!r.have).reduce((t,r)=>t+r.cost,0)+extras.reduce((t,r)=>t+r.cost,0);
+  return{st,srcs,units,rows,extras,use,buy};
+}
+function viewShop(n){
+  const d=shopData(n),st=d.st,mode=UI.shopMode||"lijst";
+  let h=`<div class="seg seg2" style="margin-top:12px"><button class="segb" data-act="shm" data-v="lijst" aria-pressed="${mode==="lijst"}">Lijst samenstellen</button><button class="segb" data-act="shm" data-v="winkel" aria-pressed="${mode==="winkel"}">In de winkel</button></div>`;
+  if(mode==="winkel")return h+viewStore(d);
+  const nd=Object.values(st.src).reduce((a,b)=>a+(b||0),0);
+  h+=`<div class="card stack shopsum"><div class="shoptot"><span>Te kopen</span><b>${eur(d.buy)}</b></div><span class="small muted">Geschat, voor hele verpakkingen. ${d.use?`Wat je van je maaltijden werkelijk opeet kost ± ${eur(d.use)}${nd?`, ± ${eur(d.use/nd)} per dag`:""}.`:""}</span></div>
+  <h2>Losse producten</h2><div class="recgroup">${d.extras.map(r=>`<div class="row logrow"><span class="n">${esc(r.name)}</span><span class="b none">${r.cost?eur(r.cost):""}</span><span class="l">${r.f&&FOOD[r.x.fid]?`${r.packs} × ${FOOD[r.x.fid].pkg>=1000?fmt1(FOOD[r.x.fid].pkg/1000)+" kg":FOOD[r.x.fid].pkg+" g"}`:`${r.packs}×`} <button class="linkbtn" data-act="shx-min" data-v="${r.x.id}" aria-label="Minder">−</button><button class="linkbtn" data-act="shx-plus" data-v="${r.x.id}" aria-label="Meer">+</button> <button class="linkbtn danger" data-act="shx-del" data-v="${r.x.id}">verwijderen</button></span></div>`).join("")}
+    <button class="row addrow" data-act="shx-add"><span class="n">+ Product uit de lijst toevoegen</span></button></div>
+  <div class="codeinput" style="margin-top:8px"><input type="text" id="shx-free" placeholder="Iets anders, bijv. keukenpapier" autocomplete="off"><button class="btn" data-act="shx-free">Toevoegen</button></div>
+  <h2>Uit maaltijden</h2><div class="card stack">${d.srcs.map(s=>`<div class="srcrow"><span>${esc(s.n)}</span><select id="shs-${esc(s.key)}" aria-label="Aantal dagen ${esc(s.n)}">${[0,1,2,3,4,5,6,7].map(v=>`<option value="${v}" ${(st.src[s.key]||0)===v?"selected":""}>${v} ${v===1?"dag":"dagen"}</option>`).join("")}</select></div>`).join("")}</div>
+  ${d.units.length?`<div class="recgroup" style="margin-top:8px">${d.units.map(u=>{const c=partsCost(u.parts),off=!!st.off[u.key];return `<button class="row shoprow${off?" ck":""}" data-act="sh-unit" data-v="${esc(u.key)}"><span class="n">${off?"☐":"☑"} ${esc(u.n)}</span><span class="b none">${eur(c.use*u.days)}</span><span class="l">${esc(u.src)} · ${u.days}× · ${eur(c.use)} per keer</span></button>`}).join("")}</div>`:`<p class="small muted">Kies hierboven een plan of voorbeelddag, of zet alleen losse producten op je lijst.</p>`}`;
+  if(d.rows.length){h+=`<h2>Producten voor je maaltijden</h2><p class="small muted" style="margin:0 0 6px">Tik op wat je al in huis hebt; dat telt dan niet mee.</p>`;
+    for(const [c,l] of FCATS){const rs=d.rows.filter(r=>r.f.cat===c);if(!rs.length)continue;
+      h+=`<div class="recgroup" style="margin-bottom:8px"><div class="row" style="cursor:default;padding:6px 14px"><span class="n small muted">${l}</span></div>${rs.map(r=>`<button class="row shoprow${r.have?" ck":""}" data-act="sh-have" data-v="${r.f.id}"><span class="n">${r.have?"✓ heb ik al · ":""}${esc(r.f.n)}</span><span class="b none">${eur(r.cost)}</span><span class="l">${r.g>=1000?fmt1(r.g/1000)+" kg":Math.round(r.g)+" g"} nodig · ${r.packs} × ${r.f.pkg>=1000?fmt1(r.f.pkg/1000)+" kg":r.f.pkg+" g"}</span></button>`).join("")}</div>`}}
+  h+=`<div class="btnrow" style="margin-top:12px"><button class="btn primary" data-act="shm" data-v="winkel">Naar de winkel</button><button class="btn" data-act="n-shop-copy">Lijst kopiëren</button></div>
+  <button class="btn ghost block" style="margin-top:8px" data-act="sh-reset">Lijst leegmaken</button>
+  <h2>Aanbiedingen deze week</h2><div class="card stack"><p class="hp small">Prijzen in de app zijn schattingen. Live prijzen ophalen kan niet; de supermarkten bieden daar geen officiële koppeling voor.</p>
+    <div class="btnrow"><a class="btn" href="https://www.ah.nl/bonus" target="_blank" rel="noopener">Albert Heijn</a><a class="btn" href="https://www.jumbo.com/aanbiedingen/nu" target="_blank" rel="noopener">Jumbo</a><a class="btn" href="https://www.lidl.nl" target="_blank" rel="noopener">Lidl</a></div></div>`;
+  if(S.me&&S.me.isAdmin)h+=`<button class="btn block" style="margin-top:12px" data-act="n-prices">Prijzen bijwerken (beheerder)</button>`;
+  UI.shopRows=d.rows.filter(r=>!r.have).map(r=>({f:r.f,packs:r.packs,have:false})).concat(d.extras.map(r=>({f:{n:r.name,pkg:FOOD[r.x.fid]?.pkg||0},packs:r.packs,have:false,free:!FOOD[r.x.fid]})));
+  return h;
+}
+function storeItems(d){
+  const items=d.rows.filter(r=>!r.have).map(r=>({key:r.key,name:r.f.n,qty:`${r.packs} × ${r.f.pkg>=1000?fmt1(r.f.pkg/1000)+" kg":r.f.pkg+" g"}`,cat:r.f.cat}));
+  for(const r of d.extras)items.push({key:r.key,name:r.name,qty:FOOD[r.x.fid]?`${r.packs} × ${FOOD[r.x.fid].pkg>=1000?fmt1(FOOD[r.x.fid].pkg/1000)+" kg":FOOD[r.x.fid].pkg+" g"}`:(r.packs>1?r.packs+"×":""),cat:r.cat});
+  return items;
+}
+function viewStore(d){
+  const items=storeItems(d),got=d.st.got,n=items.filter(i=>got[i.key]).length;
+  if(!items.length)return `<div class="card empty" style="margin-top:12px"><p class="muted">Je boodschappenlijst is leeg. Voeg producten toe bij Lijst samenstellen.</p></div>`;
+  let h=`<div class="card storehead"><b>${n} van ${items.length}</b><span class="small muted">in je mandje</span><div class="pt"><span style="width:${items.length?n/items.length*100:0}%"></span></div></div>`;
+  const cats=[...FCATS,["eigen","Overig"]];
+  for(const [c,l] of cats){const its=items.filter(i=>(i.cat||"eigen")===c);if(!its.length)continue;
+    h+=`<div class="mealhead">${l}</div><div class="recgroup">${its.map(i=>`<button class="row storerow${got[i.key]?" got":""}" data-act="st-got" data-v="${esc(i.key)}"><span class="n"><span class="box" aria-hidden="true">${got[i.key]?"✓":""}</span>${esc(i.name)}</span><span class="b none">${esc(i.qty)}</span></button>`).join("")}</div>`}
+  h+=`<div class="btnrow" style="margin-top:14px"><button class="btn" data-act="st-reset">Vinkjes wissen</button><button class="btn primary" data-act="st-done">Klaar met boodschappen</button></div><p class="small muted">Je lijst staat ook op je andere apparaten, dus je kunt hem thuis maken en in de winkel afvinken.</p>`;
+  return h;
+}
+
+document.addEventListener("click",async ev=>{
+  const b=ev.target.closest("[data-act]");if(!b)return;
+  const act=b.dataset.act,v=b.dataset.v;
+  switch(act){
+    case "grp-add":{const nm=await addGroup(document.getElementById("ex-newg")?.value);if(nm&&UI.sheet&&UI.sheet.type==="ex"){UI.sheet.group=nm;renderSheet()}break}
+    case "share-meal":await shareFood("meal",v);break;
+    case "share-prod":await shareFood("product",v);break;
+    case "prod-del":await del("foods",v.slice(2));toastOk("Product verwijderd");render();break;
+    case "nsh-lookup":await lookupShare(document.getElementById("nsh-code")?.value);break;
+    case "shm":UI.shopMode=v;render();window.scrollTo(0,0);break;
+    case "shx-add":UI.sheet={type:"plan-pick",target:"shop",mode:"p",q:""};render();break;
+    case "shx-free":{const el=document.getElementById("shx-free"),nm=(el?.value||"").trim();if(!nm)return;const st=shopState();st.extra.push({id:uid(),name:nm.slice(0,60),packs:1});shopSave();render();break}
+    case "shx-plus":case "shx-min":{const st=shopState(),x=st.extra.find(e=>e.id===v);if(!x)return;x.packs=Math.max(1,(x.packs||1)+(act==="shx-plus"?1:-1));shopSave();render();break}
+    case "shx-del":{const st=shopState();st.extra=st.extra.filter(e=>e.id!==v);shopSave();render();break}
+    case "st-got":{const st=shopState();st.got[v]=!st.got[v];shopSave();const y=window.scrollY;render();window.scrollTo(0,y);break}
+    case "st-reset":{const st=shopState();st.got={};shopSave();render();break}
+    case "st-done":{const st=shopState();st.got={};st.extra=[];st.have={};shopSave();UI.shopMode="lijst";toastOk("Boodschappen afgerond, je losse producten zijn van de lijst gehaald");render();window.scrollTo(0,0);break}
+  }
+},true);
+document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&ev.target.id==="shx-free"){ev.preventDefault();document.querySelector('[data-act="shx-free"]')?.click()}if(ev.key==="Enter"&&ev.target.id==="nsh-code"){ev.preventDefault();document.querySelector('[data-act="nsh-lookup"]')?.click()}});
+
+/* ---------- samen trainen: met toestemming iets voor een ander klaarzetten ---------- */
+const PERMS=[["plan","Trainingen in mijn planning zetten"],["schemas","Schema's naar mij sturen"],["food","Maaltijden en maaltijdplannen naar mij sturen"],["results","Resultaten zien van trainingen die hij of zij voor mij inplant"],["direct","Direct toevoegen, zonder dat ik eerst hoef te accepteren"]];
+const PERM_SHORT={plan:"planning",schemas:"schema's",food:"voeding",results:"resultaten zien",direct:"direct toevoegen"};
+const KIND_TXT={plan:"Training",routine:"Schema",folder:"Map met schema's",meal:"Maaltijd",mealplan:"Maaltijdplan",product:"Product"};
+let socialBusy=false;const inboxDone=new Set();
+function soc(){return S.social||{incoming:[],outgoing:[],inbox:[]}}
+function socialCount(){const s=soc(),direct=new Set(s.incoming.filter(l=>l.status==="active"&&l.perms&&l.perms.direct).map(l=>l.id));return s.incoming.filter(l=>l.status==="pending").length+s.inbox.filter(i=>!direct.has(i.link)&&!inboxDone.has(i.id)).length}
+function permTxt(p){const on=PERMS.map(([k])=>k).filter(k=>p&&p[k]);return on.length?on.map(k=>PERM_SHORT[k]).join(" · "):"nog niets aangevinkt"}
+function linksWith(perm){return soc().outgoing.filter(l=>l.perms&&l.perms[perm])}
+async function loadSocial(){
+  if(!pid||socialBusy||!S.ready||!loadedAt)return;socialBusy=true;const id=pid;
+  try{const s=await rpc("kl_social",{p_code:code,p_profile:id,p_pin:lsGet(pinKey(id))});if(pid!==id)return;S.social=s||{incoming:[],outgoing:[],inbox:[]};render();await processDirect()}
+  catch(e){}finally{socialBusy=false}
+}
+async function processDirect(){
+  const s=soc(),direct=new Map(s.incoming.filter(l=>l.status==="active"&&l.perms&&l.perms.direct).map(l=>[l.id,l]));
+  const todo=s.inbox.filter(i=>direct.has(i.link)&&!inboxDone.has(i.id));if(!todo.length)return;
+  const names=[];
+  for(const it of todo){inboxDone.add(it.id);try{const t=await importInbox(it);await rpc("kl_inbox_done",{p_code:code,p_profile:pid,p_pin:myPin(),p_id:it.id});names.push(`${it.name}: ${t}`)}catch(e){inboxDone.delete(it.id)}}
+  S.social.inbox=S.social.inbox.filter(i=>!inboxDone.has(i.id));
+  if(names.length){toast(names.length===1?`Toegevoegd door ${names[0]}`:`${names.length} dingen voor je klaargezet: ${names.join(", ")}`);render()}
+}
+function inboxTitle(it){const d=it.data||{};return d.name||d.n||KIND_TXT[it.kind]||"Iets"}
+function inboxDetail(it){
+  const d=it.data||{};
+  if(it.kind==="plan"){const ds=d.dates||[];return `${ds.length>1?`${ds.length}× vanaf `:""}${ds[0]?esc(dayName(ds[0])):""}${d.plan&&d.plan.note?` · ${esc(d.plan.note)}`:""}${d.routine?` · ${(d.routine.items||[]).length} oefeningen`:""}`}
+  if(it.kind==="routine"||it.kind==="folder")return (d.routines||[]).map(r=>esc(r.name)).join(" · ");
+  if(it.kind==="meal"){const t=(d.items||[]).reduce((s,x)=>s+x.k*x.g/100,0);return `${(d.items||[]).length} producten · ${nl(t)} kcal`}
+  if(it.kind==="mealplan")return `${(d.entries||[]).length} onderdelen`;
+  if(it.kind==="product")return `${nl(d.k||0)} kcal per 100 g`;
+  return "";
+}
+/* importeren bij de ontvanger */
+async function folderFrom(name){
+  const nm=`Van ${name}`,f=folderList().find(x=>norm(x.name)===norm(nm));if(f)return f.id;
+  const fid="fd-"+uid();await put("folders",fid,{name:nm,order:folderList().length});UI.open["f:"+fid]=true;lsSet(LS_OPEN,UI.open);return fid;
+}
+async function addRoutinesTo(routines,fid){
+  const exMap=new Map(Object.entries(S.exercises).map(([id,x])=>[norm(x.name),id])),ex=[],rs=[],ids=[];
+  const resolve=it=>{const k=norm(it.name);if(exMap.has(k))return exMap.get(k);const id=uid();exMap.set(k,id);ex.push(["exercises",id,{name:it.name,group:it.group}]);return id};
+  const have=routinesIn(fid);let base=have.length;
+  (routines||[]).forEach((r,i)=>{const items=(r.items||[]).map(cleanItem).filter(it=>it.name);const ex0=have.find(([,x])=>norm(x.name)===norm(r.name||""));const id=ex0?ex0[0]:uid()+"r"+i;ids.push(id);
+    rs.push(["routines",id,{name:String(r.name||"Schema").slice(0,80),folderId:fid,order:ex0?ex0[1].order:base++,items:items.map(it=>({exId:resolve(it),sets:it.sets,reps:it.reps,note:it.note}))}])});
+  await runJobs(ex,put);await runJobs(rs,put);return ids;
+}
+async function importMealPkg(d,by){
+  const items=[];for(const x of d.items||[])items.push({fid:x.fid&&FOOD[x.fid]?x.fid:await ensureFood(x),g:x.g});
+  const id=uid();await put("meals",id,{n:String(d.name||"Maaltijd").slice(0,80),cats:(d.cats||["ontbijt"]).filter(c=>MEALS.some(m=>m[0]===c)),items,by:by||null});return "u:"+id;
+}
+async function importInbox(it){
+  const d=it.data||{},by=it.name;
+  if(it.kind==="routine"||it.kind==="folder"){
+    let fid;if(it.kind==="folder"){let nm=String(d.name||"Map");if(folderList().some(f=>norm(f.name)===norm(nm)))nm+=` (van ${by})`;fid="fd-"+uid();await put("folders",fid,{name:nm,order:folderList().length});UI.open["f:"+fid]=true;lsSet(LS_OPEN,UI.open)}
+    else fid=await folderFrom(by);
+    await addRoutinesTo(d.routines,fid);return `${KIND_TXT[it.kind].toLowerCase()} "${d.name}"`;
+  }
+  if(it.kind==="plan"){
+    const p=d.plan||{},extra={};
+    if(p.type==="routine"&&d.routine){const fid=await folderFrom(by);
+      const ex=routinesIn(fid).map(([id,r])=>[id,r]).find(([,r])=>norm(r.name)===norm(d.routine.name));
+      const rid=ex?ex[0]:(await addRoutinesTo([d.routine],fid))[0];Object.assign(extra,{routineId:rid,routineName:d.routine.name})}
+    const stem=uid(),jobs=(d.dates||[]).map((dt,i)=>["plan",stem+"h"+i,{...p,...extra,date:dt,coach:by,fromLink:it.link,updated:Date.now()}]);
+    await runJobs(jobs,put);return `${(p.type==="rest"?"rustdag":"training")} ${d.name?`"${d.name}" `:""}op ${dayName(d.dates[0]).toLowerCase()}${jobs.length>1?` (+${jobs.length-1})`:""}`;
+  }
+  if(it.kind==="meal"){await importMealPkg(d,by);return `maaltijd "${d.name}"`}
+  if(it.kind==="product"){await ensureFood({...d,n:d.name||d.n});return `product "${d.name}"`}
+  if(it.kind==="mealplan"){
+    const entries=[],seen=new Map();
+    for(const e of d.entries||[]){
+      if(e.t==="m"&&e.meal){const k=norm(e.meal.name);let mid=seen.get(k);if(!mid){mid=await importMealPkg(e.meal,by);seen.set(k,mid)}entries.push({slot:e.slot,t:"m",id:mid,mul:e.mul||1})}
+      else if(e.t==="p"&&e.food)entries.push({slot:e.slot,t:"p",fid:e.food.fid&&FOOD[e.food.fid]?e.food.fid:await ensureFood(e.food),g:e.g});
+    }
+    await put("mealplans",uid(),{n:`${String(d.name||"Maaltijdplan").slice(0,60)} (van ${by})`,entries,updated:Date.now()});return `maaltijdplan "${d.name}"`;
+  }
+  throw new Error("onbekend");
+}
+/* versturen door de helper */
+function mealPkgOf(m){return{name:m.n,cats:mealCats(m),items:(m.items||[]).map(it=>{const f=partFood(it);return f?{...foodPkg(f),g:it.g,fid:it.fid&&FOOD[it.fid]?it.fid:null}:null}).filter(Boolean)}}
+function mealplanPkg(p){return{name:p.n||"Maaltijdplan",entries:(p.entries||[]).map(e=>{if(e.t==="m"){const m=mealById(e.id);return m?{slot:e.slot,t:"m",mul:e.mul||1,meal:mealPkgOf(m)}:null}const f=anyFood(e.fid);return f?{slot:e.slot,t:"p",g:e.g,food:{...foodPkg(f),fid:FOOD[e.fid]?e.fid:null}}:null}).filter(Boolean)}}
+async function sendTo(linkId,kind,data){
+  const l=soc().outgoing.find(x=>x.id===+linkId);if(!l){toast("Je hebt geen toestemming meer om iets naar deze persoon te sturen.");return false}
+  try{await rpc("kl_send",{p_code:code,p_profile:pid,p_pin:myPin(),p_link:l.id,p_kind:kind,p_data:data});
+    toast(`Verstuurd naar ${l.name}. ${l.perms.direct?"Het wordt direct toegevoegd zodra de app opent.":"Hij of zij krijgt een voorstel om te accepteren."}`);return true}
+  catch(e){if(e.code==="no_perm"){toast(`${l.name} heeft de toestemming hiervoor aangepast of ingetrokken.`);loadSocial()}else if(e.code==="too_many")toast("Je hebt vandaag al veel verstuurd. Probeer het morgen weer.");else if(e.code==="too_big")toast("Dit is te groot om te versturen.");else if(e.code==="net")toast("Versturen lukt alleen met internet.");else handleErr(e);return false}
+}
+function sendRow(perm,act,v){const ls=linksWith(perm);if(!ls.length)return "";return `<div class="f" style="margin-top:6px">Of stuur direct naar<div class="chips">${ls.map(l=>`<button class="chipb" data-act="${act}" data-v="${esc(v)}" data-id="${l.id}">${esc(l.name)}</button>`).join("")}</div></div>`}
+/* pagina */
+function permEditor(l,def){const p=l.perms&&Object.keys(l.perms).length?l.perms:def;return `<div class="stack permbox">${PERMS.map(([k,t])=>`<label class="check"><input type="checkbox" id="perm-${l.id}-${k}" ${p[k]?"checked":""}><span>${k==="results"||k==="direct"?`<b>${t.split(" ")[0]}</b> ${t.split(" ").slice(1).join(" ")}`:t}</span></label>`).join("")}</div>`}
+function readPerms(id){const o={};for(const [k] of PERMS)o[k]=!!document.getElementById(`perm-${id}-${k}`)?.checked;return o}
+function viewTogether(){
+  if(S.social==null&&!socialBusy&&loadedAt)loadSocial();
+  const s=soc(),direct=new Set(s.incoming.filter(l=>l.status==="active"&&l.perms&&l.perms.direct).map(l=>l.id));
+  const pend=s.incoming.filter(l=>l.status==="pending"),act=s.incoming.filter(l=>l.status==="active"),inbox=s.inbox.filter(i=>!direct.has(i.link)&&!inboxDone.has(i.id));
+  let h=`<div class="wohead"><div class="title">Samen trainen</div><button class="linkbtn" data-act="go-profile">← Profiel</button></div>
+    <p class="hp small muted" style="margin-top:8px">Train je samen of help je elkaar? Met toestemming kan iemand anders trainingen voor je inplannen, of schema's en maaltijden sturen. Jij kiest per persoon waarvoor, en kunt het altijd weer intrekken.</p>`;
+  if(pend.length)h+=`<h2>Verzoeken</h2>`+pend.map(l=>`<div class="card stack reqcard"><div><b>${esc(l.name)}</b> wil iets voor je kunnen klaarzetten.</div><p class="hp small" style="margin:0">Vink aan wat ${esc(l.name)} mag:</p>${permEditor(l,{plan:true,schemas:true,food:true,results:false,direct:false})}<div class="btnrow"><button class="btn primary" data-act="lk-accept" data-id="${l.id}">Accepteren</button><button class="btn" data-act="lk-decline" data-id="${l.id}">${UI.confirm==="lk-decline"+l.id?"Zeker? Tik nogmaals":"Weigeren"}</button></div></div>`).join("");
+  if(inbox.length)h+=`<h2>Voor jou klaargezet</h2>`+inbox.map(i=>`<div class="card stack inboxcard"><div class="fbh"><b>${esc(inboxTitle(i))}</b><span class="chip">${KIND_TXT[i.kind]||i.kind}</span></div><span class="small muted">Van ${esc(i.name)}${inboxDetail(i)?` · ${inboxDetail(i)}`:""}</span><div class="btnrow"><button class="btn primary" data-act="ib-add" data-id="${i.id}">Toevoegen</button><button class="btn" data-act="ib-no" data-id="${i.id}">Weigeren</button></div></div>`).join("");
+  h+=`<h2>Wie mag iets voor jou klaarzetten</h2>`+(act.length?`<div class="stack">${act.map(l=>`<div class="card stack"><div class="fbh"><b>${esc(l.name)}</b></div><span class="small muted">Mag: ${esc(permTxt(l.perms))}</span>${UI.permEdit===l.id?permEditor(l,{})+`<div class="btnrow"><button class="btn primary" data-act="lk-save" data-id="${l.id}">Opslaan</button><button class="btn" data-act="lk-edit" data-id="">Annuleren</button></div>`:`<div class="btnrow"><button class="btn" data-act="lk-edit" data-id="${l.id}">Aanpassen</button><button class="btn ghost danger" data-act="lk-remove" data-id="${l.id}">${UI.confirm==="lk-remove"+l.id?"Zeker? Tik nogmaals":"Intrekken"}</button></div>`}</div>`).join("")}</div>`:`<p class="small muted">Nog niemand. Krijg je een verzoek, dan zie je dat hier en bovenaan Trainen.</p>`);
+  h+=`<h2>Jij helpt</h2>`+(s.outgoing.length?`<div class="stack">${s.outgoing.map(l=>`<div class="card stack"><div class="fbh"><b>${esc(l.name)}</b></div><span class="small muted">Jij mag: ${esc(permTxt(l.perms))}</span><div class="btnrow">${l.perms.plan?`<button class="btn primary" data-act="lk-plan" data-id="${l.id}">Training inplannen</button><button class="btn" data-act="lk-view" data-id="${l.id}">Ingepland${l.perms.results?" en resultaten":""}</button>`:""}${l.perms.food?`<button class="btn" data-act="lk-food" data-id="${l.id}">Maaltijd sturen</button>`:""}${l.perms.schemas?`<button class="btn" data-act="go-schemas">Schema sturen</button>`:""}</div><button class="linkbtn danger" data-act="lk-stop" data-id="${l.id}">${UI.confirm==="lk-stop"+l.id?"Zeker? Tik nogmaals om te stoppen":"Stoppen met helpen"}</button></div>`).join("")}</div><p class="small muted">Schema's stuur je via Schema's → Delen, maaltijden via Voeding → Plannen → Delen.</p>`:`<p class="small muted">Je helpt nog niemand.</p>`);
+  h+=`<h2>Iemand vragen</h2><div class="card stack"><p class="hp">Wil je iets voor iemand klaarzetten? Vul de naam in waarmee die persoon inlogt.</p><div class="codeinput"><input type="text" id="lk-name" placeholder="Naam" autocomplete="off"><button class="btn primary" data-act="lk-request">Verzoek sturen</button></div><p class="small muted" style="margin:0">Je ziet niet wie er allemaal een account heeft. Bestaat de naam, dan krijgt die persoon een melding en kan je verzoek accepteren of weigeren.</p></div>`;
+  return h;
+}
+function socialBanner(){const n=socialCount();if(!n)return "";const s=soc(),p=s.incoming.filter(l=>l.status==="pending").length;
+  return `<div class="banner newsb"><span>${p?`<b>${p} verzoek${p>1?"en":""}</b> voor Samen trainen`:""}${p&&n>p?" · ":""}${n>p?`<b>${n-p}</b> ding${n-p>1?"en":""} voor je klaargezet`:""}</span><span class="nbtns"><button class="linkbtn" data-act="go-together">Bekijken</button></span></div>`}
+/* overzicht voor de helper */
+function helpViewSheet(sh){
+  const l=soc().outgoing.find(x=>x.id===sh.link),d=sh.data;
+  let h=`<div class="sh"><h2>Ingepland voor ${esc(l?l.name:"")}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>`;
+  if(!d)return h+`<p class="muted">Laden…</p>`;
+  if(d.pending.length)h+=`<div class="card stack"><b>Nog niet bekeken</b>${d.pending.map(p=>`<span class="small">${KIND_TXT[p.kind]||p.kind}${p.name?` "${esc(p.name)}"`:""}${p.dates&&p.dates[0]?` · ${esc(dayName(p.dates[0]))}`:""}</span>`).join("")}</div>`;
+  const t=today();
+  h+=d.plan.length?`<div class="recgroup" style="margin-top:10px">${d.plan.map(p=>{const s=p.session;let res="";
+      if(s){res=s.kind==="cardio"?[s.km?fmt1(+s.km)+" km":null,s.durMin?durTxt(+s.durMin):null,s.km&&s.durMin?paceTxt(+s.durMin,+s.km):null].filter(Boolean).join(" · "):(s.entries||[]).map(e=>`${esc(e.name)} ${(e.sets||[]).map(x=>(x.k?x.k+"×":"")+x.r).join(", ")}`).join(" · ")}
+      return `<div class="row logrow"><span class="n">${esc(p.title||"Training")}</span><span class="b none">${p.done?"✓ gedaan":p.date<t?"niet gedaan":"gepland"}</span><span class="l">${esc(dayName(p.date))}${res?` · ${res}`:""}${p.date>=t&&!p.done?` <button class="linkbtn danger" data-act="hv-del" data-v="${esc(p.id)}">verwijderen</button>`:""}</span></div>`}).join("")}</div>`
+    :`<p class="small muted">Nog niets van jou in de planning (laatste 60 dagen).</p>`;
+  if(!d.results)h+=`<p class="small muted">${esc(l?l.name:"Deze persoon")} deelt geen resultaten met je; je ziet alleen of iets gedaan is.</p>`;
+  return h;
+}
+async function openHelpView(link){UI.sheet={type:"help-view",link,data:null};render();
+  try{const d=await rpc("kl_help_view",{p_code:code,p_profile:pid,p_pin:myPin(),p_link:link});if(UI.sheet&&UI.sheet.type==="help-view"&&UI.sheet.link===link){UI.sheet.data=d;renderSheet()}}
+  catch(e){UI.sheet=null;if(e.code==="no_perm"){toast("Je hebt hier geen toestemming meer voor.");loadSocial()}else handleErr(e)}}
+function sendMealSheet(sh){const l=soc().outgoing.find(x=>x.id===sh.link);const ms=mealsAll();const plans=Object.entries(S.mealplans||{});
+  return `<div class="sh"><h2>Sturen naar ${esc(l?l.name:"")}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>
+  ${plans.length?`<h2>Maaltijdplannen</h2><div class="card" style="padding:4px 12px">${plans.map(([id,p])=>`<button class="pickitem" data-act="sd-mealplan" data-v="${id}" data-id="${sh.link}"><span>${esc(p.n||"Maaltijdplan")}</span><span class="small muted">${(p.entries||[]).length} onderdelen</span></button>`).join("")}</div>`:""}
+  <h2>Maaltijden</h2><div class="card" style="padding:4px 12px">${ms.map(m=>`<button class="pickitem" data-act="sd-meal" data-v="${m.id}" data-id="${sh.link}"><span>${esc(m.n)}</span><span class="small muted">${nl(partsMacros(mealParts(m,1)).k)} kcal</span></button>`).join("")}</div>`}
+EXTRA_SHEETS["help-view"]=helpViewSheet;EXTRA_SHEETS["send-meal"]=sendMealSheet;
+
+/* deel-sheet uitbreiden met direct sturen */
+const _shareSheetT=EXTRA_SHEETS["share"];
+EXTRA_SHEETS["share"]=function(sh){let h=_shareSheetT(sh);if(!sh.pkg)return h;const perm=sh.kind==="meal"||sh.kind==="product"?"food":"schemas";
+  const row=sendRow(perm,"sd-pkg",sh.kind);return row?h.replace(/<\/div>\s*$/,`${row}</div>`):h};
+
+document.addEventListener("click",async ev=>{
+  const b=ev.target.closest("[data-act]");if(!b)return;
+  const act=b.dataset.act,v=b.dataset.v,id=b.dataset.id;
+  switch(act){
+    case "go-together":UI.tab="together";lsSet(LS_TAB,"together");UI.sheet=null;UI.permEdit=null;render();window.scrollTo(0,0);loadSocial();break;
+    case "go-schemas":UI.tab="schemas";lsSet(LS_TAB,"schemas");render();window.scrollTo(0,0);toast("Tik bij een schema of map op Delen en kies daar de persoon.");break;
+    case "lk-request":{const el=document.getElementById("lk-name"),nm=(el?.value||"").trim();if(!nm){toast("Vul een naam in.");return}
+      if(norm(nm)===norm(S.me?.name||"")){toast("Dat ben je zelf.");return}
+      try{await rpc("kl_link_request",{p_code:code,p_profile:pid,p_pin:myPin(),p_name:nm});el.value="";toast("Verzoek verstuurd. Als deze gebruiker bestaat, krijgt hij of zij een melding en kan je accepteren of weigeren.")}
+      catch(e){if(e.code==="too_many")toast("Je hebt vandaag al veel verzoeken gestuurd. Probeer het morgen weer.");else if(e.code==="net")toast("Een verzoek sturen lukt alleen met internet.");else if(0)toast("Je hebt vandaag al veel verzoeken gestuurd. Probeer het morgen weer.");else handleErr(e)}break}
+    case "lk-accept":case "lk-save":{const p=readPerms(id);if(!PERMS.slice(0,3).some(([k])=>p[k])){toast("Vink minstens één onderdeel aan: planning, schema's of voeding.");return}
+      try{await rpc("kl_link_set",{p_code:code,p_profile:pid,p_pin:myPin(),p_id:+id,p_perms:p});UI.permEdit=null;toast(act==="lk-accept"?"Geaccepteerd":"Toestemming aangepast");await loadSocial()}catch(e){handleErr(e)}break}
+    case "lk-decline":case "lk-remove":case "lk-stop":{
+      if(UI.confirm!==act+id){UI.confirm=act+id;render();if(act==="lk-remove")toast("Openstaande voorstellen van deze persoon vervallen dan ook.");return}
+      UI.confirm=null;try{await rpc("kl_link_remove",{p_code:code,p_profile:pid,p_pin:myPin(),p_id:+id});toast(act==="lk-decline"?"Verzoek geweigerd":act==="lk-remove"?"Toestemming ingetrokken":"Je helpt deze persoon niet meer");await loadSocial()}catch(e){handleErr(e)}break}
+    case "lk-edit":UI.permEdit=id?+id:null;render();break;
+    case "ib-add":{const it=soc().inbox.find(i=>i.id===+id);if(!it)return;inboxDone.add(it.id);render();
+      try{const t=await importInbox(it);await rpc("kl_inbox_done",{p_code:code,p_profile:pid,p_pin:myPin(),p_id:it.id});S.social.inbox=S.social.inbox.filter(i=>i.id!==it.id);toastOk(`Toegevoegd: ${t}`);render()}
+      catch(e){inboxDone.delete(it.id);if(e.code==="net")toast("Toevoegen lukt alleen met internet.");else toast("Toevoegen lukte niet. Probeer het opnieuw.");render()}break}
+    case "ib-no":{try{await rpc("kl_inbox_done",{p_code:code,p_profile:pid,p_pin:myPin(),p_id:+id});S.social.inbox=S.social.inbox.filter(i=>i.id!==+id);toast("Geweigerd");render()}catch(e){handleErr(e)}break}
+    case "lk-plan":UI.sheet={type:"pl-add",forLink:+id,date:addDays(today(),1),kind:Object.keys(S.routines).length?"routine":"cardio",routineId:"",sport:"Hardlopen",title:"",durMin:"",km:"",note:"",repeat:"1"};UI.confirm=null;render();break;
+    case "pa-for":UI.sheet.forLink=id?+id:null;renderSheet();break;
+    case "lk-view":await openHelpView(+id);break;
+    case "hv-del":{const sh=UI.sheet;try{await rpc("kl_help_plan_del",{p_code:code,p_profile:pid,p_pin:myPin(),p_link:sh.link,p_id:v});toast("Uit de planning gehaald");await openHelpView(sh.link)}catch(e){if(e.code==="no_perm")toast("Je hebt hier geen toestemming meer voor.");else handleErr(e)}break}
+    case "lk-food":UI.sheet={type:"send-meal",link:+id};render();break;
+    case "sd-meal":{const m=mealById(v);if(m&&await sendTo(id,"meal",{type:"meal",...mealPkgOf(m),by:S.me?.name}))UI.sheet=null;render();break}
+    case "sd-mealplan":{const p=S.mealplans[v];if(p&&await sendTo(id,"mealplan",mealplanPkg(p)))UI.sheet=null;render();break}
+    case "sd-pkg":{const sh=UI.sheet;if(sh&&sh.pkg&&await sendTo(id,sh.pkg.type,sh.pkg)){UI.sheet=null;render()}break}
+    case "mp-send":{const p=UI.planEdit;if(!p||!p.entries.length){toast("Voeg eerst iets toe aan het plan.");return}if(await sendTo(id,"mealplan",mealplanPkg(p)))render();break}
+  }
+});
+document.addEventListener("input",ev=>{if(ev.target.id==="pa-date"&&UI.sheet&&UI.sheet.type==="pl-add")UI.sheet.date=ev.target.value});
+document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&ev.target.id==="lk-name"){ev.preventDefault();document.querySelector('[data-act="lk-request"]')?.click()}});
+
 /* ---------- sheets ---------- */
 function renderSheet(){
   const el=document.getElementById("sheet");
@@ -2279,7 +2617,7 @@ function renderSheet(){
     const x=S.exercises[sh.id];if(!x){UI.sheet=null;el.hidden=true;return}
     const hist=historyFor(sh.id),b=bestFor(sh.id);
     inner=`<div class="sh"><h2>${esc(x.name)}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>
-      <div class="card stack"><label class="f">Naam<input type="text" id="ex-name" value="${esc(sh.name)}"></label><label class="f">Spiergroep<select id="ex-g">${GROUPS.map(g=>`<option ${g===sh.group?"selected":""}>${g}</option>`).join("")}</select></label><button class="btn primary" data-act="save-ex">Wijzigingen opslaan</button></div>
+      <div class="card stack"><label class="f">Naam<input type="text" id="ex-name" value="${esc(sh.name)}"></label><label class="f">Spiergroep${groupSelect("ex-g",sh.group)}</label><div class="codeinput"><input type="text" id="ex-newg" placeholder="Eigen spiergroep, bijv. Adductoren" autocomplete="off"><button class="btn" data-act="grp-add">Toevoegen</button></div><button class="btn primary" data-act="save-ex">Wijzigingen opslaan</button></div>
       <h2>Geschiedenis</h2>${hist.length?`<div class="hist">`+hist.map(hh=>`<div class="h"><div class="d">${dateTxt(hh.date)} · ${esc(hh.name||"Training")}</div><div class="s">${hh.sets.map(shortSet).join(" · ")}</div></div>`).join("")+`</div>`:`<p class="muted">Nog niet gelogd.</p>`}
       ${b?`<p class="small muted">Record: <strong style="color:var(--pr)">${setTxt(b.set)}</strong> op ${dateTxt(b.date)}</p>`:""}
       <div style="margin-top:14px">${UI.confirm==="del-ex"?`<div class="confirm"><span>Oefening verwijderen uit je lijst? Gelogde trainingen blijven bewaard, maar de oefening verdwijnt uit records en schema's.</span><div class="btnrow"><button class="btn danger" data-act="del-ex-yes">Verwijderen</button><button class="btn" data-act="confirm-no">Behouden</button></div></div>`:`<button class="btn ghost danger" data-act="del-ex">Oefening verwijderen</button>`}</div>`;
