@@ -85,6 +85,7 @@ input[type=text],input[type=date],input[type=search],select,.num{width:100%;back
 .refs .best{background:var(--pr-bg)}
 .refs .best dd{color:var(--pr)}
 .refs .target{grid-column:1/-1}
+.refs .target.prog dd{font-size:13px;font-weight:600;color:var(--accent);line-height:1.35}
 .sets{display:grid;gap:6px}
 .setrow{display:grid;grid-template-columns:40px 1fr 1fr 44px 36px;gap:6px;align-items:center}
 .sethead{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
@@ -116,7 +117,7 @@ input[type=text],input[type=date],input[type=search],select,.num{width:100%;back
 .pickitem:first-child{border-top:0}
 /* nav */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
-nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr)}
+nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(7,1fr)}
 nav.tabs button{appearance:none;border:0;background:transparent;padding:10px 4px 12px;display:grid;justify-items:center;gap:3px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;letter-spacing:.04em}
 nav.tabs button svg{width:22px;height:22px}
 nav.tabs button[aria-current="page"]{color:var(--accent)}
@@ -185,7 +186,7 @@ textarea{width:100%;background:var(--sunk);border:1px solid transparent;border-r
 .coachrow .ok{color:var(--fg);font-weight:600}.coachrow .miss{color:var(--pr);font-weight:600}
 .adhead{display:flex;justify-content:space-between;align-items:center}
 .arow{display:grid;gap:1px;padding:7px 0;border-top:1px solid var(--line)}.arow:first-child{border-top:0}
-nav.tabs button{font-size:11px;padding:9px 2px 11px}
+nav.tabs button{font-size:10px;padding:9px 1px 11px;letter-spacing:0}
 nav.tabs button svg{width:21px;height:21px}
 
 :root{--sky1:#E2ECEC;--sky2:#ECEFE8;--sun:#F7E6C4;--m1:#D3DFDB;--m2:#C3D6CF;--m3:#B3CDC3;--trail:#EDE4D0;--water:#CFE2E3;--fig:#86A499;--glass:rgba(238,241,236,.82)}
@@ -245,6 +246,8 @@ header.top,body::before{background:var(--glass);-webkit-backdrop-filter:blur(12p
 b.manual{color:var(--pr);font-weight:600}
 .ptype{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 label.f.sub{font-size:11px}
+.knh{margin:12px 0 4px;font-size:14px}.kndet summary{cursor:pointer;padding:2px 0}.kndet .knbody{margin-top:8px}.kndet .hl li{margin-bottom:6px}
+.kntab{width:100%;border-collapse:collapse;font-size:12.5px;margin:4px 0 8px}.kntab th,.kntab td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);vertical-align:top}
 .impprompt{white-space:pre-wrap;word-break:break-word;font-size:11px;line-height:1.4;background:var(--bg2,rgba(0,0,0,.04));padding:8px;border-radius:8px;max-height:260px;overflow:auto;margin:8px 0 0}
 .sphead{display:flex;align-items:center;justify-content:space-between;gap:10px}.stepper{display:inline-flex;align-items:center;gap:10px}.stepper b{min-width:28px;text-align:center}
 .availrow{display:grid;grid-template-columns:minmax(110px,1fr) auto auto auto;align-items:center;gap:6px}.availrow input[type=time]{width:92px;padding:6px}.availrow .check{margin:0}
@@ -397,6 +400,7 @@ a.btn{text-decoration:none;color:var(--fg);text-align:center;display:grid;place-
   <button data-tab="schemas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Schema's</button>
   <button data-tab="records"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V5M16 20v-6M22 20H2"/></svg>Voortgang</button>
   <button data-tab="food"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-2-3-7-2.5-7 2.5C5 16 9 21 12 21s7-5 7-10.5C19 5.5 14 5 12 8z"/><path d="M12 8c0-2.5 1.5-4.5 4-5"/></svg>Voeding</button>
+  <button data-tab="kennis"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M19 19v2H6"/><path d="M9 8h6M9 11h4"/></svg>Kennis</button>
   <button data-tab="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Profiel</button>
 </div></nav>
 <div id="sheet" hidden></div>
@@ -424,7 +428,7 @@ function better(a,b){return !b||a.k>b.k||(a.k===b.k&&a.r>b.r)}
 function norm(s){return String(s||"").trim().toLowerCase().replace(/\s+/g," ")}
 const draftKey=()=>"krachtlogboek.draft."+pid;
 
-const savedTab=lsGet(LS_TAB); if(savedTab&&["train","plan","schemas","records","profile","food","help","news","privacy","together"].includes(savedTab))UI.tab=savedTab;
+const savedTab=lsGet(LS_TAB); if(savedTab&&["train","plan","schemas","records","profile","food","help","news","privacy","together","kennis"].includes(savedTab))UI.tab=savedTab;
 
 const TEMPLATE={"exercises": {"r-dip": {"name": "Ring Dip", "group": "Borst"}, "r-widepull": {"name": "Wide Ring Pull-up", "group": "Rug"}, "r-archerpush": {"name": "Ring Archer Push-up", "group": "Borst"}, "r-archerrow": {"name": "Ring Archer Row", "group": "Rug"}, "r-shoulderpush": {"name": "Ring Shoulder Push-up", "group": "Schouders"}, "r-pelican": {"name": "Pelican Curl", "group": "Biceps"}, "r-tricepext": {"name": "Ring Tricep Extension", "group": "Triceps"}, "r-facepull": {"name": "Ring Face Pull", "group": "Schouders"}, "r-rollout": {"name": "Ring Rollout", "group": "Core"}, "c-dip": {"name": "Dips (parallel bar)", "group": "Borst"}, "c-pullup": {"name": "Pull-up", "group": "Rug"}, "c-archerpush": {"name": "Archer Push-up", "group": "Borst"}, "c-austrow": {"name": "Australian Row", "group": "Rug"}, "c-pike": {"name": "Pike Push-up", "group": "Schouders"}, "c-chinup": {"name": "Chin-up", "group": "Biceps"}, "c-diamond": {"name": "Diamond Push-up", "group": "Triceps"}, "c-legraise": {"name": "Hanging Leg Raise", "group": "Core"}, "c-bss": {"name": "Bulgarian Split Squat (BW)", "group": "Benen"}, "f-bench": {"name": "Bench Press", "group": "Borst"}, "f-latpull": {"name": "Lat Pulldown", "group": "Rug"}, "f-ohp": {"name": "Overhead Press", "group": "Schouders"}, "f-row": {"name": "Barbell Row", "group": "Rug"}, "f-squat": {"name": "Squat", "group": "Benen"}, "f-rdl": {"name": "Romanian Deadlift", "group": "Billen"}, "f-fly": {"name": "Dumbbell Chest Fly", "group": "Borst"}, "f-facepull": {"name": "Cable Face Pull", "group": "Schouders"}, "f-curl": {"name": "EZ-bar Curl", "group": "Biceps"}, "f-pushdown": {"name": "Triceps Pushdown", "group": "Triceps"}}, "routines": {"rt-ringen": {"items": [{"exId": "r-dip", "reps": "8-10", "sets": "3"}, {"exId": "r-widepull", "reps": "6-8", "sets": "3"}, {"exId": "r-archerpush", "reps": "6-8", "sets": "3"}, {"exId": "r-archerrow", "reps": "8-10", "sets": "3"}, {"exId": "r-shoulderpush", "reps": "8-10", "sets": "3"}, {"exId": "r-pelican", "reps": "6-8", "sets": "3"}, {"exId": "r-tricepext", "reps": "10-12", "sets": "3"}, {"exId": "r-facepull", "reps": "12-15", "sets": "3"}, {"exId": "r-rollout", "reps": "8-10", "sets": "3"}], "name": "Ringen — Push/Pull", "order": 0}, "rt-fitness": {"items": [{"exId": "f-bench", "reps": "6-8", "sets": "4"}, {"exId": "f-latpull", "reps": "8-10", "sets": "4"}, {"exId": "f-ohp", "reps": "6-8", "sets": "3"}, {"exId": "f-row", "reps": "8-10", "sets": "3"}, {"exId": "f-squat", "reps": "6-8", "sets": "4"}, {"exId": "f-rdl", "reps": "8-10", "sets": "3"}, {"exId": "f-fly", "reps": "10-12", "sets": "3"}, {"exId": "f-facepull", "reps": "12-15", "sets": "3"}, {"exId": "f-curl", "reps": "10-12", "sets": "3"}, {"exId": "f-pushdown", "reps": "10-12", "sets": "3"}], "name": "Fitness — Gewichten", "order": 2}, "rt-cali": {"items": [{"exId": "c-dip", "reps": "8-10", "sets": "3"}, {"exId": "c-pullup", "reps": "6-8", "sets": "3"}, {"exId": "c-archerpush", "reps": "6-8", "sets": "3"}, {"exId": "c-austrow", "reps": "10-12", "sets": "3"}, {"exId": "c-pike", "reps": "8-10", "sets": "3"}, {"exId": "c-chinup", "reps": "6-8", "sets": "3"}, {"exId": "c-diamond", "reps": "10-12", "sets": "3"}, {"exId": "c-bss", "reps": "10-12", "sets": "3"}, {"exId": "c-legraise", "reps": "10", "sets": "3"}], "name": "Calisthenics — Full body", "order": 1}}};
 S.template=TEMPLATE;
@@ -731,7 +735,7 @@ function render(){
   if(!pid){v.innerHTML=viewLogin();renderSheet();restore(fid,s1,s2);return}
   if(!S.ready){v.innerHTML=`<div class="card empty" style="margin-top:16px"><strong>${S.mode==="offline"?"Geen internet":"Logboek laden"}</strong><p class="muted">${S.mode==="offline"?"Je logboek kon niet geladen worden. Open de app opnieuw zodra je verbinding hebt.":`De schema's en records van ${esc(S.me?.name||"")} verschijnen zo.`}</p></div>`;renderSheet();return}
   if(!consentOk()){v.innerHTML=viewConsent();renderSheet();restore(fid,s1,s2);return}
-  v.innerHTML=(S.readonly?`<div class="banner">Je hebt alleen leesrechten. Wijzigingen worden niet opgeslagen.</div>`:"")+({train:viewTrain,plan:viewPlan,schemas:viewSchemas,records:viewRecords,profile:viewProfile,food:viewFood,help:viewHelp,news:viewNews,privacy:viewPrivacy,together:viewTogether}[UI.tab]||viewTrain)();
+  v.innerHTML=(S.readonly?`<div class="banner">Je hebt alleen leesrechten. Wijzigingen worden niet opgeslagen.</div>`:"")+({train:viewTrain,plan:viewPlan,schemas:viewSchemas,records:viewRecords,profile:viewProfile,food:viewFood,help:viewHelp,news:viewNews,privacy:viewPrivacy,together:viewTogether,kennis:viewKennis}[UI.tab]||viewTrain)();
   renderSheet();restore(fid,s1,s2);
 }
 function restore(fid,s1,s2){if(fid){const el=document.getElementById(fid);if(el&&el!==document.activeElement){el.focus({preventScroll:true});try{if(s1!=null)el.setSelectionRange(s1,s2)}catch(e){}}}}
@@ -772,7 +776,7 @@ function viewTrain(){
 }
 
 function viewWorkout(){
-  let h=`<div class="wohead"><div class="title">${esc(draft.routineName)}</div><label class="f">Datum<input type="date" id="d-date" value="${esc(draft.date)}"></label></div><h2>Oefeningen</h2><div class="stack">`;
+  let h=`<div class="wohead"><div class="title">${esc(draft.routineName)}</div><label class="f">Datum<input type="date" id="d-date" value="${esc(draft.date)}"></label></div>${progBanner()}<h2>Oefeningen</h2><div class="stack">`;
   if(!draft.entries.length)h+=`<div class="card empty"><p class="muted">Nog geen oefeningen in deze training. Voeg er een toe om te beginnen.</p></div>`;
   draft.entries.forEach((e,i)=>{
     const best=bestFor(e.exId),last=lastFor(e.exId);
@@ -783,7 +787,7 @@ function viewWorkout(){
       <button class="ib" data-act="ex-remove" data-i="${i}" aria-label="Verwijder oefening">✕</button></div></header>
       <dl class="refs"><div class="best"><dt>Hoogste</dt><dd>${best?setTxt(best.set)+`<small>${dateTxt(best.date)}</small>`:`—<small>nog geen record</small>`}</dd></div>
       <div><dt>Laatste</dt><dd>${last?`${last.sets.length} sets · ${last.sets.map(shortSet).join(" · ")}<small>${dateTxt(last.date)}${otherSchema}</small>`:`—<small>eerste keer</small>`}</dd></div>
-      ${e.target?`<div class="target"><dt>Doel</dt><dd>${e.target.sets||e.target.reps?`${esc(e.target.sets||"?")} sets × ${esc(e.target.reps||"?")} reps`:""}${e.target.note?`<small>${esc(e.target.note)}</small>`:""}</dd></div>`:""}</dl>
+      ${(()=>{const t=progTip(e);return t?`<div class="target prog"><dt>Vandaag</dt><dd>${esc(t)}</dd></div>`:""})()}${e.target?`<div class="target"><dt>Schema</dt><dd>${e.target.sets||e.target.reps?`${esc(e.target.sets||"?")} sets × ${esc(e.target.reps||"?")} reps`:""}${e.target.note?`<small>${esc(e.target.note)}</small>`:""}</dd></div>`:""}</dl>
       <div class="sets"><div class="setrow sethead"><span>Set</span><span>Kg</span><span>Reps</span><span></span><span></span></div>`;
     e.sets.forEach((st,j)=>{const ph=placeholderFor(e,j);
       h+=`<div class="setrow"><button class="setn" data-act="fill" data-i="${i}" data-j="${j}" aria-label="Neem waarden van vorige keer over">${j+1}</button>
@@ -848,8 +852,10 @@ function viewHelp(){
     ["Voeding","In <b>Voeding</b> zie je je dagdoel op basis van je profiel en sportweek. Je kunt het zelf aanpassen, je voorkeuren voor eten instellen, drie voorbeelddagen met grammen bekijken, je eten registreren in het dagboek en een boodschappenlijst maken."],
     ["Privacy en bewaren","Details van trainingen, je voedingsdagboek en je planning worden 3 maanden bewaard en daarna samengevat; je records blijven altijd staan. Lees de <b>Privacyverklaring</b> onder Profiel. Daar kun je ook je account verwijderen."],
     ["Naar je agenda","Onder <b>Planning → Naar je agenda</b> zet je je trainingen in de agenda van je telefoon, met tijdstip en een herinnering. Op je horloge zetten kan met de hand, maar is wat omslachtig; de stappen staan daar ook."],
+    ["Progressie","Bij elke oefening in je training staat onder <b>Vandaag</b> een doel: eerst 1 herhaling meer per set dan vorige keer. Haal je bij alle sets de bovenkant van de reeks (bijv. 12 bij 8-12), dan stelt de app een hoger gewicht voor. Een rustigere week staat er ook bij."],
+    ["Kennis","Onder <b>Kennis</b> vind je per sport (kracht, HIIT, calisthenics, hardlopen, wielrennen en zwemmen) uitleg over materiaal, voeding en supplementen, techniek, blessures, opbouw per doel en het combineren van kracht en duur. Let op: dit is een test en nog niet gecontroleerd op juistheid."],
     ["Wegen","Weeg jezelf minimaal 1× per week, 's ochtends voor het ontbijt of 's avonds voor het slapen, altijd op dezelfde dag en hetzelfde moment. Vaker wegen? Houd dan vaste dagen aan, bijvoorbeeld maandag en vrijdag. Een afwijking op één dag is normaal; kijk naar de lijn."],
-    ["Sportschema op maat","Onder <b>Planning → Sportschema op maat</b> (of via Schema's) kies je sporten (fitness, hardlopen, fietsen, zwemmen, een teamsport of een eigen sport) en hoe vaak je elke sport per week wilt doen, bijvoorbeeld 3× fitness, 1× fietsen, 1× hardlopen en 1× voetbal. Per sport kun je vaste dagen kiezen (zoals je teamtraining), en per dag aangeven of en van hoe laat tot hoe laat je kunt. Ook kies je je materiaal, blessures of klachten en of je een lange duurtraining wilt. De coach maakt een plan van 1, 2, 4 of 8 weken (of tot een wedstrijd) dat zo goed mogelijk bij je wensen past, met genoeg herstel: nooit twee dagen achter elkaar dezelfde spiergroepen, rust tussen hardlooptrainingen en geen beendag vlak voor een lange duurtraining. Voor duursport gebruikt hij je laatste 3 trainingen en je langste training van de laatste 3 maanden, zodat je niet geblesseerd raakt."],
+    ["Sportschema op maat","Onder <b>Planning → Sportschema op maat</b> (of via Schema's) kies je sporten (fitness, hardlopen, fietsen, zwemmen, een teamsport of een eigen sport) en hoe vaak je elke sport per week wilt doen, bijvoorbeeld 3× fitness, 1× fietsen, 1× hardlopen en 1× voetbal. Per sport kun je vaste dagen kiezen (zoals je teamtraining), en per dag aangeven of en van hoe laat tot hoe laat je kunt. Ook kies je je materiaal, blessures of klachten en of je een lange duurtraining wilt. Per duursport kies je een eigen doel (fitter, een afstand, sneller of een wedstrijd), of je traint samen voor een duathlon of triathlon. Het schema wordt elke week een stapje zwaarder, met regelmatig een rustigere week. De coach maakt een plan van 1, 2, 4 of 8 weken (of tot een wedstrijd) dat zo goed mogelijk bij je wensen past, met genoeg herstel: nooit twee dagen achter elkaar dezelfde spiergroepen, rust tussen hardlooptrainingen en geen beendag vlak voor een lange duurtraining. Voor duursport gebruikt hij je laatste 3 trainingen en je langste training van de laatste 3 maanden, zodat je niet geblesseerd raakt."],
     ["Voortgang","Onder <b>Voortgang</b> zie je per week of per 4 weken hoe je ervoor staat: gewicht, calorieën, eiwit, trainingen, kracht en duursport. Groen is goed, oranje let op, rood bijsturen. Daaronder staat wat dat betekent en wat je kunt doen. Hoe meer je registreert (trainingen, eten en 2 à 3 keer per week je gewicht), hoe beter het advies."],
     ["Samen trainen","Onder <b>Profiel → Samen trainen</b> vraag je iemand op naam of je iets voor diegene mag klaarzetten. Accepteert die persoon, dan kies jij of hij of zij trainingen in je planning mag zetten, schema's of maaltijden mag sturen, of je resultaten mag zien, en of dat direct mag of eerst als voorstel komt. Intrekken kan altijd."],
     ["Suggesties","Mis je iets of werkt iets niet? Meld het via <b>Wat is er nieuw</b> (onder Profiel of bovenaan deze pagina). Jitse ziet je melding en laat weten wat ermee gebeurt."],
@@ -1524,7 +1530,7 @@ function viewSchemas(){
   if(UI.edit)return viewEditor();
   if(UI.cg)return viewCoachGen();
   const folders=folderList(),loose=routinesIn(null);
-  let h=`<button class="card start" style="margin-top:16px" data-act="sc-open" data-v="f"><span><span class="name">Sportschema op maat</span><br><span class="muted small">Vertel wat je leuk vindt; de coach maakt een map met schema's en een weekplan, ook gecombineerd met duursport</span></span><span class="go">Start</span></button><h2>Jouw schema's</h2>`;
+  let h=`<button class="card start" style="margin-top:16px" data-act="sc-open" data-v="f"><span><span class="name">Sportschema op maat</span><br><span class="muted small">Al je sporten in één verantwoord weekplan, met een map met schema's die elke week een stapje zwaarder worden</span></span><span class="go">Start</span></button><h2>Jouw schema's</h2>`;
   if(UI.folderEdit)h+=`<div class="card stack" style="margin-bottom:10px"><label class="f">${UI.folderEdit.id?"Map hernoemen":"Nieuwe map"}<input type="text" id="fd-name" value="${esc(UI.folderEdit.name)}" placeholder="Bijv. Fitness 4 dagen" autocomplete="off"></label><div class="btnrow"><button class="btn primary" data-act="fd-save">Opslaan</button><button class="btn" data-act="fd-cancel">Annuleren</button></div></div>`;
   if(!folders.length&&!loose.length)h+=`<div class="card empty"><strong>Nog geen schema's</strong><p class="muted">Maak een map, bijvoorbeeld "Fitness 4 dagen", en zet daar je schema's in. Of voeg hieronder een voorbeeldmap toe.</p></div>`;
   h+=`<div class="stack">`+folders.map(folderCard).join("")+(loose.length?folderCard({id:null,name:"Zonder map"}):"")+`</div>`;
@@ -1620,7 +1626,7 @@ function viewPlan(){
       ${extra.map(s=>`<button class="prow done" data-act="open-session" data-id="${s.id}"><span class="pk">${s.kind==="cardio"?esc(s.sport):"Kracht"}</span><span class="pn">${esc(s.routineName||"Training")} <span class="muted small">· niet gepland</span></span><span class="ps">✓ ${sessionSummary(s)}</span></button>`).join("")}
       ${!its.length&&!extra.length?`<p class="dempty">Nog niets gepland</p>`:""}</section>`;
   }).join("");
-  return `<button class="card start" style="margin-top:16px" data-act="sc-open"><span><span class="name">Sportschema op maat</span><br><span class="muted small">Fitness en/of duursport in één verantwoord weekplan, op basis van je logboek en profiel</span></span><span class="go">Start</span></button><div class="weekbar card" style="margin-top:10px"><button class="ib wkb" data-act="wk-prev" aria-label="Vorige week">‹</button><div class="wk"><b>Week ${weekNo(ws)}</b><span class="muted small">${dateTxt(days[0])} – ${dateTxt(days[6])}</span></div><button class="ib wkb" data-act="wk-next" aria-label="Volgende week">›</button></div>
+  return `<button class="card start" style="margin-top:16px" data-act="sc-open"><span><span class="name">Sportschema op maat</span><br><span class="muted small">Al je sporten in één verantwoord weekplan: fitness, duursport en teamsport</span></span><span class="go">Start</span></button><div class="weekbar card" style="margin-top:10px"><button class="ib wkb" data-act="wk-prev" aria-label="Vorige week">‹</button><div class="wk"><b>Week ${weekNo(ws)}</b><span class="muted small">${dateTxt(days[0])} – ${dateTxt(days[6])}</span></div><button class="ib wkb" data-act="wk-next" aria-label="Volgende week">›</button></div>
     <div class="weeksum">${planned?`<b>${done} van ${planned}</b> geplande training${planned>1?"en":""} gedaan`:"Nog niets gepland deze week"}${ws!==weekStart(t)?` · <button class="linkbtn" data-act="wk-today">naar deze week</button>`:""}</div>
     <div class="days">${dayHtml}</div>
     <div class="btnrow" style="margin-top:12px"><button class="btn" data-act="wk-copy">Deze week kopiëren naar volgende week</button><button class="btn" data-act="watch">Naar je agenda</button></div>
@@ -1708,6 +1714,8 @@ const CHANGELOG=[
   ["Sportschema op maat: kies je sporten (ook teamsport) en de verdeling per week, vaste dagen en je beschikbare tijd; de coach maakt een verantwoord plan met genoeg herstel, afgestemd op je profiel, materiaal, blessures en huidige niveau.",""],
   ["Voortgang: met kleuren zien of je op koers ligt, met uitleg en advies.",""],
   ["Voeding: maaltijden, maaltijdplannen met kosten, boodschappenlijst om af te vinken, en veel meer producten.",""],
+  ["Progressie: bij elke oefening een doel voor vandaag, en in je sportschema elke week een stapje zwaarder. Doelen per duursport, ook voor duathlon en triathlon.",""],
+  ["Kennis (test): per sport uitleg over materiaal, voeding, techniek, blessures en opbouw.",""],
   ["Oude trainingen en schema's zelf inladen: via een AI-opdracht (notities, Excel, foto's) of een CSV uit Strong, Hevy of je eigen tabel.",""],
   ["Samen trainen: met jouw toestemming trainingen, schema's en maaltijden van elkaar ontvangen.",""],
   ["Trainingen in je agenda (met tijdstip en herinnering), installeren als app, rondleiding en instructievideo.",""],
@@ -3034,9 +3042,11 @@ function ecBuild(c){
   const target=c.goal==="afstand"||c.goal==="wedstrijd"?num(c.dist):null;
   const plan=[];let vol=start,long=long0,s0note="",prevTot=0;var easyKmW=0,qKmW=0;
   const DAYPOS={1:[5],2:[2,5],3:[1,3,5],4:[0,2,4,5],5:[0,1,3,4,5],6:[0,1,2,3,4,5]}[D];
+  let qStep=0;
   for(let w=0;w<weeks;w++){
     const rec=w>0&&(w+1)%recEvery===0,taper=c.goal==="wedstrijd"&&w===weeks-1&&weeks>1;
-    if(w>0&&!rec&&!taper){vol=vol*1.08;long=Math.min(long*1.1,long+(run?1.5:bike?10:0.3),maxLong);if(target)long=Math.min(long,target)}
+    if(w>0&&!rec&&!taper)qStep++;
+    if(w>0&&!rec&&!taper){vol=vol*1.08;long=Math.min(long*1.1,long+(run?1.5:bike?10:0.3),maxLong);if(target)long=Math.min(long,Math.max(target,long0))}
     let wVol=rec?vol*0.75:taper?vol*0.6:vol,wLong=rec?long*0.8:taper?long*0.6:long;
     const sessions=[];
     if(newbie&&!swim){
@@ -3045,7 +3055,7 @@ function ecBuild(c){
     }else{
       const minS=run?3:bike?15:0.6,nBase=Math.max(1,I.freq||D);
       const n=Math.min(D,nBase>=D?D:nBase+1+Math.floor(w/2));
-      const q=n>=3&&c.level!=="beg"?(c.goal==="sneller"&&n>=4?2:1):0,easyN=Math.max(0,n-1-q),f=rec?0.8:taper?0.6:1;
+      const q=n>=3&&c.level!=="beg"?(c.goal==="sneller"&&n>=4?2:1):(c.goal==="sneller"&&n>=2&&c.level!=="beg"?1:0),easyN=Math.max(0,n-1-q),f=rec?0.8:taper?0.6:1;
       const easyKm=Math.min(Math.max(minS,avgKm*0.7*Math.pow(1.04,w))*f,Math.max(minS,wLong*0.8)),qKm=Math.max(run?5:bike?25:0.8,avgKm*0.8*f);
       let eN=easyN,qN=q,eK=easyKm,qK=qKm;
       if(prevTot&&!rec&&!taper){const allow=Math.max(0,prevTot*1.2-wLong);
@@ -3062,8 +3072,8 @@ function ecBuild(c){
         else Object.assign(s,{km:+k.toFixed(1),min:Math.round(k*(s.type==="long"?easyP*1.03:s.type==="easy"?easyP:tempoP))});
         if(s.type==="easy")Object.assign(s,{title:"Rustige duurtraining",note:`Zone 2: je kunt nog praten.${avgKm&&!swim?` Richttempo ± ${pTxt(easyP)}.`:""}`});
         if(s.type==="long")Object.assign(s,{title:taper?"Korte, rustige training (taperen)":"Lange rustige training",note:`Rustig en gelijkmatig${avgKm&&!swim?`, ± ${pTxt(easyP*1.03)}`:""}. ${s.km>=(run?15:bike?80:3)?"Neem water en koolhydraten mee (30-60 g per uur).":"Drink voor en na voldoende."}`});
-        if(s.type==="tempo")Object.assign(s,{title:"Tempotraining",note:`10 min inlopen, dan ${Math.max(10,Math.round(s.min*0.45/5)*5)} min op tempo${avgKm&&!swim?` (± ${pTxt(tempoP)})`:""}: comfortabel zwaar, praten gaat in korte zinnen. 10 min uitlopen.`});
-        if(s.type==="interval"){const reps=run?Math.min(8,Math.max(4,Math.round(s.km))):bike?5:6,rep=run?"800 m":bike?"4 min":"100 m";
+        if(s.type==="tempo")Object.assign(s,{title:"Tempotraining",note:`10 min inlopen, dan ${Math.max(10,Math.min(Math.round(s.min*0.6/5)*5,10+5*Math.min(qStep,6)-(rec?5:0)))} min op tempo${avgKm&&!swim?` (± ${pTxt(tempoP)})`:""}: comfortabel zwaar, praten gaat in korte zinnen. 10 min uitlopen.`});
+        if(s.type==="interval"){const reps=(run?Math.min(10,4+Math.floor(qStep*0.75)):bike?Math.min(8,4+qStep):Math.min(12,6+qStep))-(rec?1:0),rep=run?"800 m":bike?"4 min":"100 m";
           Object.assign(s,{title:"Intervaltraining",note:`10-15 min inlopen, dan ${reps}× ${rep} snel${avgKm&&!swim?` (± ${pTxt(intP)})`:""} met ${run?"2 min wandelen of dribbelen":bike?"3 min rustig fietsen":"30 s rust"} ertussen. 10 min uitlopen.`})}
       }
     }
@@ -3212,12 +3222,13 @@ EXTRA_SHEETS["watch"]=watchSheet;
 /* ---------- rondleiding, update-melding en video ---------- */
 const INTRO=[
   ["Welkom bij het Krachtlogboek","Je houdt hier je trainingen, voeding en voortgang bij, en ziet of je op koers ligt voor je doel. In een paar korte stappen zie je hoe het werkt. Liever kijken? Bekijk de instructievideo van ± 3 minuten."],
-  ["Trainen","Onder <b>Trainen</b> start je een training uit je schema's. Per set vul je kg en herhalingen in; je vorige keer en je record staan erbij. Duurtrainingen log je met duur en afstand, of je importeert een GPX-bestand."],
+  ["Trainen","Onder <b>Trainen</b> start je een training uit je schema's. Per set vul je kg en herhalingen in; je vorige keer en je record staan erbij. Duurtrainingen log je met duur en afstand, of je importeert een GPX-bestand. Bij elke oefening staat een doel voor vandaag, zodat je elke keer een stapje verder komt."],
   ["Schema's","Je krijgt automatisch de map <b>Krachttraining 3 dagen split</b>. Je kunt schema's zelf maken, aanpassen en met anderen delen."],
   ["Planning","Plan je week vooruit. Met <b>Sportschema op maat</b> maakt de coach een plan voor al je sporten (fitness, duursport, teamsport) dat bij je wensen en agenda past, met genoeg herstel. Met <b>Naar je agenda</b> zet je trainingen in de agenda van je telefoon."],
   ["Voeding","Vul eerst je <b>Profiel</b> in: lengte, gewicht, doel en sportweek. Dan krijg je een dagdoel, kun je maaltijden en maaltijdplannen samenstellen, je eten bijhouden en een boodschappenlijst maken."],
+  ["Kennis","Onder <b>Kennis</b> lees je per sport over materiaal, voeding, techniek, blessures en hoe je een schema opbouwt. Dit tabblad is nog in ontwikkeling."],
   ["Voortgang en samen","Onder <b>Voortgang</b> zie je met kleuren of je op koers ligt, met uitleg en advies. Met <b>Samen trainen</b> (onder Profiel) zetten vrienden met jouw toestemming trainingen voor je klaar. Tip: installeer de app op je beginscherm."]];
-const UPDATE_HL=[["Oude trainingen inladen","(Schema's): zet eerdere resultaten en schema's zelf in je account, met een AI of een CSV-bestand."],["Sportschema op maat","(Planning): al je sporten in één verantwoord weekplan, met je eigen verdeling, vaste dagen en genoeg herstel."],["Voortgang","zie met kleuren of je op koers ligt, met uitleg en advies."],["Maaltijden en maaltijdplannen","stel je dag samen en zie direct wat je nog nodig hebt, met kosten."],["Boodschappenlijst","maak je lijst thuis en vink af in de winkel."],["Samen trainen","(Profiel): laat een vriend met jouw toestemming trainingen voor je klaarzetten."],["Naar je agenda","zet je trainingen met tijdstip in de agenda van je telefoon."],["Als app installeren","met eigen icoon op je beginscherm."]];
+const UPDATE_HL=[["Kennis","(nieuw tabblad, test): per sport materiaal, voeding, techniek, blessures en opbouw."],["Progressie","bij elke oefening een doel voor vandaag; je sportschema wordt elke week een stapje zwaarder."],["Oude trainingen inladen","(Schema's): zet eerdere resultaten en schema's zelf in je account, met een AI of een CSV-bestand."],["Sportschema op maat","(Planning): al je sporten in één verantwoord weekplan, met je eigen verdeling, vaste dagen en genoeg herstel."],["Voortgang","zie met kleuren of je op koers ligt, met uitleg en advies."],["Maaltijden en maaltijdplannen","stel je dag samen en zie direct wat je nog nodig hebt, met kosten."],["Boodschappenlijst","maak je lijst thuis en vink af in de winkel."],["Samen trainen","(Profiel): laat een vriend met jouw toestemming trainingen voor je klaarzetten."],["Naar je agenda","zet je trainingen met tijdstip in de agenda van je telefoon."],["Als app installeren","met eigen icoon op je beginscherm."]];
 function introSheet(sh){
   if(sh.mode==="update"){const c=CHANGELOG[0];
     return `<div class="sh"><h2>Nieuw in versie ${esc(c.v)}</h2><button class="ib" data-act="intro-done" aria-label="Sluiten">✕</button></div><div class="card"><ul class="hl">${UPDATE_HL.map(([t,x])=>`<li><b>${esc(t)}</b> ${esc(x)}</li>`).join("")}</ul><p class="small muted" style="margin:6px 0 0">Ook verbeterd: privacy en beveiliging. Bekijk ook wat er in eerdere versies kwam.</p></div>
@@ -3262,6 +3273,13 @@ const SC_ENDU=["Hardlopen","Wielrennen","Zwemmen"];
 const SC_TEAM=["Voetbal","Hockey","Handbal","Volleybal","Basketbal","Tennis","Padel"];
 const SC_LIST=["Fitness",...SC_ENDU,...SC_TEAM];
 const SC_DEFN={Fitness:3,Hardlopen:2,Wielrennen:1,Zwemmen:1};
+const SC_MULTI={duo:{label:"Duathlon",need:["Hardlopen","Wielrennen"],dists:[["sprint","Sprint: 5 km lopen, 20 km fietsen, 2,5 km lopen",{Hardlopen:5,Wielrennen:20}],["std","Standaard: 10 km lopen, 40 km fietsen, 5 km lopen",{Hardlopen:10,Wielrennen:40}]]},
+  tri:{label:"Triathlon",need:["Zwemmen","Wielrennen","Hardlopen"],dists:[["ss","Supersprint: 400 m zwemmen, 10 km fietsen, 2,5 km lopen",{Zwemmen:0.4,Wielrennen:10,Hardlopen:2.5}],["sprint","Sprint: 750 m zwemmen, 20 km fietsen, 5 km lopen",{Zwemmen:0.75,Wielrennen:20,Hardlopen:5}],["od","Olympisch (kwart): 1,5 km zwemmen, 40 km fietsen, 10 km lopen",{Zwemmen:1.5,Wielrennen:40,Hardlopen:10}],["half","Halve: 1,9 km zwemmen, 90 km fietsen, 21,1 km lopen",{Zwemmen:1.9,Wielrennen:90,Hardlopen:21.1}],["full","Hele: 3,8 km zwemmen, 180 km fietsen, 42,2 km lopen",{Zwemmen:3.8,Wielrennen:180,Hardlopen:42.2}]]}};
+const scMultiOk=(c,t)=>!!SC_MULTI[t]&&SC_MULTI[t].need.every(n=>scEndu(c).includes(n));
+const scMulti=c=>c.multi&&c.multi.type&&scMultiOk(c,c.multi.type)?c.multi:null;
+function scGoal(c,n){const m=scMulti(c);if(m&&SC_MULTI[m.type].need.includes(n)){const d=(SC_MULTI[m.type].dists.find(x=>x[0]===m.dist)||SC_MULTI[m.type].dists[0])[2];return{goal:"wedstrijd",dist:n==="Zwemmen"?"":String(d[n]||""),race:m.race||"",multi:true}}
+  const g=c.eg[n]||(c.eg[n]={goal:"fit",dist:"",race:""});return g}
+const scNeedLong=(c,n)=>["afstand","wedstrijd"].includes(scGoal(c,n).goal);
 const scKind=n=>n==="Fitness"?"f":SC_ENDU.includes(n)?"e":"t";
 const scLabel=n=>n==="Wielrennen"?"Fietsen":n;
 function scDefaults(pre){
@@ -3270,12 +3288,13 @@ function scDefaults(pre){
   if(!Object.keys(sp).length){if(pre!=="e")sp.Fitness={n:3,days:[]};if(pre!=="f")sp[es.sport||"Hardlopen"]={n:2,days:[]}}
   const avail=sv.avail||DOW_S.map(()=>({on:true,from:"",to:""}));
   return{sp,order:Object.keys(sp),custom:sv.custom||[],f:{likes:(cd.likes||[]).filter(x=>x!=="cardio").length?(cd.likes||[]).filter(x=>x!=="cardio"):["kracht"],goal:cd.goal||"fit",min:cd.min||"",equip:cd.equip||[],focus:cd.focus||[],seed:0},
-    eGoal:es.goal||"fit",dist:es.dist||"",race:"",longOn:sv.longOn!=null?sv.longOn:true,longSport:sv.longSport||"",longDay:sv.longDay??5,
+    eg:sv.eg||(es.sport?{[es.sport]:{goal:es.goal||"fit",dist:es.dist||"",race:""}}:{}),multi:sv.multi?{...sv.multi,race:""}:{type:"",dist:"sprint",race:""},longOn:sv.longOn!=null?sv.longOn:true,longSport:sv.longSport||"",longDay:sv.longDay??5,
     basis:{},inj:(cd.inj||[]).filter(i=>INJ.some(x=>x[0]===i)),injTxt:"",wish:"",level:sv.level||cd.level||"",weeks:sv.weeks||4,start:addDays(weekStart(today()),7),avail,availOpen:false,result:null};
 }
 const scSel=c=>c.order.filter(n=>c.sp[n]&&c.sp[n].n>0);
 const scEndu=c=>scSel(c).filter(n=>scKind(n)==="e");
-function scPrimary(c){const e=scEndu(c);return e.includes(c.longSport)?c.longSport:e[0]||null}
+function scExtraLong(c){if(!c.longOn)return null;const o=scEndu(c).filter(n=>!scNeedLong(c,n));return o.includes(c.longSport)?c.longSport:o[0]||null}
+function scPrimary(c){const e=scEndu(c);return e.includes(c.longSport)?c.longSport:e.find(n=>scNeedLong(c,n))||e[0]||null}
 function scBasis(c,n){return c.basis[n]||(c.basis[n]={manual:false,rows:null,freq:0,newbie:false,longest:""})}
 function scInj(c){const set=new Set(c.inj);const t=(c.injTxt||"").toLowerCase();for(const [w,k] of INJ_WORDS)if(t.includes(w))set.add(k);return [...set]}
 function scMin(it,c){if(it.k==="s")return +(c.f.min||60);if(it.k==="t")return 90;return Math.max(20,Math.round(it.x.min||45))}
@@ -3326,12 +3345,13 @@ function scBuild(c){
   const F=nF?buildPlan(fc):null;
   let weeks=+c.weeks;
   const E={};
-  for(const n of scEndu(c)){const b=scBasis(c,n),isP=n===prim,goal=isP?c.eGoal:"fit";
-    E[n]=ecBuild({sport:n,goal,days:c.sp[n].n,weeks:c.weeks,level:c.level,dist:isP?c.dist:"",race:isP?c.race:"",start:c.start,manual:b.manual,rows:b.rows,freq:b.freq,newbie:b.newbie,longest:b.longest});
-    if(isP&&goal==="wedstrijd")weeks=E[n].weeks}
-  for(const n of scEndu(c))if(E[n].weeks!==weeks){const b=scBasis(c,n);E[n]=ecBuild({sport:n,goal:"fit",days:c.sp[n].n,weeks,level:c.level,start:c.start,manual:b.manual,rows:b.rows,freq:b.freq,newbie:b.newbie,longest:b.longest})}
-  const keepLong=n=>n===prim&&(c.longOn||["afstand","wedstrijd"].includes(c.eGoal));
-  if(prim&&!c.longOn&&["afstand","wedstrijd"].includes(c.eGoal))why.push(`Voor je doel (${c.eGoal==="wedstrijd"?"wedstrijd":"afstand"}) is een lange training nodig; die blijft daarom in het schema bij ${scLabel(prim).toLowerCase()}.`);
+  const mul=scMulti(c),ecOf=(n,wks)=>{const b=scBasis(c,n),g=scGoal(c,n),race=g.goal==="wedstrijd";return ecBuild({sport:n,goal:race&&!wks?g.goal:race?"afstand":g.goal,days:c.sp[n].n,weeks:wks||c.weeks,level:c.level,dist:g.dist,race:race&&!wks?g.race:"",start:c.start,manual:b.manual,rows:b.rows,freq:b.freq,newbie:b.newbie,longest:b.longest})};
+  let raceW=0;for(const n of scEndu(c)){E[n]=ecOf(n);if(scGoal(c,n).goal==="wedstrijd")raceW=Math.max(raceW,E[n].weeks)}if(raceW)weeks=raceW;
+  for(const n of scEndu(c))if(E[n].weeks<weeks&&scGoal(c,n).goal!=="wedstrijd")E[n]=ecOf(n,weeks);
+  const xl=scExtraLong(c),keepLong=n=>scNeedLong(c,n)||n===xl;
+  const forced=scEndu(c).filter(n=>scNeedLong(c,n));
+  if(!c.longOn&&forced.length)why.push(`Voor je doel bij ${forced.map(n=>scLabel(n).toLowerCase()).join(" en ")} is een lange training nodig; die blijft daarom in het schema.`);
+  if(mul)why.unshift(`Je traint voor een ${SC_MULTI[mul.type].label.toLowerCase()} (${(SC_MULTI[mul.type].dists.find(x=>x[0]===mul.dist)||SC_MULTI[mul.type].dists[0])[1].replace(/^[^:]*: /,"")}) op ${dateTxt(mul.race)}. Elke sport bouwt op naar die afstand, met vanaf week 2 koppeltrainingen (direct lopen na het fietsen) en een rustigere laatste week.`);
   const runInj=inj.filter(i=>INJ_RUN.includes(i));
   if(runInj.length&&E.Hardlopen)warn.push(`Je hebt klachten die door hardlopen erger kunnen worden (${runInj.map(i=>(INJ.find(x=>x[0]===i)||[,i])[1].toLowerCase()).join(", ")}). Het hardlopen start daarom 20% rustiger en zonder snelle trainingen in de eerste 2 weken. Doet het pijn tijdens of na het lopen, stop dan en overleg met een fysiotherapeut. Fietsen of zwemmen belast minder.`);
   if(c.injTxt&&c.injTxt.trim())why.push(`Je gaf aan: "${c.injTxt.trim()}". De coach houdt rekening met wat hij herkent; overleg bij twijfel met een fysiotherapeut of je arts.`);
@@ -3340,15 +3360,18 @@ function scBuild(c){
   const fItems=F?F.week.map((x,i)=>x.t==="c"?null:{k:"s",sp:"Fitness",r:x.r,cls:clsOf(x.r.key),sig:"s"+x.r.key+i}).filter(Boolean):[];
   const out=[];let sevMax=0;const tooLong=new Set();
   for(let w=0;w<weeks;w++){
-    const ws=addDays(c.start,w*7),items=[...fItems];let raceDay=null;
+    const ws=addDays(c.start,w*7),items=fItems.map(x=>({...x}));let raceDay=null;
     for(const n of scEndu(c)){const wk=E[n].plan[w];if(!wk)continue;
       for(let s of wk.sessions){s={...s};
         if(s.type==="long"&&!keepLong(n)){s.type="easy";s.title="Rustige duurtraining";s.km=s.km?+(s.km*0.6).toFixed(1):s.km;s.min=Math.round((s.min||45)*0.6);s.note="Zone 2: je kunt nog praten."}
         if(n==="Hardlopen"&&runInj.length){if(w<2&&(s.type==="interval"||s.type==="tempo")){s.type="easy";s.title="Rustige duurtraining";s.note="Rustig, je kunt nog praten. Geen snelle stukken zolang je klachten hebt."}if(s.km)s.km=+(s.km*0.8).toFixed(1);if(s.min)s.min=Math.round(s.min*0.8)}
+        if(mul&&n==="Wielrennen"&&s.type==="long"&&w>0&&!E[n].plan[w].rec&&!E[n].plan[w].taper)s.note=(s.note||"")+" Koppeltraining: loop direct na het fietsen 10-20 min rustig; zo went je lijf aan de wissel.";
         const it={k:"c",sp:n,x:s,run:n==="Hardlopen",hard:["interval","tempo","long","race"].includes(s.type),long:s.type==="long",race:s.type==="race",sig:"c"+n+s.type};
         if(s.type==="race"){const d=daysBetween(ws,s.date);if(d>=0&&d<7){raceDay=d;it.only=[d]}}
         items.push(it)}}
-    for(const n of sel.filter(n=>scKind(n)==="t"))for(let i=0;i<c.sp[n].n;i++)items.push({k:"t",sp:n,name:n,sig:"t"+n+i});
+    if(mul){const rs=items.filter(i=>i.race);if(rs.length){const D=SC_MULTI[mul.type],dd=(D.dists.find(x=>x[0]===mul.dist)||D.dists[0]);rs.forEach(r=>items.splice(items.indexOf(r),1));
+      items.push({k:"c",sp:D.label,x:{type:"race",title:`wedstrijd (${dd[1].split(":")[0].toLowerCase()})`,date:mul.race,km:null,min:120,note:"Succes! Start rustig, eet en drink op de fiets, en loop je eigen tempo. "+dd[1].replace(/^[^:]*: /,"")+"."},hard:true,race:true,long:false,run:false,only:[raceDay],sig:"race"})}}
+    for(const n of sel.filter(n=>scKind(n)==="t"))for(let i=0;i<c.sp[n].n;i++)items.push({k:"t",sp:n,name:n,sig:"t"+n});
     // vaste dagen als harde eis wanneer het aantal past
     for(const n of sel){const fd=c.sp[n].days||[];const its=items.filter(i=>i.sp===n&&!i.race);if(fd.length&&fd.length>=its.length)its.forEach(i=>{i.only=fd})}
     let allowW=raceDay!=null?allowed.filter(d=>d<=raceDay):allowed;
@@ -3356,7 +3379,10 @@ function scBuild(c){
     if(!sch){const pr=i=>i.race?-1:i.k==="t"?0:i.k==="c"?(i.hard?1:3):2;const keep=items.slice().sort((x,y)=>pr(x)-pr(y)).slice(0,allowW.length);keep.forEach(i=>{if(i.only&&!i.race)delete i.only});sch=scSchedule(keep,c,ctx,allowW);if(sch&&keep.length<items.length)warn.push(`In week ${w+1} paste niet alles; ${items.length-keep.length} rustige training${items.length-keep.length>1?"en zijn":" is"} weggelaten.`)}
     if(!sch)continue;sevMax=Math.max(sevMax,scCost(sch.days,c,ctx,true));
     sch.days.forEach((it,d)=>{const wl=ctx.win[d];if(it&&wl&&scMin(it,c)>wl+5)tooLong.add(`${DOW_L[d]} (${wl} min, ${scLabel(it.sp).toLowerCase()} ± ${scMin(it,c)} min)`)});
-    out.push({week:w+1,rec:prim?E[prim].plan[w]?.rec:false,taper:prim?E[prim].plan[w]?.taper:false,days:sch.days.map((it,d)=>({d,date:addDays(ws,d),it,time:c.avail[d].from||""}))});
+    const pw=prim&&E[prim].plan[w],rec=pw?pw.rec:(weeks>=4&&(w+1)%4===0),taper=pw?pw.taper:false;
+    const prog=scProg(c,F,w,rec,taper),tot=scEndu(c).map(n=>{const k=E[n].plan[w];if(!k)return"";const km=k.sessions.reduce((t,x)=>t+(x.km||0),0),mn=k.sessions.reduce((t,x)=>t+(x.min||0),0);return `${scLabel(n)} ${km&&n!=="Zwemmen"?fmt1(km)+" km":durTxt(mn)}`}).filter(Boolean);
+    sch.days.forEach(it=>{if(it&&it.k==="s")it.prog=it.cls==="hiit"?prog.hiit:prog.str});
+    out.push({week:w+1,rec,taper,prog,tot,days:sch.days.map((it,d)=>({d,date:addDays(ws,d),it,time:c.avail[d].from||""}))});
   }
   why.unshift(`Je week: ${sel.map(n=>`${c.sp[n].n}× ${scLabel(n).toLowerCase()}`).join(", ")}${allowed.length<7?`, op ${allowed.map(d=>DOW_S[d]).join(", ")}`:""}.`);
   if(F)why.push(...coachExplain(fc,F).filter(t=>!/^Een week van/.test(t)));
@@ -3371,7 +3397,20 @@ function scBuild(c){
   if(tooLong.size){warn.push(`Niet elke training past in de tijd die je hebt: ${[...tooLong].slice(0,3).join(", ")}. Maak die training korter, kies een kortere trainingsduur of geef meer tijd op.`);sevMax-=tooLong.size}
   if(sevMax>0)warn.push("Door je keuzes (vaste dagen, beschikbare tijd of het aantal trainingen) kon niet alles ideaal worden ingedeeld. Houd trainingen die direct na elkaar staan wat rustiger.");
   if(total>=7)warn.push("Je traint 7 dagen per week. Plan minstens 1 rustdag; herstel is nodig om sterker en fitter te worden.");
+  if(F)why.push("Progressie: bij elke krachttraining zie je in de app wat je vorige keer deed en een doel voor vandaag: eerst 1 herhaling meer per set, en haal je overal de bovenkant van de reeks, dan gaat het gewicht omhoog. HIIT wordt elke week iets zwaarder (meer werk, minder rust of een ronde extra).");
+  if(scEndu(c).length)why.push("Duurtraining wordt elke week iets langer, en tempo- en intervaltrainingen worden stap voor stap zwaarder (een paar minuten of een herhaling extra).");
   return{weeks:out,F,E,why,warn,nF,score:F?F.score:null};
+}
+const SC_HIIT=[[30,30,3],[30,30,4],[35,25,4],[40,20,4],[40,20,5],[45,15,5],[45,15,6]];
+function scProg(c,F,w,rec,taper){
+  const L=new Set(c.f.likes),cali=L.has("cali")&&!L.has("kracht");
+  const step=Math.min(SC_HIIT.length-1,Math.max(0,w-Math.floor((w+1)/4))),[wk,rs,rn]=SC_HIIT[step],rr=rec||taper?Math.max(2,rn-1):rn;
+  const hiit=`Week ${w+1}: ${rr} rondes, ${wk} s werk en ${rs} s rust per oefening${rec||taper?" (rustigere week)":""}.`;
+  const str=rec?`Week ${w+1} · rustigere week: zelfde gewichten als vorige week, 1 set minder per oefening, en stop 2-3 herhalingen voor het falen. Zo herstel je en word je daarna sterker.`
+    :taper?`Week ${w+1} · laatste week voor je wedstrijd: zelfde gewichten, de helft van de sets. Geen zware beentraining in de laatste 4 dagen.`
+    :w===0?`Week 1: kies per oefening een gewicht waarmee je de reeks haalt met nog 1-2 herhalingen over. De app onthoudt alles.`
+    :`Week ${w+1}: probeer per oefening 1 herhaling meer per set dan vorige keer${cali?", of een zwaardere variant":""}. Haal je bij alle sets de bovenkant van de reeks? Dan ${cali?"een moeilijkere variant of extra gewicht":"gewicht omhoog (+2,5 kg, kleine oefeningen +1-2 kg)"} en weer onderaan beginnen.`;
+  return{str,hiit};
 }
 function scChip(path,opts,multi){const [g,k]=path.split("."),o=k?UI.sc[g]:UI.sc,key=k||g;
   return `<div class="chips">${opts.map(([v,l])=>`<button class="chipb" data-act="sc-set" data-k="${path}" data-v="${v}" data-m="${multi?1:""}" aria-pressed="${multi?(o[key]||[]).includes(v):String(o[key])===String(v)}">${esc(l)}</button>`).join("")}</div>`}
@@ -3389,13 +3428,21 @@ function viewSportCoach(){
       <div class="f">Hoe lang mag een training duren?${scChip("f.min",[30,45,60,75,90].map(v=>[v,v+" min"]))}</div>
       <div class="f">Welk materiaal heb je? <i>eigen gewicht kan altijd</i>${scChip("f.equip",EQUIP,true)}</div>
       <div class="f">Extra aandacht voor <i>maximaal 2</i>${scChip("f.focus",FOCUS.map(x=>[x[0],x[1]]),true)}</div></div>`}
-  if(endu.length){const prim=scPrimary(c);
-    h+=`<h2>Duursport</h2><div class="card stack"><div class="f">Wat wil je bereiken${endu.length>1?` met ${esc(scLabel(prim).toLowerCase())}`:""}?${scChip("eGoal",EGOAL)}</div>
-      ${c.eGoal==="afstand"||c.eGoal==="wedstrijd"?`<label class="f">Afstand<input type="text" inputmode="decimal" id="sc-dist" value="${esc(c.dist||"")}" placeholder="km, bijv. 10 of 21,1"></label>`:""}
-      ${c.eGoal==="wedstrijd"?`<label class="f">Datum wedstrijd<input type="date" id="sc-race" value="${esc(c.race||"")}"></label>`:""}
-      <label class="check"><input type="checkbox" id="sc-longon" ${c.longOn?"checked":""}><span>Lange duurtraining in het schema opnemen</span></label>
-      ${c.longOn?`${endu.length>1?`<div class="f sub">Voor welke sport?<div class="chips">${endu.map(n=>`<button class="chipb" data-act="sc-set" data-k="longSport" data-v="${esc(n)}" aria-pressed="${prim===n}">${esc(scLabel(n))}</button>`).join("")}</div></div>`:""}
-        <div class="f sub">Bij voorkeur op${scChip("longDay",[[5,"zaterdag"],[6,"zondag"],[-1,"maakt niet uit"]])}</div>`:""}</div>`;
+  if(endu.length){const mts=Object.keys(SC_MULTI).filter(t=>scMultiOk(c,t)),mul=scMulti(c),opts=endu.filter(n=>!scNeedLong(c,n)),xl=scExtraLong(c);
+    h+=`<h2>Duursport: je doel</h2><div class="card stack">`;
+    if(mts.length)h+=`<div class="f">Train je voor een multisportwedstrijd?<div class="chips"><button class="chipb" data-act="sc-mt" data-v="" aria-pressed="${!mul}">Nee</button>${mts.map(t=>`<button class="chipb" data-act="sc-mt" data-v="${t}" aria-pressed="${!!mul&&mul.type===t}">${SC_MULTI[t].label}</button>`).join("")}</div></div>`;
+    if(mul)h+=`<div class="f sub">Welke afstand?<div class="chips">${SC_MULTI[mul.type].dists.map(([v,l])=>`<button class="chipb" data-act="sc-md" data-v="${v}" aria-pressed="${mul.dist===v}">${esc(l)}</button>`).join("")}</div></div>
+      <label class="f">Datum wedstrijd<input type="date" id="sc-mrace" value="${esc(mul.race||"")}"></label>`;
+    endu.forEach(n=>{if(mul&&SC_MULTI[mul.type].need.includes(n))return;const g=scGoal(c,n),id=SC_ENDU.indexOf(n);
+      h+=`<div class="f">${esc(scLabel(n))}: wat wil je bereiken?<div class="chips">${EGOAL.map(([v,l])=>`<button class="chipb" data-act="sc-eg" data-v="${esc(n)}" data-d="${v}" aria-pressed="${g.goal===v}">${esc(l)}</button>`).join("")}</div></div>
+        ${(g.goal==="afstand"||g.goal==="wedstrijd")&&n!=="Zwemmen"?`<label class="f sub">Afstand ${esc(scLabel(n).toLowerCase())}<input type="text" inputmode="decimal" id="sc-dist-${id}" value="${esc(g.dist||"")}" placeholder="${n==="Wielrennen"?"km, bijv. 60 of 100":"km, bijv. 10 of 21,1"}"></label>`:""}
+        ${(g.goal==="afstand"||g.goal==="wedstrijd")&&n==="Zwemmen"?`<p class="small muted" style="margin:0">Zwemmen bouwt op in minuten aan één stuk; zo kun je steeds langer achter elkaar zwemmen.</p>`:""}
+        ${g.goal==="wedstrijd"?`<label class="f sub">Datum wedstrijd ${esc(scLabel(n).toLowerCase())}<input type="date" id="sc-race-${id}" value="${esc(g.race||"")}"></label>`:""}`});
+    h+=opts.length?`<label class="check"><input type="checkbox" id="sc-longon" ${c.longOn?"checked":""}><span>Extra lange duurtraining in het schema${opts.length<endu.length?` <span class="small muted">(bij ${endu.filter(n=>!opts.includes(n)).map(n=>scLabel(n).toLowerCase()).join(" en ")} zit die er al in door je doel)</span>`:""}</span></label>
+      ${c.longOn?`${opts.length>1?`<div class="f sub">Voor welke sport?<div class="chips">${opts.map(n=>`<button class="chipb" data-act="sc-set" data-k="longSport" data-v="${esc(n)}" aria-pressed="${xl===n}">${esc(scLabel(n))}</button>`).join("")}</div></div>`:`<p class="small muted" style="margin:0">Voor ${esc(scLabel(opts[0]).toLowerCase())}.</p>`}`:""}`
+      :`<p class="small muted" style="margin:0">Door je doel${endu.length>1?"en":""} zit er bij ${endu.map(n=>scLabel(n).toLowerCase()).join(" en ")} al een lange training in.</p>`;
+    h+=(c.longOn&&opts.length)||opts.length<endu.length?`<div class="f sub">Lange training bij voorkeur op${scChip("longDay",[[5,"zaterdag"],[6,"zondag"],[-1,"maakt niet uit"]])}</div>`:"";
+    h+=`</div>`;
     for(const n of endu){const b=scBasis(c,n),B=ecBase({sport:n}),useApp=B.fromApp&&!b.manual;
       h+=`<h2>Je basis: ${esc(scLabel(n).toLowerCase())} <span class="small muted">· belangrijk om blessures te voorkomen</span></h2><div class="card stack">`;
       if(useApp)h+=`<p class="hp" style="margin:0">Uit je logboek:</p>${B.last3.map(s=>`<div class="fline"><span class="fq">${s.km?fmt1(s.km)+" km":""}</span><span class="fn">${esc(dateTxt(s.date))} · ${durTxt(s.min)}${s.km&&n==="Hardlopen"?" · "+paceTxt(s.min,s.km):""}</span></div>`).join("")}<span class="small muted">Langste training laatste 3 maanden: <b>${fmt1(B.longest)} km</b> · nu ± ${B.freq}× per week</span><button class="linkbtn" data-act="sc-manual" data-v="${esc(n)}">Klopt niet? Zelf invullen</button>`;
@@ -3410,7 +3457,7 @@ function viewSportCoach(){
     ${DOW_S.map((l,d)=>{const w=c.avail[d];return `<div class="availrow"><label class="check"><input type="checkbox" id="sc-av-${d}" ${w.on!==false?"checked":""}><span>${DOW_L[d]}</span></label>${w.on!==false?`<input type="time" id="sc-from-${d}" value="${esc(w.from||"")}" aria-label="Van, ${DOW_L[d]}"><span class="small muted">tot</span><input type="time" id="sc-to-${d}" value="${esc(w.to||"")}" aria-label="Tot, ${DOW_L[d]}">`:`<span class="small muted">geen training</span>`}</div>`}).join("")}</div>
   <h2>Blessures of klachten</h2><div class="card stack">${scChip("inj",INJ,true)}<label class="f">Iets anders? <i>optioneel</i><input type="text" id="sc-injtxt" value="${esc(c.injTxt||"")}" placeholder="Bijv. last van mijn rechter hamstring" autocomplete="off"></label></div>
   <h2>Algemeen</h2><div class="card stack">
-    ${endu.length&&c.eGoal==="wedstrijd"?"":`<div class="f">Hoe lang moet het plan zijn?${scChip("weeks",EWEEKS.map(v=>[v,v===1?"1 week":v+" weken"]))}</div>`}
+    ${endu.some(n=>scGoal(c,n).goal==="wedstrijd")?"":`<div class="f">Hoe lang moet het plan zijn?${scChip("weeks",EWEEKS.map(v=>[v,v===1?"1 week":v+" weken"]))}</div>`}
     <div class="f">Je niveau${scChip("level",[["beg","Beginner"],["int","Gemiddeld"],["adv","Gevorderd"]])}</div>
     <label class="f">Start op <i>een maandag</i><input type="date" id="sc-start" value="${esc(c.start)}"></label>
     <label class="f">Nog wensen? <i>optioneel</i><textarea id="sc-wish" rows="3" autocomplete="off" autocorrect="on" name="sc-wensen" placeholder="Bijv. ik wil sterker worden op bankdrukken en deadlifts, liever geen squats met halter, en sterkere billen.">${esc(c.wish||"")}</textarea></label></div>
@@ -3428,13 +3475,13 @@ function viewSportResult(){
   let h=`<div class="wohead"><div class="title">Jouw sportschema</div><button class="linkbtn" data-act="sc-back">← Aanpassen</button></div>`;
   if(R.warn.length)h+=`<div class="stack" style="margin-top:10px">${R.warn.map(w=>`<div class="card insight in-warn"><p>${esc(w)}</p></div>`).join("")}</div>`;
   h+=`<div class="card" style="margin-top:10px"><ul class="hl">${R.why.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
-  for(const wk of R.weeks)h+=`<h2>Week ${wk.week}${wk.rec?" · rustigere week":wk.taper?" · taperen":""}</h2><div class="recgroup">${wk.days.map(({d,it,time})=>{const [t,sub]=scItemTxt(it);return `<div class="row scrow${it?"":" rest"}" style="cursor:default"><span class="n"><span class="dw">${DOW_S[d]}</span> ${it&&time?`<b class="ptime">${esc(time)}</b> `:""}${esc(t)}</span><span class="b none">${esc(sub)}</span>${it&&it.k==="c"?`<span class="l">${esc(it.x.note||"")}</span>`:""}</div>`}).join("")}</div>`;
+  for(const wk of R.weeks)h+=`<h2>Week ${wk.week}${wk.rec?" · rustigere week":wk.taper?" · taperen":""}</h2>${wk.tot&&wk.tot.length||R.F?`<p class="small muted" style="margin:-4px 0 8px">${[wk.tot&&wk.tot.length?"Duur: "+wk.tot.join(" · "):"",R.F?esc(wk.prog.str.replace(/^Week \d+( · [^:]*)?: ?/,"")):""].filter(Boolean).join("<br>")}</p>`:""}<div class="recgroup">${wk.days.map(({d,it,time})=>{const [t,sub]=scItemTxt(it);return `<div class="row scrow${it?"":" rest"}" style="cursor:default"><span class="n"><span class="dw">${DOW_S[d]}</span> ${it&&time?`<b class="ptime">${esc(time)}</b> `:""}${esc(t)}</span><span class="b none">${esc(sub)}</span>${it&&it.k==="c"?`<span class="l">${esc(it.x.note||"")}</span>`:""}</div>`}).join("")}</div>`;
   if(R.F)h+=`<h2>Je fitnessschema's</h2>`+R.F.routines.map(r=>`<details class="privdet" style="margin-bottom:8px"><summary>${esc(r.name)}</summary>${r.items.map(it=>`<div class="fline"><span class="fq">${esc(it.sets)} × ${esc(it.reps)}</span><span class="fn">${esc(it.name)}</span><span class="fm">${esc(it.note)}</span></div>`).join("")}</details>`).join("");
   h+=`<div class="card stack" style="margin-top:14px"><button class="btn primary" data-act="sc-save">Zet in mijn planning${R.F?" en maak de map":""}</button>${R.F?`<button class="btn" data-act="sc-again">Andere oefeningen kiezen</button>`:""}<p class="small muted" style="margin:0">Voel je pijn die niet binnen een dag weg is, sla dan een training over. Dit schema volgt algemene trainingsrichtlijnen en is geen persoonlijk advies van een trainer, fysiotherapeut of arts.</p></div>`;
   return h;
 }
 function scRead(){const c=UI.sc,g=id=>document.getElementById(id);if(!c)return;
-  if(g("sc-dist"))c.dist=g("sc-dist").value;if(g("sc-race"))c.race=g("sc-race").value;if(g("sc-start")&&g("sc-start").value)c.start=weekStart(g("sc-start").value);
+  SC_ENDU.forEach((n,id)=>{const e=c.eg[n];if(!e)return;if(g("sc-dist-"+id))e.dist=g("sc-dist-"+id).value;if(g("sc-race-"+id))e.race=g("sc-race-"+id).value});if(g("sc-mrace"))c.multi.race=g("sc-mrace").value;if(g("sc-start")&&g("sc-start").value)c.start=weekStart(g("sc-start").value);
   if(g("sc-wish"))c.wish=g("sc-wish").value;if(g("sc-injtxt"))c.injTxt=g("sc-injtxt").value;if(g("sc-longon"))c.longOn=g("sc-longon").checked;
   for(let d=0;d<7;d++){const w=c.avail[d];if(g("sc-av-"+d))w.on=g("sc-av-"+d).checked;if(g("sc-from-"+d))w.from=g("sc-from-"+d).value;if(g("sc-to-"+d))w.to=g("sc-to-"+d).value}
   SC_ENDU.forEach((n,id)=>{const b=c.basis[n];if(!b)return;if(g(`sc-long-${id}`))b.longest=g(`sc-long-${id}`).value;if(g(`sc-new-${id}`))b.newbie=g(`sc-new-${id}`).checked;
@@ -3446,13 +3493,13 @@ async function scSave(){
     fid="fd-"+uid();await put("folders",fid,{name:nm.slice(0,60),order:folderList().length});UI.open["f:"+fid]=true;lsSet(LS_OPEN,UI.open);
     const ids=await addRoutinesTo(R.F.routines.map(r=>({name:r.name,items:r.items})),fid);R.F.routines.forEach((r,i)=>idOf.set(r,ids[i]))}
   R.weeks.forEach(wk=>wk.days.forEach(({date,it,time},i)=>{if(!it)return;const tm=time&&!(it.k==="c"&&it.race)?{time}:{};
-    if(it.k==="s"){const rid=idOf.get(it.r);if(rid)jobs.push(["plan",stem+"s"+wk.week+"_"+i,{type:"routine",routineId:rid,routineName:it.r.name,own:true,date,...tm,updated:Date.now()}])}
+    if(it.k==="s"){const rid=idOf.get(it.r);if(rid)jobs.push(["plan",stem+"s"+wk.week+"_"+i,{type:"routine",routineId:rid,routineName:it.r.name,own:true,date,...tm,note:it.prog||"",prog:{week:wk.week,rec:!!wk.rec,taper:!!wk.taper},updated:Date.now()}])}
     else if(it.k==="t")jobs.push(["plan",stem+"t"+wk.week+"_"+i,{type:"other",title:it.name,own:true,date,...tm,updated:Date.now()}]);
     else{const s=it.x,sport=["Hardlopen","Wielrennen"].includes(it.sp)?it.sp:"Anders";
-      jobs.push(["plan",stem+"c"+wk.week+"_"+i,{type:"cardio",sport,title:(it.sp==="Zwemmen"?"Zwemmen: ":"")+s.title,km:s.km||null,durMin:s.min||null,note:s.note,purpose:s.type==="long"?"Lange duur":s.type==="easy"?"Rustige duur":s.type==="tempo"?"Tempo":s.type==="interval"?"Interval":s.type==="race"?"Wedstrijd":"",own:true,date,...tm,updated:Date.now()}])}}));
+      jobs.push(["plan",stem+"c"+wk.week+"_"+i,{type:"cardio",sport,title:(sport==="Anders"?scLabel(it.sp)+": ":"")+s.title,km:s.km||null,durMin:s.min||null,note:s.note,purpose:s.type==="long"?"Lange duur":s.type==="easy"?"Rustige duur":s.type==="tempo"?"Tempo":s.type==="interval"?"Interval":s.type==="race"?"Wedstrijd":"",own:true,date,...tm,updated:Date.now()}])}}));
   await runJobs(jobs,put);
-  await put("meta","scoach",{sports:scSel(c).map(n=>({name:n,n:c.sp[n].n,days:c.sp[n].days||[]})),custom:c.custom,weeks:c.weeks,level:c.level,avail:c.avail,longOn:c.longOn,longSport:c.longSport,longDay:c.longDay});
-  const prim=scPrimary(c);if(prim)await put("meta","ecoach",{sport:prim,goal:c.eGoal,dist:c.dist||"",level:c.level});
+  await put("meta","scoach",{sports:scSel(c).map(n=>({name:n,n:c.sp[n].n,days:c.sp[n].days||[]})),custom:c.custom,weeks:c.weeks,level:c.level,avail:c.avail,longOn:c.longOn,longSport:c.longSport,longDay:c.longDay,eg:Object.fromEntries(Object.entries(c.eg).map(([k,v])=>[k,{goal:v.goal,dist:v.dist||"",race:""}])),multi:{type:c.multi.type,dist:c.multi.dist}});
+  const prim=scPrimary(c);if(prim){const g=scGoal(c,prim);await put("meta","ecoach",{sport:prim,goal:g.goal,dist:g.dist||"",level:c.level})}
   if(R.F)await put("meta","coach",{likes:c.f.likes,goal:c.f.goal,days:R.nF,level:c.level,min:c.f.min,equip:c.f.equip,focus:c.f.focus,inj:c.inj,csport:"",wish:""});
   UI.sc=null;UI.week=weekStart(c.start);UI.tab="plan";lsSet(LS_TAB,"plan");toastOk(`${jobs.length} trainingen ingepland${fid?" en map met schema's gemaakt":""}`);render();window.scrollTo(0,0);
 }
@@ -3467,6 +3514,9 @@ document.addEventListener("click",async ev=>{
       if(!SC_LIST.includes(n)&&!c.custom.includes(n))c.custom.push(n);c.sp[n]={n:1,days:[]};if(!c.order.includes(n))c.order.push(n);render();break}
     case "sc-n":{scRead();const n=b.dataset.v,s=c.sp[n];s.n=Math.max(0,Math.min(7,s.n+(+b.dataset.d)));render();break}
     case "sc-day":{scRead();const n=b.dataset.v,d=+b.dataset.d,s=c.sp[n],a=s.days=s.days||[];const i=a.indexOf(d);if(i>=0)a.splice(i,1);else{for(const m of scSel(c))if(m!==n){const o=c.sp[m].days||[];const j=o.indexOf(d);if(j>=0){o.splice(j,1);toast(`${DOW_L[d]} stond bij ${scLabel(m).toLowerCase()}; nu bij ${scLabel(n).toLowerCase()}.`)}}a.push(d);if(a.length>s.n)s.n=a.length}render();break}
+    case "sc-eg":{scRead();const g=c.eg[b.dataset.v]||(c.eg[b.dataset.v]={goal:"fit",dist:"",race:""});g.goal=b.dataset.d;render();break}
+    case "sc-mt":scRead();c.multi.type=b.dataset.v;if(c.multi.type&&!SC_MULTI[c.multi.type].dists.some(x=>x[0]===c.multi.dist))c.multi.dist="sprint";render();break;
+    case "sc-md":scRead();c.multi.dist=b.dataset.v;render();break;
     case "sc-freq":{scRead();scBasis(c,b.dataset.v).freq=+b.dataset.d;render();break}
     case "sc-manual":{scRead();const x=scBasis(c,b.dataset.v);x.manual=!x.manual;render();break}
     case "sc-set":{scRead();const path=b.dataset.k,[g,k]=path.split("."),o=k?c[g]:c,key=k||g,raw=b.dataset.v,v=/^-?\d+$/.test(raw)?+raw:raw;
@@ -3477,9 +3527,11 @@ document.addEventListener("click",async ev=>{
       if(c.sp.Fitness&&c.sp.Fitness.n&&!c.f.likes.length){toast("Kies welke soort fitness je wilt doen.");return}
       for(const n of scEndu(c)){const b=scBasis(c,n),I=ecInput({sport:n,manual:b.manual,rows:b.rows,freq:b.freq,longest:b.longest});
         if(!b.newbie&&I.src==="hand"){if(I.last3.length<3){toast(`Vul je laatste 3 trainingen ${scLabel(n).toLowerCase()} in (km en minuten), of vink aan dat je nieuw bent.`);return}if(!I.longest){toast(`Vul je langste training ${scLabel(n).toLowerCase()} van de laatste 3 maanden in.`);return}if(!I.freq){toast(`Kies hoe vaak je nu ${scLabel(n).toLowerCase()} per week doet.`);return}}}
-      const prim=scPrimary(c);
-      if(prim&&(c.eGoal==="afstand"||c.eGoal==="wedstrijd")&&!(num(c.dist)>0)&&prim!=="Zwemmen"){toast("Vul de afstand in die je wilt halen.");return}
-      if(prim&&c.eGoal==="wedstrijd"&&(!c.race||c.race<=c.start)){toast("Kies een wedstrijddatum na de startdatum.");return}
+      const mul=scMulti(c);if(mul&&(!mul.race||mul.race<=c.start)){toast(`Kies een datum voor je ${SC_MULTI[mul.type].label.toLowerCase()} na de startdatum.`);return}
+      if(mul&&daysBetween(c.start,mul.race)>16*7){toast("Je wedstrijd is meer dan 16 weken weg. Maak nu een plan van 8 weken met als doel \"een afstand kunnen\", en later een wedstrijdschema.");return}
+      for(const n of scEndu(c)){const g=scGoal(c,n);if(g.multi)continue;
+        if((g.goal==="afstand"||g.goal==="wedstrijd")&&n!=="Zwemmen"&&!(num(g.dist)>0)){toast(`Vul de afstand in die je wilt halen met ${scLabel(n).toLowerCase()}.`);return}
+        if(g.goal==="wedstrijd"&&(!g.race||g.race<=c.start)){toast(`Kies een wedstrijddatum voor ${scLabel(n).toLowerCase()} na de startdatum.`);return}}
       const R=scBuild(c);if(R.error){toast(R.error);return}c.result=R;render();window.scrollTo(0,0);break}
     case "sc-again":c.f.seed=(c.f.seed||0)+1;c.result=scBuild(c);render();window.scrollTo(0,0);toast("Andere oefeningen gekozen");break;
     case "sc-back":c.result=null;render();window.scrollTo(0,0);break;
@@ -3717,6 +3769,312 @@ document.addEventListener("change",ev=>{
   if(f.size>IMP_MAX_BYTES){toast("Dit bestand is te groot (maximaal ± 3 MB). Splits het in delen.");return}
   const rd=new FileReader();rd.onload=()=>impFromText(String(rd.result||""),"file");rd.onerror=()=>toast("Dit bestand kan niet gelezen worden.");rd.readAsText(f);
 });
+
+/* ---------- progressie: doel voor vandaag per oefening ---------- */
+const PROG_SMALL=["Biceps","Triceps","Schouders","Onderarmen","Kuiten","Core"];
+function progRange(reps){const t=String(reps||"");let x;
+  if(/\d+\s*(s|sec|min)\b/i.test(t))return{time:true};
+  if((x=t.match(/(\d+)\s*[-–]\s*(\d+)/)))return{lo:+x[1],hi:+x[2]};
+  if((x=t.match(/^\s*(\d+)\s*$/)))return{lo:+x[1],hi:+x[1]};
+  return null}
+function progPlan(){const p=draft&&draft.planId&&S.plan[draft.planId];return p&&p.prog?p:null}
+function progTip(e){
+  const last=lastFor(e.exId);if(!last)return"";
+  const sets=last.sets.filter(s=>s.r>0);if(!sets.length)return"";
+  const pl=progPlan(),rec=pl&&(pl.prog.rec||pl.prog.taper),rg=progRange(e.target&&e.target.reps),n=parseInt(e.target&&e.target.sets)||sets.length;
+  const topK=Math.max(...sets.map(s=>+s.k||0)),work=sets.filter(s=>(+s.k||0)===topK).slice(0,n),grp=exGroup(e.exId,e.group),kTxt=k=>k?fmt1(k)+" kg":"eigen gewicht";
+  if(rec)return `Rustigere week: ${kTxt(topK)}, 1 set minder en stop 2-3 herhalingen voor het falen.`;
+  if(rg&&rg.time)return "Probeer meer herhalingen in dezelfde tijd, of houd het net iets langer vol dan vorige keer.";
+  const reps=work.map(s=>s.r);
+  if(rg&&reps.length>=Math.min(n,work.length)&&reps.every(r=>r>=rg.hi)){
+    if(!topK)return `Je haalde overal ${rg.hi}. Maak het zwaarder: extra gewicht, langzamer tempo of een moeilijkere variant, en begin weer bij ${rg.lo}.`;
+    const inc=PROG_SMALL.includes(grp)?(topK<20?1:2):(topK<40?2.5:2.5);
+    return `Je haalde overal ${rg.hi}: tijd voor meer gewicht. Probeer ${fmt1(topK+inc)} kg × ${rg.lo}${PROG_SMALL.includes(grp)?" (of de kleinste stap die kan)":""}.`}
+  const goal=reps.map(r=>rg?Math.min(rg.hi,r+1):r+1);
+  return `Doel: ${kTxt(topK)} × ${goal.join(", ")}. Dat is 1 herhaling meer per set dan vorige keer.`;
+}
+function progBanner(){const p=progPlan();if(!p||!p.note)return"";return `<div class="card insight in-info" style="margin-top:10px"><p><b>Deze week</b> · ${esc(p.note.replace(/^Week \d+( · [^:]*)?: ?/,""))}</p></div>`}
+
+/* ---------- Kennis: achtergrondinformatie per sport (test, nog niet gecontroleerd) ---------- */
+const knUl=(...a)=>`<ul class="hl">${a.map(x=>`<li>${x}</li>`).join("")}</ul>`,knP=t=>`<p class="hp">${t}</p>`,knH=t=>`<h4 class="knh">${t}</h4>`;
+const KN_SUPP=knH("Supplementen (legaal, voor de gewone sporter)")+knP("Supplementen zijn de laatste 1-5%. Eerst moeten eten, slapen en trainen op orde zijn.")+knUl(
+  "<b>Creatine monohydraat</b>: 3-5 g per dag, elke dag (het tijdstip maakt weinig uit, een laadfase is niet nodig). Het best onderzochte supplement voor kracht en korte, zware inspanningen. Je kunt 0,5-1 kg zwaarder worden door extra vocht in je spieren.",
+  "<b>Cafeïne</b>: 3-6 mg per kg lichaamsgewicht, 30-60 min voor de training of wedstrijd. Niet laat op de dag, want het verstoort je slaap. Voor gezonde volwassenen geldt ongeveer 400 mg per dag als veilige bovengrens.",
+  "<b>Eiwitpoeder</b>: handig om je eiwit te halen, maar niet beter dan gewoon eten (kwark, yoghurt, vlees, vis, eieren, peulvruchten).",
+  "<b>Bèta-alanine</b>: 3-6 g per dag, verdeeld over de dag, gedurende weken. Kan helpen bij zware inspanningen van 1-4 minuten. Tintelingen in je huid zijn onschuldig.",
+  "<b>Nitraat (bietensap)</b>: ± 2-3 uur voor een duurinspanning. Kan het zuurstofverbruik iets verlagen; het effect is het grootst bij recreatieve sporters.",
+  "<b>Sportdrank, gels en elektrolyten</b>: voor lange trainingen en wedstrijden (zie de voeding per sport).",
+  "<b>Vitamine D</b>: veel Nederlanders hebben in de winter weinig vitamine D. Twijfel je, laat dan via de huisarts je bloed testen.",
+  "<b>IJzer</b>: alleen bij een aangetoond tekort (komt vaker voor bij vrouwen en lopers). Slik het niet op de gok.")+
+  knP("<b>Veilig kiezen:</b> neem bij voorkeur supplementen met het NZVT-keurmerk of het Informed Sport-keurmerk; daarbij is de kans op vervuiling met verboden stoffen kleiner. Blijf weg van \"fat burners\", pre-workouts met onbekende oppeppers en testosteron-boosters. Prohormonen, SARMs en anabolen zijn doping en gevaarlijk voor je gezondheid. Gebruik je medicijnen, ben je zwanger of heb je hartklachten? Overleg dan eerst met je huisarts.");
+const KN_COMBI=knP("Kracht- en duurtraining gaan prima samen. Wel kan veel duurtraining de krachtwinst iets remmen, vooral explosiviteit en spiergroei (het \"interferentie-effect\"). Voor recreatieve sporters is dat effect klein als je je herstel goed plant.")+
+  knH("Zo plan je het")+knUl(
+  "<b>Zware dagen zwaar, rustige dagen rustig.</b> Zet een zware beentraining liever op dezelfde dag als een zware duurtraining (met minstens 6 uur ertussen) dan op je rustige dag. Dan blijven je rustige dagen echt rustig.",
+  "Geen zware beentraining de dag vóór een lange duurtraining of intervaltraining.",
+  "Op één dag allebei? Doe eerst wat het belangrijkst is voor je doel.",
+  "2× per week kracht is genoeg voor duursporters; in een wedstrijdperiode is 1× per week genoeg om je kracht te behouden.",
+  "Wie vooral kracht traint en duur toevoegt: 2-3× per week 30-45 min rustig (zone 2) verbetert je herstel tussen sets en je gezondheid, zonder veel spiermassa te verliezen. Fietsen en roeien belasten je benen minder dan hardlopen.",
+  "Je verbruikt meer energie: eet genoeg, vooral koolhydraten rond de trainingen.")+
+  knH("Hoe kracht je duursport helpt")+knUl(
+  "Betere loop- of fietseconomie: je gebruikt minder energie per stap of trap.",
+  "Je houdt het langer vol en hebt meer over voor heuvels en de eindsprint.",
+  "Minder blessures: sterkere spieren en pezen kunnen meer belasting aan.",
+  "Zwaar (3-6 herhalingen) plus springoefeningen werkt hiervoor beter dan veel lichte herhalingen.")+
+  knH("Goede oefeningen per sport")+knUl(
+  "<b>Hardlopen:</b> squat, Roemeense deadlift, split squat of lunges, step-ups, kuitheffen met gestrekte én gebogen knie, hip thrust, Copenhagen plank (binnenkant bovenbeen), Pallof press (romp) en kleine sprongetjes (pogo hops).",
+  "<b>Fietsen:</b> squat of leg press, oefeningen op één been, Roemeense deadlift, rugstrekken en romp-oefeningen.",
+  "<b>Zwemmen:</b> pull-ups of lat pulldown, roeien, buitenwaartse rotatie van de schouder, Y-T-W-oefening, romp, en squats en sprongen voor de afzet.");
+const KN_BLES=knP("<b>Wanneer naar de huisarts of fysiotherapeut?</b> Bij pijn die erger wordt, zwelling, pijn in rust of 's nachts, uitstraling, tintelingen of krachtverlies, of als je na 1-2 weken minder belasten nog klachten hebt. Bij lichte klachten is minder belasten meestal beter dan helemaal stilzitten.");
+const KN={
+ kracht:{n:"Kracht / fitness",s:[
+  ["Materiaal",knUl(
+   "<b>Schoenen</b>: een platte, stevige zool geeft stabiliteit bij squats en deadlifts. Zachte hardloopschoenen geven minder grip. Gewichthefschoenen (harde, verhoogde hak) helpen bij diepe squats als je enkels stijf zijn; voor beginners zijn ze niet nodig.",
+   "<b>Kleding</b>: ademend, met bewegingsvrijheid, en een handdoek.",
+   "<b>Halterriem</b>: alleen voor zware squats en deadlifts dicht bij je maximum. De riem helpt druk in je romp op te bouwen. Leer eerst je romp aanspannen zonder riem.",
+   "<b>Polsbanden</b> voor zware drukoefeningen. <b>Lifting straps</b> voor grip bij zware trekoefeningen; train je grip ook zonder.",
+   "<b>Krijt (magnesium)</b> voor grip, als je sportschool het toestaat. <b>Kniebandages</b> geven warmte en comfort, maar zijn geen vervanging voor techniek.",
+   "<b>Thuis</b>: verstelbare dumbbells, een bankje, weerstandsbanden, en een halterrek met veiligheidssteunen. Train nooit zwaar zonder veiligheid.")],
+  ["Voeding",knUl(
+   "<b>Eiwit</b>: ± 1,6 g per kg lichaamsgewicht per dag is voor de meeste mensen genoeg voor spieropbouw. Bij afvallen kan meer (tot ± 2,2 g/kg) helpen om spiermassa te behouden. Verdeel het over 3-5 momenten van 20-40 g.",
+   "<b>Voor</b>: een maaltijd 2-3 uur ervoor met koolhydraten en eiwit, of een kleine snack 30-60 min ervoor (banaan, yoghurt, boterham).",
+   "<b>Tijdens</b>: water. Bij trainingen tot ± 75 min heb je geen sportdrank nodig.",
+   "<b>Na</b>: een maaltijd met eiwit en koolhydraten binnen een paar uur. Het \"anabole venster\" is ruimer dan vroeger gedacht; wat je over de hele dag eet, telt het meest.",
+   "<b>Over de dag</b>: spieropbouw gaat het best met een klein overschot (± 200-300 kcal), vetverlies met een tekort van ± 300-500 kcal en veel eiwit. Slaap 7-9 uur.")+KN_SUPP],
+  ["Sets en herhalingen",`<table class="kntab"><tr><th>Doel</th><th>Herhalingen</th><th>Sets / rust</th></tr><tr><td>Kracht</td><td>1-6, zwaar</td><td>3-5 sets, 2-5 min rust</td></tr><tr><td>Spiergroei</td><td>6-12 (5-30 werkt ook, mits dicht bij falen)</td><td>10-20 sets per spiergroep per week, 1-3 min rust</td></tr><tr><td>Spieruithouding</td><td>15+</td><td>2-3 sets, 30-60 s rust</td></tr></table>`+knUl(
+   "<b>Zwaarte</b>: stop 0-3 herhalingen voor het falen. Beginners houden 1-2 herhalingen over.",
+   "<b>Frequentie</b>: elke spiergroep ± 2× per week werkt beter dan 1× per week met hetzelfde aantal sets.",
+   "<b>Progressie (dubbele progressie)</b>: werk binnen een reeks, bijvoorbeeld 8-12. Haal je bij alle sets 12, verhoog dan het gewicht (± 2,5 kg; bij kleine oefeningen 1-2 kg) en begin weer bij 8. De app geeft je hiervoor bij elke oefening een doel voor vandaag.",
+   "<b>Beginners</b>: 2-3 sets per oefening is genoeg. Je wordt de eerste maanden snel sterker, vooral doordat je techniek en zenuwstelsel beter worden.",
+   "<b>Rustweek (deload)</b> elke 4-8 weken: minder sets of lichter. Daarna kun je weer verder.")],
+  ["Techniek en houding",knUl(
+   "<b>Algemeen</b>: warm 5-10 minuten op, plus 1-3 lichtere sets van je eerste oefening. Gebruik een volledige bewegingsuitslag die je onder controle hebt, laat het gewicht in 2-3 seconden zakken, en adem in en span je romp aan vóór de zware fase.",
+   "<b>Squat</b>: voeten ± schouderbreedte, tenen iets naar buiten. Knieën gaan in de richting van je tenen (niet naar binnen). Rug neutraal en gewicht midden op je voet. Zak zo diep als je met een neutrale rug kunt.",
+   "<b>Deadlift</b>: stang dicht bij je schenen, rug neutraal (niet bollen). Heupen en schouders komen tegelijk omhoog en de stang blijft langs je benen. Strek uit met je heupen, zonder achterover te leunen.",
+   "<b>Bankdrukken</b>: schouderbladen naar achteren en omlaag, voeten stevig op de grond. Stang naar de onderkant van je borst, ellebogen ± 45-70° van je lichaam (niet haaks). Gebruik een spotter of veiligheidssteunen.",
+   "<b>Drukken boven je hoofd</b>: billen en buik aanspannen, niet hol trekken met je onderrug.",
+   "<b>Roeien en pulldown</b>: start met je schouderbladen en trek zonder zwaaien.",
+   "<b>Pijn</b>: bij scherpe of stekende pijn stop je de oefening. Spierpijn 1-3 dagen na de training is normaal.")],
+  ["Veelvoorkomende blessures",knUl(
+   "<b>Onderrug</b>: vaak door een bolle rug bij deadlift of squat, te snel te zwaar, of doorgaan als je vermoeid bent.",
+   "<b>Schouder</b> (pijn bij drukken of boven je hoofd): veel drukken en weinig trekken, of ellebogen haaks bij bankdrukken. Zorg voor balans tussen druk- en trekoefeningen, en doe face pulls en rotatie-oefeningen.",
+   "<b>Elleboog</b> (tennis- of golferselleboog): veel curls, pull-ups of grip, te snel opgebouwd.",
+   "<b>Knie</b> (voorkant): squats en lunges te snel opgebouwd, of knieën die naar binnen zakken.",
+   "<b>Pols</b>: zwaar drukken met een omgebogen pols.",
+   "<b>Spierverrekking</b>: explosief of zwaar trainen zonder warming-up.")+KN_BLES],
+  ["Opbouw per doel",knUl(
+   "<b>Sterker worden</b>: basisoefeningen (squat, deadlift, bankdrukken, drukken boven je hoofd, roeien), 3-6 herhalingen, 3-4 dagen per week, lange rust.",
+   "<b>Spiermassa</b>: 6-12 herhalingen dicht bij falen, genoeg sets per spiergroep, en een klein calorie-overschot. Splits zoals bovenlichaam/benen of push/pull/legs.",
+   "<b>Vetverlies</b>: krachttraining blijft de basis, zodat je je spiermassa houdt. Daarbij een calorietekort, veel eiwit en extra stappen of rustige duurtraining.",
+   "<b>Algemeen fit</b>: 2-3× per week full body, plus conditie.",
+   "<b>Welke indeling?</b> 2-3 dagen: full body. 4 dagen: bovenlichaam/benen. 5-6 dagen: push/pull/legs.",
+   "Werk in blokken van 4-8 weken met daarna een rustweek; dat is ook hoe de app je sportschema opbouwt.")],
+  ["Kracht en duur combineren",KN_COMBI]]},
+ hiit:{n:"HIIT",s:[
+  ["Materiaal",knUl(
+   "<b>Schoenen</b> met demping én stevigheid opzij (cross-trainers) voor sprongen en richtingsveranderingen. Hardloopschoenen zijn opzij vaak minder stabiel.",
+   "Een <b>mat</b>, een <b>timer-app</b> (bijv. een intervaltimer) en eventueel een <b>hartslagmeter</b>.",
+   "<b>Thuis</b>: genoeg ruimte, een stroeve vloer, en let op harde vloeren en de buren bij sprongen.",
+   "Optioneel: kettlebell, springtouw, roeitrainer, hometrainer of air bike.")],
+  ["Voeding",knUl(
+   "Niet met een volle maag: een maaltijd 2-3 uur ervoor, of een lichte snack ± 1 uur ervoor.",
+   "HIIT draait op koolhydraten. Nuchter trainen kan, maar dan lukt een hoge intensiteit vaak minder.",
+   "Na: eiwit en koolhydraten, en drink genoeg.")+KN_SUPP],
+  ["Werk en rust",knUl(
+   "<b>Tabata</b>: 20 s maximaal, 10 s rust, 8 rondes (4 minuten). Echt maximaal, dus zwaar.",
+   "<b>30/30 of 40/20</b>: 30 of 40 s werk met 30 of 20 s rust per oefening, in 3-6 rondes. Goed om mee te beginnen en op te bouwen.",
+   "<b>EMOM</b> (every minute on the minute): elke minuut een vast aantal herhalingen; de rest van de minuut is rust.",
+   "<b>4×4</b>: 4 minuten op ± 85-95% van je maximale hartslag, met 3 minuten rustig ertussen. Sterk voor je conditie (VO2max).",
+   "<b>Opbouw</b>: begin met meer rust (30/30) en werk naar minder rust (40/20) of meer rondes. De app doet dit in je sportschema stap voor stap.",
+   "<b>Hoe vaak</b>: maximaal 2-3× per week, niet op dagen achter elkaar. Zo blijft er tijd om te herstellen.")],
+  ["Techniek en houding",knUl(
+   "Warm 5-10 minuten op.",
+   "<b>Landen</b> na een sprong: zacht, eerst op je voorvoet en dan je hele voet, knieën boven je tenen (niet naar binnen).",
+   "<b>Burpees en mountain climbers</b>: rug recht in de plank, heupen niet omhoog en niet doorzakken.",
+   "<b>Kettlebell swing</b>: beweging vanuit je heupen (scharnieren), niet tillen met je rug of armen.",
+   "Kwaliteit gaat voor snelheid: zakt je techniek weg, pauzeer dan even of kies een lichtere variant.")],
+  ["Veelvoorkomende blessures",knUl(
+   "<b>Enkel verzwikken</b>: bij landen of zijwaartse sprongen, vaak als je moe bent.",
+   "<b>Achillespees en kuit</b>: veel springen zonder opbouw.",
+   "<b>Knie</b>: veel sprongen, en landen met knieën die naar binnen zakken.",
+   "<b>Onderrug</b>: burpees of kettlebell swings met een bolle rug.",
+   "<b>Overbelasting</b>: elke dag HIIT. Je lijf heeft tijd nodig om te herstellen.")+KN_BLES],
+  ["Opbouw per doel",knUl(
+   "<b>Vetverlies en conditie</b>: 2× HIIT per week, plus 2-3× kracht en dagelijks bewegen. Het meeste verschil maakt je voeding.",
+   "<b>Conditie (VO2max)</b>: 4×4 min of 5×3 min hard, op de fiets, roeitrainer of hardlopend.",
+   "<b>Snelheid en explosiviteit</b>: kort en maximaal (sprints van 10-30 s, Tabata) met ruime rust.",
+   "Combineer HIIT met rustige duurtraining: ± 80% rustig en 20% hard is voor de meeste mensen het beste recept.")],
+  ["Kracht en duur combineren",KN_COMBI]]},
+ cali:{n:"Calisthenics",s:[
+  ["Materiaal",knUl(
+   "<b>Optrekstang</b>: voor in een deurpost of vast aan muur of plafond. Controleer het maximale gewicht. Buiten kun je in een calisthenicspark trainen.",
+   "<b>Ringen</b>: veelzijdig en instabiel, dus veel spierwerk. Je kunt ze hoog en laag hangen voor pull-ups, dips en rows.",
+   "<b>Parallettes</b>: voor handstand, L-sit en push-ups die vriendelijker zijn voor je polsen.",
+   "<b>Weerstandsbanden</b>: hulp bij pull-ups en dips terwijl je sterker wordt.",
+   "<b>Dipstation</b>, <b>grips</b> (beschermen je handpalmen) en <b>krijt</b>. Een gewichtsvest of dipriem komt later, voor extra gewicht.")],
+  ["Voeding",knUl(
+   "Dezelfde basis als bij krachttraining: genoeg eiwit (± 1,6 g/kg), koolhydraten rond de training, en slaap.",
+   "Je tilt je eigen gewicht: lichter maakt veel oefeningen makkelijker, maar extreem lijnen kost kracht en herstel.")+KN_SUPP],
+  ["Sets en herhalingen",knUl(
+   "Je maakt het zwaarder met een moeilijkere <b>variant of hefboom</b>, niet met kilo's.",
+   "<b>Push-up</b>: knieën → gewone push-up → voeten hoog → archer → push-up op één arm.",
+   "<b>Pull-up</b>: australian rows → negatives (5 s laten zakken) → met band → gewone pull-up → met extra gewicht.",
+   "<b>Dips</b>: op een bankje → aan de brug of ringen → met extra gewicht.",
+   "<b>Benen</b>: squat → bulgarian split squat → pistol squat.",
+   "Kies de moeilijkste variant waarmee je 5-12 herhalingen met goede techniek haalt. Haal je 12-15, ga dan naar de volgende stap.",
+   "<b>Skills</b> (handstand, L-sit, front lever): oefen ze aan het begin van je training, als je fris bent, in korte blokken. Statische houdingen doe je in 3-5 sets van 10-30 s.")],
+  ["Techniek en houding",knUl(
+   "<b>Actief hangen</b>: schouders weg van je oren voordat je optrekt.",
+   "<b>Hollow body</b>: buik aangespannen en onderrug plat. Dat is de basis voor bijna alles.",
+   "<b>Volledige uitslag</b>: kin boven de stang en onderaan je armen gestrekt; bij dips tot je bovenarmen ± horizontaal zijn.",
+   "Warm je polsen goed op voor handstand en planche.",
+   "Ringen: draai bovenaan bij dips en support je handen iets naar buiten (\"turn out\") voor stabiliteit.")],
+  ["Veelvoorkomende blessures",knUl(
+   "<b>Elleboog</b>: veel pull-ups of muscle-ups, te snel opgebouwd.",
+   "<b>Pols</b>: handstand of planche zonder opbouw.",
+   "<b>Schouder</b>: dips te diep, of muscle-ups met slechte techniek.",
+   "<b>Huid en vingers</b>: blaren en scheurtjes. Gebruik grips en houd eelt glad.",
+   "De grootste valkuil: te snel naar moeilijke skills. Pezen worden langzamer sterk dan spieren.")+KN_BLES],
+  ["Opbouw per doel",knUl(
+   "<b>Kracht</b>: zware varianten of extra gewicht, 3-6 herhalingen.",
+   "<b>Spiermassa</b>: 8-15 herhalingen dicht bij falen, en genoeg sets.",
+   "<b>Skills</b>: dagelijks kort oefenen, steeds net onder je maximum.",
+   "Een full-body schema 3× per week (duwen, trekken, benen, romp) is voor de meeste mensen ideaal.")],
+  ["Kracht en duur combineren",KN_COMBI]]},
+ run:{n:"Hardlopen",s:[
+  ["Materiaal",knUl(
+   "<b>Schoenen laten aanmeten</b>: ga naar een gespecialiseerde hardloopwinkel of een loopcentrum. Daar meten ze je voeten en filmen ze je op de loopband. Kies uiteindelijk de schoen die tijdens het lopen het meest comfortabel voelt; dat blijkt een goede graadmeter.",
+   "<b>Neutraal of stabiel</b>: een neutrale schoen voor de meeste lopers. Een stabiliteitsschoen geeft steun als je voet sterk naar binnen kantelt (overpronatie).",
+   "<b>Demping</b>: meer demping is comfortabel bij lange afstanden; minder demping geeft meer gevoel met de grond.",
+   "<b>Drop</b> (het hoogteverschil tussen hiel en teen, 0-12 mm): een lage drop belast je kuit en achillespees meer. Wissel daarom geleidelijk.",
+   "<b>Zool</b>: een wegschoen voor asfalt; een trailschoen met grof profiel en meer grip voor bos en onverhard. <b>Carbonschoenen</b> zijn voor wedstrijden en snelle trainingen: efficiënter, maar minder stabiel, dus niet voor elke training.",
+   "<b>Vervangen</b> na ± 500-800 km of als de demping op is. Afwisselen tussen twee paar is fijn.",
+   "<b>Sokken</b>: naadloos en synthetisch of merino (geen katoen) tegen blaren. <b>Kleding</b>: ademende laagjes; kleed je alsof het ± 10 graden warmer is. In het donker: reflectie en een lampje.",
+   "<b>Horloge of hartslagmeter</b> (een borstband is nauwkeuriger dan meten aan je pols). Bij lange duurlopen een heupband of bidon.")],
+  ["Voeding",knUl(
+   "<b>Voor</b>: een licht verteerbare maaltijd 2-3 uur ervoor, of een snack (banaan) 30-60 min ervoor. Weinig vezels en vet vlak voor het lopen.",
+   "<b>Tijdens</b>: tot ± 75 min is water genoeg (bij warmte). Bij een lange duurloop of wedstrijd van meer dan 75-90 min: 30-60 g koolhydraten per uur (gels, sportdrank). Drink op dorst (± 400-800 ml per uur) en neem bij warmte zout (natrium).",
+   "<b>Train je darmen</b>: oefen gels en sportdrank in je trainingen. Op de wedstrijddag niets nieuws.",
+   "<b>Na</b>: koolhydraten en 20-30 g eiwit, en drinken.",
+   "<b>Over de dag</b>: genoeg koolhydraten als je veel loopt. Voor een wedstrijd van meer dan 90 min 1-2 dagen extra koolhydraten eten (carboloaden).",
+   "<b>IJzer</b>: bij aanhoudende vermoeidheid kan een ijzertekort spelen, vooral bij vrouwelijke lopers. Laat dit via de huisarts testen.")+KN_SUPP],
+  ["Techniek en houding",knUl(
+   "<b>Houding</b>: rechtop, iets voorover vanuit je enkels, ontspannen schouders, armen ± 90° gebogen langs je lichaam (niet voor je borst kruisen), blik vooruit.",
+   "<b>Pasfrequentie</b>: kleine, snelle passen en landen dicht onder je lichaam. Ver voor je landen met een gestrekte knie (overstriding) belast je knie en scheen. Je pasfrequentie 5-10% verhogen kan de belasting op je knie verminderen.",
+   "<b>Hiel of voorvoet?</b> Dat maakt minder uit dan niet ver voor je lichaam landen. Verander je landing niet ineens.",
+   "<b>Rustig is rustig</b>: bij een rustige training kun je nog praten.",
+   "<b>Loopscholing</b> 1-2× per week: kniehef, hakken-billen, skippings, en 4-6 versnellingen (strides) van 80-100 m na een rustige loop.",
+   "Warm altijd 5-10 minuten op met rustig inlopen.")],
+  ["Veelvoorkomende blessures",knUl(
+   "<b>Scheenbeenvliesontsteking</b>: pijn langs de binnenrand van je scheenbeen. Oorzaak: te snel opbouwen, harde ondergrond, versleten schoenen of zwakke kuiten. Pijn op één plek die ook in rust of 's nachts blijft, kan een stressfractuur zijn: ga dan naar je huisarts.",
+   "<b>Lopersknie</b>: pijn rond of achter de knieschijf, erger bij traplopen en hurken. Vaak door te veel kilometers en zwakke heup- en bilspieren.",
+   "<b>ITB-syndroom</b>: pijn aan de buitenkant van je knie, vaak na een vaste afstand. Door veel volume, veel afdalen en zwakke heupspieren.",
+   "<b>Achillespees</b>: stijf in de ochtend en pijn bij het starten. Door te snel opbouwen, veel heuvels of snelheid, of een snelle overstap naar een schoen met lage drop.",
+   "<b>Fasciitis plantaris</b>: hielpijn bij je eerste stappen in de ochtend.",
+   "<b>Kuitverrekking of -scheur</b>: plotselinge pijn bij versnellen, vaak als je moe of niet opgewarmd bent. Bouw daarna rustig op, met kuitkracht.",
+   "<b>Voorkomen</b>: geleidelijk opbouwen (± 10% per week), rustweken, krachttraining voor kuit, bil en heup, genoeg slaap, en afwisselen van ondergrond.")+KN_BLES],
+  ["Opbouw per doel",knUl(
+   "<b>Rustige duurloop</b> (je kunt praten): ± 80% van je training. Bouwt je basisconditie, je vetverbranding en je pezen op.",
+   "<b>Lange duurloop</b>: 1× per week, rustig, ± 25-30% van je weekvolume. Voor uithoudingsvermogen en om aan de afstand te wennen.",
+   "<b>Tempoloop</b> (drempel): 20-40 min \"comfortabel zwaar\"; praten gaat in korte zinnen. Je kunt daarna langer een hoog tempo volhouden.",
+   "<b>Intervallen</b>: 3-5 minuten rond je 5 km-tempo (bijv. 5× 1000 m) voor je conditie (VO2max); korte stukken van 200-400 m voor snelheid en een efficiëntere pas. Altijd met rust ertussen.",
+   "<b>Per doel</b>: voor een snelle 5 km meer intervallen; voor een halve of hele marathon zijn de lange duurloop en tempo belangrijker.",
+   "Bij 3 trainingen per week 1 snelle training, maximaal 2. Elke 3-4 weken een rustweek, en 1-2 weken voor je wedstrijd minder trainen (taperen).")],
+  ["Kracht en duur combineren",KN_COMBI]]},
+ bike:{n:"Wielrennen",s:[
+  ["Materiaal",knUl(
+   "<b>Soort fiets</b>: racefiets (asfalt, snel), gravelbike (asfalt en onverhard, bredere banden), mountainbike (bos en technisch terrein), of binnen op een fietstrainer met een app.",
+   "<b>Maat en afstelling</b>: zet je hiel op het pedaal in de laagste stand; je been is dan gestrekt. Met je voorvoet op het pedaal is je knie dan licht gebogen. Is het zadel te laag, dan voel je het aan de voorkant van je knie; te hoog, dan aan de achterkant en wiegen je heupen. Rijd je veel of heb je klachten? Laat dan een bikefit doen.",
+   "<b>Helm</b>: altijd. Let op het keurmerk (EN 1078). Een MIPS- of vergelijkbaar systeem beschermt extra bij een schuine klap. Vervang je helm na een val.",
+   "<b>Gewone (platte) pedalen</b>: met normale schoenen, makkelijk en vertrouwd. Prima om mee te beginnen.",
+   "<b>Klikpedalen</b>: je schoen klikt vast in het pedaal. Je zet efficiënter kracht en blijft stabiel op het pedaal. Uitklikken doe je door je hiel naar buiten te draaien.",
+   "<b>SPD</b> (2 schroefgaten): een klein plaatje (cleat) verzonken in de zool, zodat je goed kunt lopen. Voor mountainbike, gravel, toerfietsen en binnen.",
+   "<b>SPD-SL of Look Kéo</b> (3 schroefgaten): een groot plaatje en een stijve zool. Betere krachtoverbrenging op de weg, maar lastig lopen.",
+   "<b>Float</b>: hoeveel graden je voet kan draaien in het pedaal. Een beetje float (bijv. 6°) is fijn voor je knieën.",
+   "<b>Tip bij klikpedalen</b>: zet de veerspanning laag en oefen eerst stilstaand tegen een muur. Bijna iedereen valt in het begin een keer stil om.",
+   "<b>Kleding</b>: een fietsbroek met zeem (zonder onderbroek eronder, na elke rit wassen), een shirt met rugzakken, handschoenen, een fietsbril en een windjack.",
+   "<b>Banden</b>: houd de juiste bandenspanning aan; bredere banden kunnen met minder druk, wat comfortabeler is en vaak niet langzamer. Neem een reparatieset mee: binnenband, bandenlichters, pomp en multitool.",
+   "<b>Versnellingen</b>: trap ± 80-95 omwentelingen per minuut en schakel vóór de heuvel terug.",
+   "In het donker zijn voor- en achterlicht verplicht.",
+   "Een fietscomputer, hartslagmeter of vermogensmeter (watt) helpt om gericht te trainen.")],
+  ["Voeding",knUl(
+   "Op de fiets kun je goed eten: eet vroeg en regelmatig, nog voordat je honger hebt.",
+   "<b>Rustig tot 60-90 min</b>: water is genoeg.",
+   "<b>1 tot 2,5 uur</b>: 30-60 g koolhydraten per uur.",
+   "<b>Langer dan 2,5 uur</b>: tot 60-90 g per uur, bij voorkeur een mix van glucose en fructose (sportdrank, gels, repen, rijstwafels, banaan).",
+   "<b>Drinken</b>: ± 500-750 ml per uur (een bidon), meer bij warmte, met elektrolyten (natrium).",
+   "<b>Voor</b>: een koolhydraatrijke maaltijd 2-3 uur ervoor (havermout, brood). <b>Na</b>: koolhydraten en eiwit; na een lange rit flink bijvullen.",
+   "<b>Hongerklop</b>: plotseling leeg, slap en duizelig door een tekort aan koolhydraten. Voorkom het door op tijd te eten.")+KN_SUPP],
+  ["Techniek en houding",knUl(
+   "<b>Houding</b>: ontspannen schouders, ellebogen licht gebogen, rug neutraal, handen licht op het stuur.",
+   "<b>Trappen</b>: rond trappen, met een soepele cadans van 80-95.",
+   "<b>Bochten</b>: rem vóór de bocht, buitenste pedaal laag met je gewicht erop, kijk door de bocht heen.",
+   "<b>Klimmen</b>: zittend in een lichte versnelling; staand voor korte, steile stukken.",
+   "<b>In een groep</b>: rijd een rechte lijn, wijs gaten en obstakels aan, rem niet plotseling, en laat je voorwiel niet overlappen met het achterwiel voor je.")],
+  ["Veelvoorkomende blessures",knUl(
+   "<b>Knie</b>: zadel te laag (voorkant) of te hoog (achterkant), een verkeerd afgesteld schoenplaatje, of een te zware versnelling (lage cadans).",
+   "<b>Lage rug</b>: een te gestrekte houding of een zwakke romp.",
+   "<b>Nek en schouders</b>: een te lage voorkant, of krampachtig vasthouden.",
+   "<b>Gevoelloze handen</b>: te veel gewicht op je handen. Wissel van greep en draag handschoenen.",
+   "<b>Zadelpijn</b>: een verkeerd zadel of een verkeerde breedte, een slecht zeem of hygiëne.",
+   "<b>Vallen</b>: sleutelbeen en pols zijn kwetsbaar. Fiets voorspelbaar en zichtbaar.")+KN_BLES],
+  ["Opbouw per doel",knUl(
+   "<b>Duurrit</b> (rustig, je kunt praten): het grootste deel van je training. Bouwt je basis en je vetverbranding op.",
+   "<b>Lange rit</b>: 1× per week, voor je uithoudingsvermogen en om eten en drinken te oefenen.",
+   "<b>Sweet spot en drempel</b>: blokken als 2× 20 min net onder je FTP (wat je ± een uur volhoudt). Verhoogt je FTP.",
+   "<b>VO2max-intervallen</b>: 3-6 min hard (bijv. 5× 4 min) met even lang rust.",
+   "<b>Sprints</b> van 10-30 s voor explosiviteit, en <b>cadanstraining</b> (kort 100+ omwentelingen).",
+   "<b>FTP-test</b>: 20 minuten zo hard mogelijk, × 0,95. Daarmee bepaal je je zones.",
+   "Fietsen belast je gewrichten minder dan hardlopen, dus er is meer volume mogelijk. Bouw toch geleidelijk op en neem rustweken.")],
+  ["Kracht en duur combineren",KN_COMBI]]},
+ swim:{n:"Zwemmen",s:[
+  ["Materiaal",knUl(
+   "<b>Zwembril</b>: test of hij goed afsluit door hem zonder band tegen je ogen te drukken; blijft hij even zitten, dan past hij. Neem anti-condens en voor buiten getinte of spiegelende glazen.",
+   "<b>Badmuts</b>: haar uit je gezicht en minder weerstand. Buiten een felle kleur, zodat je goed zichtbaar bent.",
+   "<b>Zwemkleding</b>: strak en chloorbestendig.",
+   "<b>Plankje</b>: om je beenslag te trainen. <b>Pull buoy</b> (tussen je benen): om je armen te trainen; je ligt er ook hoger mee.",
+   "<b>Korte zwemvliezen</b>: voor techniek en beenslag. <b>Handpaddles</b>: voor kracht, maar ze belasten je schouders, dus alleen kort en met goede techniek.",
+   "<b>Frontale snorkel</b>: om op je armslag te letten zonder te hoeven ademen.",
+   "<b>Buiten zwemmen</b>: een wetsuit geeft drijfvermogen en warmte. Bij wedstrijden bepaalt de organisatie op basis van de watertemperatuur of een wetsuit verplicht, toegestaan of verboden is. Gebruik een zwemboei, zwem nooit alleen en controleer de waterkwaliteit.")],
+  ["Voeding",knUl(
+   "Ook in het zwembad zweet je: neem een bidon mee.",
+   "Vroeg zwemmen? Neem iets kleins vooraf, zoals een banaan of een beschuit. Een grote maaltijd liever 2-3 uur ervoor.",
+   "Bij trainingen van meer dan 75-90 min (bijvoorbeeld voor triathlon): koolhydraten in je bidon.",
+   "Na: koolhydraten en eiwit. Zwemmen maakt vaak flink hongerig.")+KN_SUPP],
+  ["Techniek en houding",knP("Bij zwemmen levert techniek meer op dan alleen harder trainen. Een les of iemand die je filmt helpt enorm. Dit gaat vooral over de borstcrawl (vrije slag).")+knUl(
+   "<b>Ligging</b>: zo horizontaal mogelijk. Hoofd in het verlengde van je rug, blik naar beneden en iets naar voren. Houd je je hoofd te hoog, dan zakken je benen.",
+   "<b>Uitademen</b>: blaas onder water rustig en continu uit, door je neus en/of mond. Dan hoef je bij het draaien alleen in te ademen. Veel beginners houden hun adem in en raken daardoor snel buiten adem.",
+   "<b>Ademen</b>: draai je hoofd mee met je lichaam, zonder het op te tillen; één brilglas blijft in het water. Om de 3 slagen (afwisselend links en rechts) helpt voor je balans; om de 2 mag ook.",
+   "<b>Rotatie</b>: draai vanuit je heup en schouder rond je lengteas. Dat geeft een langere slag en maakt ademen makkelijker.",
+   "<b>Armslag</b>: je hand gaat met de vingertoppen eerst het water in, vóór je schouder (niet over het midden). Strek uit, en \"pak\" dan het water met een hoge elleboog: je onderarm staat zo snel mogelijk verticaal. Duw door tot bij je heup. Bij het terugbrengen boven water blijft je elleboog hoog en ontspannen.",
+   "<b>Beenslag</b>: vanuit je heup, benen bijna gestrekt, enkels ontspannen en voeten gestrekt, met een kleine slag. Bij triathlon dient de beenslag vooral voor je balans; spaar je benen voor fietsen en lopen.",
+   "<b>Schoolslag</b>: de volgorde is trekken, ademen, trappen, glijden. Draai je voeten bij de beenslag naar buiten. De zweepslag belast de binnenkant van je knie.",
+   "<b>Oefeningen</b>: beenslag op je zij met één arm vooruit (balans en ademen); catch-up (de ene arm wacht voor tot de andere aantikt); vingertoppen over het water slepen (hoge elleboog); sculling (watergevoel); beenslag met een plankje.")],
+  ["Veelvoorkomende blessures",knUl(
+   "<b>Zwemmersschouder</b>: overbelaste pezen in je schouder. Door te snel meer meters, je hand die het midden kruist, een lage elleboog, weinig rotatie, steeds naar één kant ademen, of veel met paddles. Voorkom het met geleidelijke opbouw, goede techniek, en oefeningen voor je rotatorcuff en schouderbladen.",
+   "<b>Schoolslagknie</b>: pijn aan de binnenkant van je knie door de zweepslag. Wissel af met andere slagen.",
+   "<b>Nek</b>: je hoofd te hoog houden of optillen om te ademen.",
+   "<b>Onderrug</b>: hol trekken, vooral bij schoolslag en vlinderslag, of een te hoog hoofd.",
+   "<b>Oren en huid</b>: ontstoken oren (zwemmersoor) en een geïrriteerde huid door chloor. Droog je oren goed en spoel na het zwemmen af.")+KN_BLES],
+  ["Opbouw per doel",knUl(
+   "<b>Techniek</b>: elke training een paar oefeningen, vooral in je warming-up.",
+   "<b>Uithouding</b>: langere blokken rustig, bijv. 4× 400 m met 30 s rust.",
+   "<b>Drempeltempo (CSS)</b>: zwem 400 m en (na rust) 200 m zo snel mogelijk. Je CSS-tempo per 100 m = (tijd 400 m − tijd 200 m) ÷ 2. Dat is ongeveer het tempo dat je ± 30 min volhoudt. Train bijv. 10× 100 m op dat tempo met 10-20 s rust.",
+   "<b>Snelheid</b>: korte stukken van 25-50 m snel, met ruime rust.",
+   "<b>Opbouw</b>: ± 10% meer meters per week, en ook hier een rustweek.",
+   "<b>Voor triathlon</b>: oefen in open water. Kijk om de 6-10 slagen kort vooruit om te oriënteren (sighting), en oefen een start in een groep.")],
+  ["Kracht en duur combineren",KN_COMBI]]}
+};
+const KN_ORDER=["kracht","hiit","cali","run","bike","swim"];
+function viewKennis(){
+  const k=KN[UI.kn]?UI.kn:"kracht",d=KN[k];
+  return `<div class="wohead"><div class="title">Kennis</div></div>
+    <div class="card insight in-warn" style="margin-top:6px"><p><b>Test · in ontwikkeling.</b> Deze informatie is nog niet gecontroleerd op juistheid (fact check). Het is algemene informatie, geen medisch of persoonlijk advies. Twijfel je of heb je klachten, overleg dan met een huisarts, fysiotherapeut of trainer.</p></div>
+    <div class="chips" style="margin-top:12px">${KN_ORDER.map(x=>`<button class="chipb" data-act="kn-sport" data-v="${x}" aria-pressed="${x===k}">${esc(KN[x].n)}</button>`).join("")}</div>
+    <h2>${esc(d.n)}</h2><div class="stack">${d.s.map(([t,html],i)=>`<details class="card kndet" ${UI.knOpen===k+i?"open":""} data-kn="${k+i}"><summary><b>${esc(t)}</b></summary><div class="knbody">${html}</div></details>`).join("")}</div>`;
+}
+UI.kn=lsGet("krachtlogboek.kn")||"kracht";
+document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="kn-sport"]');if(!b)return;UI.kn=b.dataset.v;UI.knOpen=null;lsSet("krachtlogboek.kn",UI.kn);render()});
+document.addEventListener("toggle",ev=>{const d=ev.target;if(d.classList&&d.classList.contains("kndet")&&d.open)UI.knOpen=d.dataset.kn},true);
 
 /* ---------- sheets ---------- */
 function renderSheet(){
