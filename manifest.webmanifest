@@ -1,13 +1,13 @@
 {
- "name": "Krachtlogboek",
- "short_name": "Krachtlogboek",
- "description": "Trainingen, voeding en voortgang bijhouden",
+ "name": "PeakForm",
+ "short_name": "PeakForm",
+ "description": "Training, voeding, coaching en voortgang in één app",
  "start_url": "./",
  "scope": "./",
  "display": "standalone",
  "orientation": "portrait",
- "background_color": "#E2ECEC",
- "theme_color": "#E2ECEC",
+ "background_color": "#14171C",
+ "theme_color": "#14171C",
  "lang": "nl",
  "icons": [
   {
