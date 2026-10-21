@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#E2ECEC" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0B1317" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F4F1EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171A1F" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" href="icon-192.png">
@@ -24,16 +24,16 @@
 <style>
 /* Layout: one narrow phone column, sticky header, fixed bottom tab bar, bottom sheets for pickers */
 :root{
-  --bg:#EEF0EC; --surface:#FFFFFF; --sunk:#E3E6E1; --fg:#15181B; --muted:#5F666D; --line:#D5D9D3;
+  --bg:#F0EEEA; --surface:#FFFFFF; --sunk:#E6E3DE; --fg:#15181B; --muted:#5F666D; --line:#DAD6CF;
   --accent:#1F4FE0; --accent-ink:#FFFFFF; --pr:#A86A00; --pr-bg:#FCEFD3; --danger:#B3261E; --good:#2E7D4F; --warn:#B26A00; --bad:#C62828;
   --display:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
   --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E1012; --surface:#171A1E; --sunk:#202429; --fg:#ECEEF1; --muted:#949AA2; --line:#2A2F35;
+  --bg:#111317; --surface:#1A1D22; --sunk:#22262C; --fg:#ECEEF1; --muted:#9A9FA6; --line:#2C3036;
   --accent:#7290FF; --accent-ink:#0B0D10; --pr:#F2B544; --pr-bg:#3A2C10; --danger:#FF8A80; --good:#5CCB8A; --warn:#F2B544; --bad:#FF8A80; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0E1012; --surface:#171A1E; --sunk:#202429; --fg:#ECEEF1; --muted:#949AA2; --line:#2A2F35;
+  --bg:#111317; --surface:#1A1D22; --sunk:#22262C; --fg:#ECEEF1; --muted:#9A9FA6; --line:#2C3036;
   --accent:#7290FF; --accent-ink:#0B0D10; --pr:#F2B544; --pr-bg:#3A2C10; --danger:#FF8A80; --good:#5CCB8A; --warn:#F2B544; --bad:#FF8A80; color-scheme:dark}
 *{box-sizing:border-box}
 html,body{background:var(--bg)}
@@ -189,9 +189,9 @@ textarea{width:100%;background:var(--sunk);border:1px solid transparent;border-r
 nav.tabs button{font-size:10px;padding:9px 1px 11px;letter-spacing:0}
 nav.tabs button svg{width:21px;height:21px}
 
-:root{--sky1:#E2ECEC;--sky2:#ECEFE8;--sun:#F7E6C4;--m1:#D3DFDB;--m2:#C3D6CF;--m3:#B3CDC3;--trail:#EDE4D0;--water:#CFE2E3;--fig:#86A499;--glass:rgba(238,241,236,.82)}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--sky1:#0B1317;--sky2:#0E1215;--sun:#1B262A;--m1:#142026;--m2:#17262C;--m3:#1B2D33;--trail:#243036;--water:#152A31;--fig:#35505A;--glass:rgba(14,16,18,.82)}}
-:root[data-theme="dark"]{--sky1:#0B1317;--sky2:#0E1215;--sun:#1B262A;--m1:#142026;--m2:#17262C;--m3:#1B2D33;--trail:#243036;--water:#152A31;--fig:#35505A;--glass:rgba(14,16,18,.82)}
+:root{--sky1:#F4F1EC;--sky2:#F0EEEA;--glow:#FAD3B5;--hex:#E8590C;--glass:rgba(240,238,234,.84)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--sky1:#171A1F;--sky2:#111317;--glow:#4A2410;--hex:#F0701F;--glass:rgba(15,17,20,.84)}}
+:root[data-theme="dark"]{--sky1:#171A1F;--sky2:#111317;--glow:#4A2410;--hex:#F0701F;--glass:rgba(15,17,20,.84)}
 body{background:transparent}
 .scene{position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 60%,var(--bg) 100%)}
 .scene svg{position:absolute;left:0;bottom:0;width:100%;height:70vh;min-height:320px}
@@ -347,54 +347,43 @@ a.btn{text-decoration:none;color:var(--fg);text-align:center;display:grid;place-
 .dots{display:flex;gap:6px;justify-content:center;margin-top:12px}.dots span{width:8px;height:8px;border-radius:50%;background:var(--line)}.dots span.on{background:var(--accent)}
 .ptime{font-variant-numeric:tabular-nums}
 .banner{margin-top:12px;background:var(--pr-bg);color:var(--fg);border-radius:8px;padding:10px 12px;font-size:13px}
+
+/* brede schermen: tablet en laptop */
+@media (min-width:760px){
+  .wrap,nav.tabs .in{max-width:720px}
+  .sheet{max-width:640px}
+  nav.tabs button{font-size:12px;padding:10px 4px 12px;letter-spacing:.02em}
+  .ptiles{grid-template-columns:repeat(4,1fr)}
+}
+@media (min-width:1100px){
+  nav.tabs{top:0;bottom:0;right:auto;width:210px;border-top:0;border-right:1px solid var(--line);padding-top:84px}
+  nav.tabs .in{display:flex!important;flex-direction:column;max-width:none;gap:2px;padding:0 10px}
+  nav.tabs button{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;font-size:15px;letter-spacing:0;text-align:left}
+  nav.tabs button:hover{background:var(--sunk)}
+  nav.tabs button[aria-current="page"]{background:var(--sunk)}
+  .wrap{max-width:900px;margin-left:calc(210px + max(24px,(100vw - 210px - 900px)/2));margin-right:auto;padding-bottom:60px}
+  .toast{bottom:28px;left:calc(50% + 105px)}
+  .scrim{align-items:center;padding-left:210px}
+  .sheet{border-radius:14px;max-height:86vh}
+  .has-badge::after{left:30px;top:6px}
+}
 @media (prefers-reduced-motion:no-preference){.sheet{animation:up .18s ease-out}@keyframes up{from{transform:translateY(24px);opacity:.6}}}
 </style>
 </head>
 <body>
 <div class="scene" aria-hidden="true"><svg viewBox="0 0 1000 480" preserveAspectRatio="xMidYMax slice">
-<circle cx="612" cy="246" r="30" fill="var(--sun)"/>
-<path d="M420 214q5-4 10 0q5-4 10 0M452 200q4-3 8 0q4-3 8 0" fill="none" stroke="var(--fig)" stroke-width="1.4" stroke-linecap="round" opacity=".7"/>
-<path d="M0 322L50 300L95 316L150 286L200 312L250 294L300 318L345 290L390 312L430 300L470 318L520 276L560 310L598 292L642 320L690 280L734 312L770 294L820 316L870 288L915 310L960 296L1000 312V480H0Z" fill="var(--m1)"/>
-<path d="M0 352C150 334 300 366 420 360S560 357 640 352S860 340 1000 354V480H0Z" fill="var(--m2)"/>
-<path d="M0 404C180 390 330 410 500 402S800 408 1000 392V480H0Z" fill="var(--m3)"/>
-<path d="M500 480C512 462 552 452 540 432S520 414 542 403" fill="none" stroke="var(--trail)" stroke-width="7" stroke-linecap="round"/>
-<ellipse cx="402" cy="444" rx="54" ry="13" fill="var(--water)"/>
-<g fill="none" stroke="var(--fig)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
- <g transform="translate(404 361)">
-  <path d="M-17 0V-50M17 0V-50M-20 -50H20" stroke-width="2"/>
-  <path d="M-7 -50V-30M7 -50V-30" stroke-width="1.4"/>
-  <circle cx="-7" cy="-27" r="3" stroke-width="1.8"/><circle cx="7" cy="-27" r="3" stroke-width="1.8"/>
-  <path d="M0 -31.5V-18M-7 -27L-3 -31.5M7 -27L3 -31.5M0 -18H13"/>
-  <circle cx="0" cy="-36" r="3.3" fill="var(--fig)" stroke="none"/>
- </g>
- <g transform="translate(462 359)">
-  <path d="M0 -23V-11M0 -21L-6 -27L-7 -35M0 -21L6 -27L7 -35M-17 -35H17M0 -11L-4 -4L-5 2M0 -11L4 -4L5 2"/>
-  <rect x="-21" y="-40" width="4" height="10" rx="1" fill="var(--fig)" stroke="none"/><rect x="17" y="-40" width="4" height="10" rx="1" fill="var(--fig)" stroke="none"/>
-  <circle cx="0" cy="-27" r="3.3" fill="var(--fig)" stroke="none"/>
- </g>
- <g transform="translate(568 359)">
-  <circle cx="-11" cy="-7" r="7" stroke-width="1.8"/><circle cx="12" cy="-7" r="7" stroke-width="1.8"/>
-  <path d="M-11 -7L-1 -8L8 -17M-1 -8L-4 -18L8 -17M12 -7L8 -17L10 -20" stroke-width="1.8"/>
-  <path d="M-4 -19L7 -26M7 -25L10 -19M-4 -19L2 -13L-1 -8"/>
-  <circle cx="10" cy="-29" r="3.2" fill="var(--fig)" stroke="none"/>
- </g>
- <g transform="translate(536 436)">
-  <path d="M1 -22L-2 -10M0 -19L6 -15L9 -19M0 -19L-6 -16L-8 -11M-2 -10L5 -4L3 3M-2 -10L-6 -2L-12 1"/>
-  <circle cx="2" cy="-26" r="3.3" fill="var(--fig)" stroke="none"/>
- </g>
- <g transform="translate(400 444)">
-  <path d="M3 -3Q11 -15 19 -4" />
-  <path d="M-4 1H-20M24 1H34M-30 3h6" stroke-width="1.4" opacity=".7"/>
-  <circle cx="0" cy="-2" r="3.3" fill="var(--fig)" stroke="none"/>
- </g>
- <g transform="translate(586 446)">
-  <path d="M0 -23L1 -11M0 -20L-7 -15M0 -20L7 -17M1 -11L-1 -4L-1 3M1 -11L8 -6L14 -8"/>
-  <circle cx="0" cy="-27" r="3.3" fill="var(--fig)" stroke="none"/>
-  <circle cx="20" cy="-6" r="3" stroke-width="1.8"/>
-  <path d="M30 4V-20H66V4" stroke-width="2"/>
-  <path d="M36 -20L33 4M42 -20L40 4M48 -20L48 4M54 -20L56 4M60 -20L63 4M31 -12H65M31 -4H65" stroke-width=".8" opacity=".6"/>
- </g>
+<defs><radialGradient id="scg" cx=".82" cy=".92" r=".62"><stop offset="0" style="stop-color:var(--glow);stop-opacity:.75"/><stop offset="1" style="stop-color:var(--glow);stop-opacity:0"/></radialGradient>
+<linearGradient id="scl" x1="0" x2="1"><stop offset="0" style="stop-color:var(--hex);stop-opacity:0"/><stop offset="1" style="stop-color:var(--hex);stop-opacity:.5"/></linearGradient></defs>
+<rect width="1000" height="480" fill="url(#scg)"/>
+<g fill="none" style="stroke:var(--hex)" stroke-linejoin="round">
+ <polygon points="820.0,177.0 1006.2,284.5 1006.2,499.5 820.0,607.0 633.8,499.5 633.8,284.5" stroke-width="3" opacity=".22"/>
+ <polygon points="820.0,212.0 975.9,302.0 975.9,482.0 820.0,572.0 664.1,482.0 664.1,302.0" stroke-width="1.2" opacity=".14"/>
+ <polygon points="130.0,334.0 232.2,393.0 232.2,511.0 130.0,570.0 27.8,511.0 27.8,393.0" stroke-width="2" opacity=".14"/>
+ <polygon points="470.0,412.0 520.2,441.0 520.2,499.0 470.0,528.0 419.8,499.0 419.8,441.0" stroke-width="1.4" opacity=".12"/>
 </g>
+<polygon points="948.0,124.0 970.5,137.0 970.5,163.0 948.0,176.0 925.5,163.0 925.5,137.0" style="fill:var(--hex)" opacity=".10"/>
+<path d="M842 300L790 400H826L806 476L872 368H834L856 300Z" style="fill:var(--hex)" opacity=".07"/>
+<g stroke-linecap="round" style="stroke:url(#scl)"><path d="M470 352H585" stroke-width="5"/><path d="M500 378H600" stroke-width="3.5"/><path d="M450 404H590" stroke-width="2.5"/></g>
 </svg>
 </div>
 
@@ -719,7 +708,7 @@ async function finishWorkout(){
   if(!entries.length){toast("Vul minstens één set in met herhalingen.");return}
   let prs=0;for(const e of entries){let b=bestFor(e.exId)?.set||null;for(const s of e.sets)if(better(s,b)){prs++;b=s}}
   const id=draft.id||uid();
-  const rec={date:draft.date||today(),ts:Date.now(),routineId:draft.routineId,routineName:draft.routineName,entries};
+  const rec={date:draft.date||today(),ts:Date.now(),routineId:draft.routineId,routineName:draft.routineName,entries};if((draft.note||"").trim())rec.note=draft.note.trim().slice(0,1000);
   if(draft.planId&&S.plan[draft.planId]){rec.planId=draft.planId;rec.planTitle=planTitle({id:draft.planId,...S.plan[draft.planId]})}
   draft=null;saveDraft();UI.confirm=null;
   const ok=await put("sessions",id,rec);
@@ -808,7 +797,7 @@ function viewWorkout(){
         <button class="ib" data-act="set-remove" data-i="${i}" data-j="${j}" aria-label="Verwijder set">✕</button></div>`});
     h+=`</div>${last?`<p class="hint">Tik op een setnummer om het resultaat van vorige keer over te nemen. Leeg kg = bodyweight.</p>`:`<p class="hint">Leeg kg = bodyweight.</p>`}<button class="btn block addset" data-act="add-set" data-i="${i}">+ Set</button></article>`;
   });
-  h+=`<button class="btn block" data-act="pick" data-mode="draft">+ Oefening toevoegen</button></div><h2>Afronden</h2>`;
+  h+=`<button class="btn block" data-act="pick" data-mode="draft">+ Oefening toevoegen</button></div><h2>Afronden</h2><label class="f" style="margin-bottom:10px">Opmerking <i>optioneel</i><textarea id="d-note" rows="2" placeholder="Hoe ging het? Bijv. zware benen, nieuwe techniek geprobeerd.">${esc(draft.note||"")}</textarea></label>`;
   if(UI.confirm==="cancel")h+=`<div class="confirm"><span>Training weggooien? Ingevulde sets gaan verloren.</span><div class="btnrow"><button class="btn danger" data-act="cancel-yes">Weggooien</button><button class="btn" data-act="confirm-no">Doorgaan met trainen</button></div></div>`;
   else h+=`<div class="btnrow"><button class="btn primary" data-act="finish">Training opslaan</button><button class="btn ghost" data-act="cancel">Weggooien</button></div>`;
   return h;
@@ -863,6 +852,7 @@ function viewHelp(){
     ["Voeding","In <b>Voeding</b> zie je je dagdoel op basis van je profiel en sportweek. Je kunt het zelf aanpassen, je voorkeuren voor eten instellen, drie voorbeelddagen met grammen bekijken, je eten registreren in het dagboek en een boodschappenlijst maken."],
     ["Privacy en bewaren","Details van trainingen, je voedingsdagboek en je planning worden 3 maanden bewaard en daarna samengevat; je records blijven altijd staan. Lees de <b>Privacyverklaring</b> onder Profiel. Daar kun je ook je account verwijderen."],
     ["Naar je agenda","Onder <b>Planning → Naar je agenda</b> zet je je trainingen in de agenda van je telefoon, met tijdstip en een herinnering. Op je horloge zetten kan met de hand, maar is wat omslachtig; de stappen staan daar ook."],
+    ["Profiel en instellingen","Profiel heeft twee delen: <b>Persoonlijk</b> (je gegevens, beweging en gewicht) en <b>Instellingen</b> (samen trainen, tabbladen en sporten, muziek, je code en account)."],
     ["Tabbladen en sporten kiezen","Bij <b>Profiel → Tabbladen</b> kies je welke onderdelen je onderin ziet, en per tabblad welke onderdelen erin staan (bij Voeding blijft Advies altijd staan). Trainen en Profiel blijven altijd staan. Bij <b>Mijn sporten</b> kies je welke sporten je doet: de andere verdwijnen uit de keuzes bij trainen, schema's, sportschema op maat, de planning en kennis. Wat al gepland staat, blijft staan. Alles zet je zo weer aan."],
     ["Progressie","Bij elke oefening in je training staat onder <b>Vandaag</b> een doel: eerst 1 herhaling meer per set dan vorige keer. Haal je bij alle sets de bovenkant van de reeks (bijv. 12 bij 8-12), dan stelt de app een hoger gewicht voor. Een rustigere week staat er ook bij. Gaf je aan dat het te zwaar of te licht was, dan past het doel zich daarop aan."],
     ["Kennis","Onder <b>Kennis</b> vind je per sport (kracht, HIIT, calisthenics, hardlopen, wielrennen, zwemmen, duathlon, triathlon, trailrunnen en ultrarunnen) uitleg over materiaal, voeding en supplementen, techniek, blessures, opbouw per doel en het combineren van kracht en duur. Let op: dit is een test en nog niet gecontroleerd op juistheid."],
@@ -933,7 +923,7 @@ function viewProfile(){
     <button class="btn" data-act="w-add">Gewicht toevoegen</button><details class="privdet"><summary>Tips voor wegen</summary><p class="hp small" style="margin:8px 0 0">${WEIGH_TIP}</p><p class="hp small muted" style="margin:6px 0 0">${WEIGH_CALM}</p></details>
     ${wl.length?`<div class="wlist">${wl.slice(-8).reverse().map(x=>`<div class="wrow"><span>${dateTxt(x.date)}</span><b>${fmt1(x.kg)} kg</b><button class="ib" data-act="w-del" data-id="${x.date}" aria-label="Verwijder meting ${dateTxt(x.date)}">✕</button></div>`).join("")}</div>`:""}
   </div>
-  ${tabsCard()}${musicCard()}<h2>Persoonlijke code</h2><div class="card stack">
+  <!--pf-set-->${tabsCard()}${musicCard()}<h2>Persoonlijke code</h2><div class="card stack">
     ${UI.pinOpen?`<label class="f">Huidige code<input type="password" id="cp-old" autocomplete="current-password"></label><label class="f">Nieuwe code<input type="password" id="cp-new" autocomplete="new-password"></label><label class="f">Herhaal nieuwe code<input type="password" id="cp-new2" autocomplete="new-password"></label><div class="btnrow"><button class="btn primary" data-act="cp-save">Code wijzigen</button><button class="btn" data-act="cp-toggle">Annuleren</button></div>`
     :`<p class="hp">Met je naam en persoonlijke code log je in. Vergeten? Jitse kan hem als beheerder opnieuw instellen.</p>${(myPin()||"").length<6?`<p class="hp small" style="color:var(--warn)">Je code is korter dan 6 tekens. Kies voor extra veiligheid een langere code.</p>`:""}<button class="btn" data-act="cp-toggle">Code wijzigen</button>`}
   </div>`;
@@ -1720,8 +1710,12 @@ function importSheet(sh){
 const EXTRA_SHEETS={"pl-add":plAddSheet,"pl-item":plItemSheet,"share":shareSheet,"import":importSheet};
 
 /* ---------- wat is er nieuw & suggesties ---------- */
-const APP_VERSION="6.1";
+const APP_VERSION="6.2";
 const CHANGELOG=[
+ {v:"6.2",date:"2026-10-21",items:[
+  ["Samen trainen: met jouw toestemming ziet je trainer de hele training (sets, hartslag, hoe het ging en je opmerking), en als je dat aanvinkt ook je voortgang.",""],
+  ["Profiel in twee delen: Persoonlijk en Instellingen. Bij een krachttraining kun je nu een opmerking toevoegen.",""],
+  ["Breder scherm op tablet en laptop, en een rustige achtergrond in de kleuren van Athlevon.",""]]},
  {v:"6.1",date:"2026-10-21",items:[
   ["Kies bij Profiel welke sporten je doet: andere sporten verdwijnen uit alle keuzes, tot je ze weer aanzet. Wat al gepland staat, blijft staan. Ook de onderdelen binnen Voeding en Voortgang kun je nu aan- en uitzetten.",""]]},
  {v:"6.0",date:"2026-10-20",items:[
@@ -1929,7 +1923,7 @@ function privacyHtml(){
   <h4>Welke gegevens?</h4><ul><li>Je naam en je persoonlijke code (versleuteld opgeslagen, niemand kan hem terugzien). Na 5 foute pogingen wordt inloggen 15 minuten geblokkeerd.</li><li>Je schema's, trainingen, planning en records.</li><li>Je profiel: leeftijd, lengte, geslacht, gewicht, doelgewicht, doel, werk, stappen en sportweek.</li><li>Hartslag bij duurtrainingen, je voedingsdagboek en je voorkeuren voor eten.</li><li>Meldingen en suggesties die je instuurt.</li></ul>
   <p>Gewicht, hartslag en voeding zijn gezondheidsgegevens. Die worden alleen opgeslagen met je uitdrukkelijke toestemming.</p>
   <h4>Waarvoor?</h4><p>Alleen om de functies van de app te laten werken: je trainingen en voortgang bijhouden, je voedingsadvies berekenen en trainingen inplannen. Er zijn geen advertenties, er wordt niets verkocht of gedeeld met bedrijven, en er wordt niets gevolgd of gemeten.</p><p><b>Voortgang en Sportschema op maat</b> analyseren je eigen gegevens (training, voeding en gewicht) om je feedback en een schema te geven. Dat wordt op je eigen telefoon berekend; er gaat daarvoor niets naar anderen. Het zijn alleen suggesties: de app neemt geen beslissingen over je.</p>
-  <h4>Wie ziet wat?</h4><ul><li>Je eigen gegevens zie alleen jij.</li><li>Jitse ziet als beheerder: de namen van de accounts, het aantal trainingen, wanneer iemand laatst actief was en ingestuurde meldingen.</li><li><b>Samen trainen:</b> geef je iemand toestemming, dan mag die persoon alleen wat jij aanvinkt: trainingen in je planning zetten, schema's of maaltijden sturen. Hij of zij ziet van jou alleen de trainingen die hij of zij zelf voor je inplande en of je die gedaan hebt, en alleen als jij dat aanvinkt ook het resultaat daarvan. Je kunt toestemming altijd intrekken. Dit geldt ook voor Jitse.</li><li>Als beheerder van de database kan Jitse technisch bij alle gegevens. Hij kijkt daar alleen in als dat nodig is, bijvoorbeeld om een probleem op te lossen of een back-up terug te zetten.</li><li>Andere gebruikers zien verder niets van jou, ook je naam niet, tenzij je met iemand samen traint. Deel je zelf een schema, dan staat je naam als afzender bij dat schema.</li></ul>
+  <h4>Wie ziet wat?</h4><ul><li>Je eigen gegevens zie alleen jij.</li><li>Jitse ziet als beheerder: de namen van de accounts, het aantal trainingen, wanneer iemand laatst actief was en ingestuurde meldingen.</li><li><b>Samen trainen:</b> geef je iemand toestemming, dan mag die persoon alleen wat jij aanvinkt: trainingen in je planning zetten, schema's of maaltijden sturen. Hij of zij ziet van jou alleen de trainingen die hij of zij zelf voor je inplande en of je die gedaan hebt. Alleen als jij dat aanvinkt ziet hij of zij ook de hele training (sets, tijden, hartslag, hoe het ging en je opmerking). Vink je <b>Voortgang zien</b> aan, dan ziet hij of zij ook je voortgang: je trainingen en records, je gewicht en je voedingsdagboek van de afgelopen weken. Dit staat standaard uit. Je kunt toestemming altijd intrekken. Dit geldt ook voor Jitse.</li><li>Als beheerder van de database kan Jitse technisch bij alle gegevens. Hij kijkt daar alleen in als dat nodig is, bijvoorbeeld om een probleem op te lossen of een back-up terug te zetten.</li><li>Andere gebruikers zien verder niets van jou, ook je naam niet, tenzij je met iemand samen traint. Deel je zelf een schema, dan staat je naam als afzender bij dat schema.</li></ul>
   <h4>Waar staan de gegevens?</h4><ul><li>In een online database bij Supabase.</li><li>De app zelf staat op GitHub Pages.</li><li>Eén keer per week wordt een back-up gemaakt in een afgeschermde, privé GitHub-omgeving waar alleen Jitse bij kan.</li><li>Op je eigen telefoon staat een kopie, zodat de app ook zonder internet werkt. Bij uitloggen wordt die gewist.</li><li>Zoek je in het dagboek in Open Food Facts of scan je een barcode, dan gaat alleen je zoekterm of de barcode naar Open Food Facts. De camera wordt alleen op je telefoon gebruikt om de barcode te lezen; er worden geen beelden verstuurd.</li><li>Gebruik je de foto-functie bij voeding, dan deel je je foto zelf met de AI-dienst die je kiest; Athlevon stuurt niets door. Verder gaan er geen gegevens naar andere partijen; de lettertypes zitten in de app zelf.</li></ul>
   <h4>Hoe lang?</h4><ul><li>Trainingen, je voedingsdagboek en je planning worden 3 maanden in detail bewaard. Daarna worden ze samengevat: je records, aantallen en maandtotalen blijven, de details verdwijnen.</li><li>Je profiel, gewicht en schema's blijven tot je ze zelf aanpast of verwijdert.</li><li>Back-ups worden maximaal 3 maanden bewaard.</li><li>Toestemmingen voor Samen trainen blijven staan tot jij of de ander ze intrekt, of tot een van beiden het account verwijdert. Voorstellen verdwijnen zodra je ze toevoegt of weigert; trek je toestemming in, dan vervallen openstaande voorstellen.</li><li>Verwijder je je account, dan worden al je gegevens, meldingen, deelcodes en toestemmingen direct gewist. Uit de back-ups verdwijnen ze binnen 3 maanden.</li></ul>
   <h4>Jouw rechten</h4><p>Je kunt je gegevens altijd inzien en downloaden (Uitleg → Back-up downloaden), aanpassen en zelf verwijderen (Profiel → Account verwijderen). Je toestemming intrekken doe je door je account te verwijderen. Vragen? Stuur Jitse een bericht of gebruik Wat is er nieuw → Suggestie. Ben je het ergens niet mee eens, dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens.</p>
@@ -2490,8 +2484,8 @@ document.addEventListener("click",async ev=>{
 document.addEventListener("keydown",ev=>{if(ev.key==="Enter"&&ev.target.id==="shx-free"){ev.preventDefault();document.querySelector('[data-act="shx-free"]')?.click()}if(ev.key==="Enter"&&ev.target.id==="nsh-code"){ev.preventDefault();document.querySelector('[data-act="nsh-lookup"]')?.click()}});
 
 /* ---------- samen trainen: met toestemming iets voor een ander klaarzetten ---------- */
-const PERMS=[["plan","Trainingen in mijn planning zetten"],["schemas","Schema's naar mij sturen"],["food","Maaltijden en maaltijdplannen naar mij sturen"],["results","Resultaten zien van trainingen die hij of zij voor mij inplant"],["direct","Direct toevoegen, zonder dat ik eerst hoef te accepteren"]];
-const PERM_SHORT={plan:"planning",schemas:"schema's",food:"voeding",results:"resultaten zien",direct:"direct toevoegen"};
+const PERMS=[["plan","Trainingen in mijn planning zetten"],["schemas","Schema's naar mij sturen"],["food","Maaltijden en maaltijdplannen naar mij sturen"],["results","Resultaten zien van trainingen die hij of zij voor mij inplant: de hele training, met opmerkingen en hartslag"],["progress","Voortgang zien: je trainingen, records, gewicht en voeding"],["direct","Direct toevoegen, zonder dat ik eerst hoef te accepteren"]];
+const PERM_SHORT={plan:"planning",schemas:"schema's",food:"voeding",results:"resultaten zien",progress:"voortgang zien",direct:"direct toevoegen"};
 const KIND_TXT={plan:"Training",routine:"Schema",folder:"Map met schema's",meal:"Maaltijd",mealplan:"Maaltijdplan",product:"Product"};
 let socialBusy=false;const inboxDone=new Set();
 function soc(){return S.social||{incoming:[],outgoing:[],inbox:[]}}
@@ -2576,7 +2570,7 @@ async function sendTo(linkId,kind,data){
 }
 function sendRow(perm,act,v){const ls=linksWith(perm);if(!ls.length)return "";return `<div class="f" style="margin-top:6px">Of stuur direct naar<div class="chips">${ls.map(l=>`<button class="chipb" data-act="${act}" data-v="${esc(v)}" data-id="${l.id}">${esc(l.name)}</button>`).join("")}</div></div>`}
 /* pagina */
-function permEditor(l,def){const p=l.perms&&Object.keys(l.perms).length?l.perms:def;return `<div class="stack permbox">${PERMS.map(([k,t])=>`<label class="check"><input type="checkbox" id="perm-${l.id}-${k}" ${p[k]?"checked":""}><span>${k==="results"||k==="direct"?`<b>${t.split(" ")[0]}</b> ${t.split(" ").slice(1).join(" ")}`:t}</span></label>`).join("")}</div>`}
+function permEditor(l,def){const p=l.perms&&Object.keys(l.perms).length?l.perms:def;return `<div class="stack permbox">${PERMS.map(([k,t])=>`<label class="check"><input type="checkbox" id="perm-${l.id}-${k}" ${p[k]?"checked":""}><span>${k==="results"||k==="direct"||k==="progress"?`<b>${t.split(" ")[0]}</b> ${t.split(" ").slice(1).join(" ")}`:t}</span></label>`).join("")}</div>`}
 function readPerms(id){const o={};for(const [k] of PERMS)o[k]=!!document.getElementById(`perm-${id}-${k}`)?.checked;return o}
 function viewTogether(){
   if(S.social==null&&!socialBusy&&loadedAt)loadSocial();
@@ -2587,7 +2581,7 @@ function viewTogether(){
   if(pend.length)h+=`<h2>Verzoeken</h2>`+pend.map(l=>`<div class="card stack reqcard"><div><b>${esc(l.name)}</b> wil iets voor je kunnen klaarzetten.</div><p class="hp small" style="margin:0">Vink aan wat ${esc(l.name)} mag:</p>${permEditor(l,{plan:true,schemas:true,food:true,results:false,direct:false})}<div class="btnrow"><button class="btn primary" data-act="lk-accept" data-id="${l.id}">Accepteren</button><button class="btn" data-act="lk-decline" data-id="${l.id}">${UI.confirm==="lk-decline"+l.id?"Zeker? Tik nogmaals":"Weigeren"}</button></div></div>`).join("");
   if(inbox.length)h+=`<h2>Voor jou klaargezet</h2>`+inbox.map(i=>`<div class="card stack inboxcard"><div class="fbh"><b>${esc(inboxTitle(i))}</b><span class="chip">${KIND_TXT[i.kind]||i.kind}</span></div><span class="small muted">Van ${esc(i.name)}${inboxDetail(i)?` · ${inboxDetail(i)}`:""}</span><div class="btnrow"><button class="btn primary" data-act="ib-add" data-id="${i.id}">Toevoegen</button><button class="btn" data-act="ib-no" data-id="${i.id}">Weigeren</button></div></div>`).join("");
   h+=`<h2>Wie mag iets voor jou klaarzetten</h2>`+(act.length?`<div class="stack">${act.map(l=>`<div class="card stack"><div class="fbh"><b>${esc(l.name)}</b></div><span class="small muted">Mag: ${esc(permTxt(l.perms))}</span>${UI.permEdit===l.id?permEditor(l,{})+`<div class="btnrow"><button class="btn primary" data-act="lk-save" data-id="${l.id}">Opslaan</button><button class="btn" data-act="lk-edit" data-id="">Annuleren</button></div>`:`<div class="btnrow"><button class="btn" data-act="lk-edit" data-id="${l.id}">Aanpassen</button><button class="btn ghost danger" data-act="lk-remove" data-id="${l.id}">${UI.confirm==="lk-remove"+l.id?"Zeker? Tik nogmaals":"Intrekken"}</button></div>`}</div>`).join("")}</div>`:`<p class="small muted">Nog niemand. Krijg je een verzoek, dan zie je dat hier en bovenaan Trainen.</p>`);
-  h+=`<h2>Jij helpt</h2>`+(s.outgoing.length?`<div class="stack">${s.outgoing.map(l=>`<div class="card stack"><div class="fbh"><b>${esc(l.name)}</b></div><span class="small muted">Jij mag: ${esc(permTxt(l.perms))}</span><div class="btnrow">${l.perms.plan?`<button class="btn primary" data-act="lk-plan" data-id="${l.id}">Training inplannen</button><button class="btn" data-act="lk-view" data-id="${l.id}">Ingepland${l.perms.results?" en resultaten":""}</button>`:""}${l.perms.food?`<button class="btn" data-act="lk-food" data-id="${l.id}">Maaltijd sturen</button>`:""}${l.perms.schemas?`<button class="btn" data-act="go-schemas">Schema sturen</button>`:""}</div><button class="linkbtn danger" data-act="lk-stop" data-id="${l.id}">${UI.confirm==="lk-stop"+l.id?"Zeker? Tik nogmaals om te stoppen":"Stoppen met helpen"}</button></div>`).join("")}</div><p class="small muted">Schema's stuur je via Schema's → Delen, maaltijden via Voeding → Plannen → Delen.</p>`:`<p class="small muted">Je helpt nog niemand.</p>`);
+  h+=`<h2>Jij helpt</h2>`+(s.outgoing.length?`<div class="stack">${s.outgoing.map(l=>`<div class="card stack"><div class="fbh"><b>${esc(l.name)}</b></div><span class="small muted">Jij mag: ${esc(permTxt(l.perms))}</span><div class="btnrow">${l.perms.plan?`<button class="btn primary" data-act="lk-plan" data-id="${l.id}">Training inplannen</button><button class="btn" data-act="lk-view" data-id="${l.id}">Ingepland${l.perms.results?" en resultaten":""}</button>`:""}${l.perms.progress?`<button class="btn" data-act="hv-prog" data-id="${l.id}">Voortgang bekijken</button>`:""}${l.perms.food?`<button class="btn" data-act="lk-food" data-id="${l.id}">Maaltijd sturen</button>`:""}${l.perms.schemas?`<button class="btn" data-act="go-schemas">Schema sturen</button>`:""}</div><button class="linkbtn danger" data-act="lk-stop" data-id="${l.id}">${UI.confirm==="lk-stop"+l.id?"Zeker? Tik nogmaals om te stoppen":"Stoppen met helpen"}</button></div>`).join("")}</div><p class="small muted">Schema's stuur je via Schema's → Delen, maaltijden via Voeding → Plannen → Delen.</p>`:`<p class="small muted">Je helpt nog niemand.</p>`);
   h+=`<h2>Iemand vragen</h2><div class="card stack"><p class="hp">Wil je iets voor iemand klaarzetten? Vul de naam in waarmee die persoon inlogt.</p><div class="codeinput"><input type="text" id="lk-name" placeholder="Naam" autocomplete="off"><button class="btn primary" data-act="lk-request">Verzoek sturen</button></div><p class="small muted" style="margin:0">Je ziet niet wie er allemaal een account heeft. Bestaat de naam, dan krijgt die persoon een melding en kan je verzoek accepteren of weigeren.</p></div>`;
   return h;
 }
@@ -2602,6 +2596,7 @@ function helpViewSheet(sh){
   const t=today();
   h+=d.plan.length?`<div class="recgroup" style="margin-top:10px">${d.plan.map(p=>{const s=p.session;let res="";
       if(s){res=s.kind==="cardio"?[s.km?fmt1(+s.km)+" km":null,s.durMin?durTxt(+s.durMin):null,s.km&&s.durMin?paceTxt(+s.durMin,+s.km):null].filter(Boolean).join(" · "):(s.entries||[]).map(e=>`${esc(e.name)} ${(e.sets||[]).map(x=>(x.k?x.k+"×":"")+x.r).join(", ")}`).join(" · ")}
+      if(s&&d.results)return `<button class="row logrow" data-act="hv-ses" data-v="${esc(p.id)}"><span class="n">${esc(p.title||"Training")}</span><span class="b none">✓ gedaan</span><span class="l">${esc(dayName(p.date))}${res?` · ${res}`:""}${s.feel?` · ${esc(hvFeel(s.feel))}`:""}${s.note?" · 💬":""} · <u>hele training</u></span></button>`;
       return `<div class="row logrow"><span class="n">${esc(p.title||"Training")}</span><span class="b none">${p.done?"✓ gedaan":p.date<t?"niet gedaan":"gepland"}</span><span class="l">${esc(dayName(p.date))}${res?` · ${res}`:""}${p.date>=t&&!p.done?` <button class="linkbtn danger" data-act="hv-del" data-v="${esc(p.id)}">verwijderen</button>`:""}</span></div>`}).join("")}</div>`
     :`<p class="small muted">Nog niets van jou in de planning (laatste 60 dagen).</p>`;
   if(!d.results)h+=`<p class="small muted">${esc(l?l.name:"Deze persoon")} deelt geen resultaten met je; je ziet alleen of iets gedaan is.</p>`;
@@ -3253,7 +3248,7 @@ const INTRO=[
   ["Voeding","Vul eerst je <b>Profiel</b> in: lengte, gewicht, doel en sportweek. Dan krijg je een dagdoel, kun je maaltijden en maaltijdplannen samenstellen, je eten bijhouden en een boodschappenlijst maken."],
   ["Kennis","Onder <b>Kennis</b> lees je per sport over materiaal, voeding, techniek, blessures en hoe je een schema opbouwt. Dit tabblad is nog in ontwikkeling."],
   ["Voortgang en samen","Onder <b>Voortgang</b> zie je met kleuren of je op koers ligt, met uitleg en advies. Met <b>Samen trainen</b> (onder Profiel) zetten vrienden met jouw toestemming trainingen voor je klaar. Tip: installeer de app op je beginscherm."]];
-const UPDATE_HL=[["Mijn sporten","(Profiel): kies welke sporten je doet, de rest verdwijnt uit de keuzes. Ook onderdelen van Voeding en Voortgang zet je aan of uit."],["Tabbladen kiezen","(Profiel): laat alleen de onderdelen zien die je gebruikt."],["Athlevon","de app heeft een nieuwe naam: atleet + evolve, elke week een stap sterker."],["Voeding","scan een barcode, of laat een foto van je bord inschatten door je eigen AI."],["Terugknop en muziek","ga makkelijk terug met de knop linksboven of terugvegen, en open je playlist tijdens het trainen."],["Kennis","(nieuw tabblad, test): per sport materiaal, voeding, techniek, blessures en opbouw."],["Progressie","bij elke oefening een doel voor vandaag; je sportschema wordt elke week een stapje zwaarder."],["Oude trainingen inladen","(Schema's): zet eerdere resultaten en schema's zelf in je account, met een AI of een CSV-bestand."],["Sportschema op maat","(Planning): al je sporten in één verantwoord weekplan, met je eigen verdeling, vaste dagen en genoeg herstel."],["Voortgang","zie met kleuren of je op koers ligt, met uitleg en advies."],["Maaltijden en maaltijdplannen","stel je dag samen en zie direct wat je nog nodig hebt, met kosten."],["Boodschappenlijst","maak je lijst thuis en vink af in de winkel."],["Samen trainen","(Profiel): laat een vriend met jouw toestemming trainingen voor je klaarzetten."],["Naar je agenda","zet je trainingen met tijdstip in de agenda van je telefoon."],["Als app installeren","met eigen icoon op je beginscherm."]];
+const UPDATE_HL=[["Samen trainen","met jouw toestemming ziet je trainer de hele training en eventueel je voortgang."],["Profiel","nu in twee delen: Persoonlijk en Instellingen."],["Mijn sporten","(Profiel): kies welke sporten je doet, de rest verdwijnt uit de keuzes. Ook onderdelen van Voeding en Voortgang zet je aan of uit."],["Tabbladen kiezen","(Profiel): laat alleen de onderdelen zien die je gebruikt."],["Athlevon","de app heeft een nieuwe naam: atleet + evolve, elke week een stap sterker."],["Voeding","scan een barcode, of laat een foto van je bord inschatten door je eigen AI."],["Terugknop en muziek","ga makkelijk terug met de knop linksboven of terugvegen, en open je playlist tijdens het trainen."],["Kennis","(nieuw tabblad, test): per sport materiaal, voeding, techniek, blessures en opbouw."],["Progressie","bij elke oefening een doel voor vandaag; je sportschema wordt elke week een stapje zwaarder."],["Oude trainingen inladen","(Schema's): zet eerdere resultaten en schema's zelf in je account, met een AI of een CSV-bestand."],["Sportschema op maat","(Planning): al je sporten in één verantwoord weekplan, met je eigen verdeling, vaste dagen en genoeg herstel."],["Voortgang","zie met kleuren of je op koers ligt, met uitleg en advies."],["Maaltijden en maaltijdplannen","stel je dag samen en zie direct wat je nog nodig hebt, met kosten."],["Boodschappenlijst","maak je lijst thuis en vink af in de winkel."],["Samen trainen","(Profiel): laat een vriend met jouw toestemming trainingen voor je klaarzetten."],["Naar je agenda","zet je trainingen met tijdstip in de agenda van je telefoon."],["Als app installeren","met eigen icoon op je beginscherm."]];
 function introSheet(sh){
   if(sh.mode==="update"){const c=CHANGELOG[0];
     return `<div class="sh"><h2>Nieuw in versie ${esc(c.v)}</h2><button class="ib" data-act="intro-done" aria-label="Sluiten">✕</button></div><div class="card"><ul class="hl">${UPDATE_HL.map(([t,x])=>`<li><b>${esc(t)}</b> ${esc(x)}</li>`).join("")}</ul><p class="small muted" style="margin:6px 0 0">Ook verbeterd: privacy en beveiliging. Bekijk ook wat er in eerdere versies kwam.</p></div>
@@ -4682,6 +4677,67 @@ document.addEventListener("click",ev=>{const tb=ev.target.closest("nav.tabs butt
 const _renderNav=render;render=function(){const r=_renderNav.apply(this,arguments);try{navAfter()}catch(e){}return r};
 const _renderSheetNav=renderSheet;renderSheet=function(){const r=_renderSheetNav.apply(this,arguments);try{navAfter()}catch(e){}return r};
 
+/* ---------- samen trainen: de hele training en de voortgang zien (met toestemming) ---------- */
+const hvFeel=f=>((FEELS.find(x=>x[0]===f)||[,f])[1]);
+/* volledige weergave van een training; werkt op eigen en gedeelde gegevens */
+function sessionFullHtml(s){
+  let h="";
+  if(s.planTitle)h+=`<p class="small muted" style="margin:0 0 8px">Geplande training: <b>${esc(s.planTitle)}</b></p>`;
+  if(s.kind==="cardio"){const min=+s.durMin||0,km=+s.km||0,v=min&&km?speed(min,km):null;
+    h+=`<div class="card"><div class="calc">${min?`<div><span>Duur</span><b>${durTxt(min)}</b></div>`:""}${km?`<div><span>Afstand</span><b>${fmt1(km)} km</b></div>`:""}${v?`<div><span>Gem. snelheid</span><b>${fmt1(v)} km/u</b></div>`:""}${v&&s.sport==="Hardlopen"?`<div><span>Tempo</span><b>${paceTxt(min,km)}</b></div>`:""}${s.avgHr?`<div><span>Gem. hartslag</span><b>${esc(s.avgHr)} bpm</b></div>`:""}${s.maxHr?`<div><span>Max. hartslag</span><b>${esc(s.maxHr)} bpm</b></div>`:""}${s.purpose?`<div><span>Soort training</span><b>${esc(s.purpose)}</b></div>`:""}</div></div>`}
+  else h+=`<div class="hist">${(s.entries||[]).map(e=>`<div class="h"><div class="d">${esc(e.name||exName(e.exId))}</div><div class="s">${(e.sets||[]).map(shortSet).join(" · ")}</div></div>`).join("")||`<p class="muted small">Geen sets.</p>`}</div>`;
+  if(s.feel)h+=`<p class="hp" style="margin:10px 0 0"><b>Hoe ging het:</b> ${esc(hvFeel(s.feel))}</p>`;
+  if(s.note)h+=`<div class="card" style="margin-top:10px"><span class="ml">Opmerking</span><p class="hp" style="margin:4px 0 0;white-space:pre-wrap">${esc(s.note)}</p></div>`;
+  return h;
+}
+function sesTitle(s){return s.kind==="cardio"?(s.sport||"Duurtraining"):(s.routineName||"Training")}
+EXTRA_SHEETS["hv-ses"]=function(sh){
+  const s=sh.ses;if(!s)return null;
+  return `<div class="sh"><h2>${esc(sesTitle(s))} · ${esc(dateTxt(s.date))}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>
+    <p class="small muted" style="margin:0 0 8px">Van ${esc(sh.name||"")}</p>${sessionFullHtml(s)}
+    ${sh.back?`<button class="btn block" style="margin-top:14px" data-act="hv-back">← Terug</button>`:""}`};
+/* andermans gegevens tijdelijk tonen met de gewone voortgangsweergave */
+function withData(D,fn){const keep={};for(const c of COLLS){keep[c]=S[c];S[c]=(D&&D[c])||{}}try{return fn()}finally{for(const c of COLLS)S[c]=keep[c]}}
+EXTRA_SHEETS["hv-prog"]=function(sh){
+  let h=`<div class="sh"><h2>Voortgang ${esc(sh.name||"")}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>`;
+  if(!sh.data)return h+`<p class="muted">Laden…</p>`;
+  const tab=sh.tab||"voortgang";
+  h+=`<div class="seg seg2"><button class="segb" data-act="hvp-tab" data-v="voortgang" aria-pressed="${tab==="voortgang"}">Voortgang</button><button class="segb" data-act="hvp-tab" data-v="records" aria-pressed="${tab==="records"}">Trainingen en records</button></div>`;
+  let body=withData(sh.data,()=>{
+    if(tab==="voortgang")return nutrition().miss?`<p class="small muted" style="margin-top:12px">${esc(sh.name)} heeft het profiel nog niet helemaal ingevuld.</p>`:viewProgress();
+    const recent=sortedSessions().slice(0,15);
+    return `<h2>Laatste trainingen</h2>`+(recent.length?`<div class="recgroup">${recent.map(s=>`<button class="row logrow" data-act="hvp-ses" data-v="${esc(s.id)}"><span class="n">${esc(sesTitle(s))}</span><span class="b none">${s.kind==="cardio"?esc(cardioSummary(s)):(s.entries||[]).length+" oef."}</span><span class="l">${esc(dateTxt(s.date))}${s.feel?` · ${esc(hvFeel(s.feel))}`:""}${s.note?" · 💬":""}</span></button>`).join("")}</div>`:`<p class="small muted">Nog geen trainingen.</p>`)
+      +viewStrengthRecords()+viewCardioRecords()});
+  body=body.replace(/<input[^>]*id="rec-q"[^>]*>/g,"").replace(/data-act="open-session"/g,'data-act="hvp-ses"').replace(/data-act="open-ex"/g,'data-act="hv-none"');
+  return h+body+`<p class="small muted" style="margin-top:12px">Je ziet dit omdat ${esc(sh.name)} je toestemming gaf. Die kan ${esc(sh.name)} altijd intrekken.</p>`};
+async function openHelpProgress(link){const l=soc().outgoing.find(x=>x.id===link);UI.sheet={type:"hv-prog",link,name:l?l.name:"",data:null,tab:"voortgang"};render();
+  try{const d=await rpc("kl_help_progress",{p_code:code,p_profile:pid,p_pin:myPin(),p_link:link});if(UI.sheet&&UI.sheet.type==="hv-prog"&&UI.sheet.link===link){UI.sheet.data=d||{};renderSheet()}}
+  catch(e){UI.sheet=null;render();if(e.code==="no_perm"){toast("Je hebt hier geen toestemming (meer) voor.");loadSocial()}else handleErr(e)}}
+document.addEventListener("click",async ev=>{const b=ev.target.closest('[data-act^="hv"]');if(!b)return;const act=b.dataset.act,sh=UI.sheet;
+  if(act==="hv-prog"){await openHelpProgress(+b.dataset.id);return}
+  if(act==="hv-ses"&&sh&&sh.type==="help-view"&&sh.data){const p=sh.data.plan.find(x=>x.id===b.dataset.v);if(!p||!p.session)return;const l=soc().outgoing.find(x=>x.id===sh.link);
+    UI.sheet={type:"hv-ses",ses:p.session,name:l?l.name:"",back:sh};renderSheet();document.querySelector(".sheet")?.scrollTo(0,0);return}
+  if(act==="hvp-ses"&&sh&&sh.type==="hv-prog"&&sh.data){const s=(sh.data.sessions||{})[b.dataset.v];if(!s)return;UI.sheet={type:"hv-ses",ses:s,name:sh.name,back:sh};renderSheet();return}
+  if(act==="hvp-tab"&&sh&&sh.type==="hv-prog"){sh.tab=b.dataset.v;renderSheet();return}
+  if(act==="hv-back"&&sh&&sh.back){UI.sheet=sh.back;renderSheet();return}
+});
+/* pg-days binnen het voortgangsvenster van een ander */
+document.addEventListener("click",ev=>{const b=ev.target.closest('.sheet [data-act="pg-days"]');if(b&&UI.sheet&&UI.sheet.type==="hv-prog"){setTimeout(()=>renderSheet(),0)}});
+
+/* ---------- profiel: persoonlijk en instellingen gescheiden ---------- */
+const PF_TABS=[["persoonlijk","Persoonlijk"],["instellingen","Instellingen"]];
+UI.pfTab=lsGet("krachtlogboek.pftab")||"persoonlijk";
+const _viewProfileAll=viewProfile;viewProfile=function(){
+  const h=_viewProfileAll(),i=h.indexOf("<h2>Mijn gegevens</h2>"),j=h.indexOf("<!--pf-set-->");
+  if(i<0||j<0)return h;
+  const t=PF_TABS.some(x=>x[0]===UI.pfTab)?UI.pfTab:"persoonlijk";
+  const seg=`<div class="seg seg2 pftabs" style="margin-top:16px" role="tablist">${PF_TABS.map(([k,l])=>`<button class="segb" role="tab" data-act="pf-tab" data-v="${k}" aria-pressed="${t===k}">${l}</button>`).join("")}</div>`;
+  return seg+(t==="persoonlijk"?h.slice(0,j):h.slice(0,i)+h.slice(j));
+};
+document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="pf-tab"]');if(!b)return;UI.pfTab=b.dataset.v;lsSet("krachtlogboek.pftab",UI.pfTab);render();window.scrollTo(0,0)});
+/* knoppen die naar iets in Instellingen springen */
+document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="go-settings"]');if(!b)return;UI.tab="profile";UI.pfTab="instellingen";lsSet(LS_TAB,"profile");render();window.scrollTo(0,0)},true);
+
 /* ---------- sheets ---------- */
 function renderSheet(){
   const el=document.getElementById("sheet");
@@ -4711,7 +4767,7 @@ function renderSheet(){
       inner=`<div class="sh"><h2>${esc(s.sport)} · ${dateTxt(s.date)}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>${s.planTitle?`<p class="small muted" style="margin:0 0 8px">Geplande training: <b>${esc(s.planTitle)}</b></p>`:""}<div class="card"><div class="calc">
         <div><span>Duur</span><b>${durTxt(s.durMin)}</b></div>${s.km?`<div><span>Afstand</span><b>${fmt1(s.km)} km</b></div>`:""}${v?`<div><span>Gem. snelheid</span><b>${fmt1(v)} km/u</b></div>`:""}${v&&s.sport==="Hardlopen"?`<div><span>Tempo</span><b>${paceTxt(s.durMin,s.km)}</b></div>`:""}${s.avgHr?`<div><span>Gem. hartslag</span><b>${s.avgHr} bpm</b></div>`:""}${s.maxHr?`<div><span>Max. hartslag</span><b>${s.maxHr} bpm</b></div>`:""}${s.purpose?`<div><span>Soort training</span><b>${esc(s.purpose)}</b></div>`:""}</div>${s.note?`<p class="hp" style="margin-top:10px">${esc(s.note)}</p>`:""}</div>`;
     }else inner=`<div class="sh"><h2>${esc(s.routineName||"Training")} · ${dateTxt(s.date)}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="hist">`+
-      (s.entries||[]).map(e=>`<div class="h"><div class="d">${esc(exName(e.exId,e.name))}</div><div class="s">${e.sets.map(shortSet).join(" · ")}</div></div>`).join("")+`</div>`;
+      (s.entries||[]).map(e=>`<div class="h"><div class="d">${esc(exName(e.exId,e.name))}</div><div class="s">${e.sets.map(shortSet).join(" · ")}</div></div>`).join("")+`</div>`+(s.feel?`<p class="hp" style="margin:10px 0 0"><b>Hoe ging het:</b> ${esc(hvFeel(s.feel))}</p>`:"")+(s.note?`<div class="card" style="margin-top:10px"><span class="ml">Opmerking</span><p class="hp" style="margin:4px 0 0;white-space:pre-wrap">${esc(s.note)}</p></div>`:"");
     inner+=`<div style="margin-top:14px">${UI.confirm==="del-session"?`<div class="confirm"><span>Deze training verwijderen? Records worden opnieuw berekend.</span><div class="btnrow"><button class="btn danger" data-act="del-session-yes">Verwijderen</button><button class="btn" data-act="confirm-no">Behouden</button></div></div>`:`<button class="btn ghost danger" data-act="del-session">Training verwijderen</button>`}</div>`;
   }
   if(EXTRA_SHEETS[sh.type]){inner=EXTRA_SHEETS[sh.type](sh);if(inner==null){UI.sheet=null;el.hidden=true;el.innerHTML="";return}}
@@ -4855,6 +4911,7 @@ document.addEventListener("input",ev=>{
     const e=draft.entries[+m[1]],st=e.sets[+m[2]];st[m[3]]=t.value;saveDraft();
     const f=document.getElementById(`f-${m[1]}-${m[2]}`);if(f)f.textContent=rowIsPR(e,st)?"PR":"";
   }else if(id==="d-date"&&draft){draft.date=t.value||today();saveDraft()}
+  else if(id==="d-note"&&draft){draft.note=t.value;saveDraft()}
   else if(id==="np-name")UI.newName=t.value;
   else if(id.startsWith("pf-")&&UI.pf!==undefined){const f=pfDraft();if(id==="pf-age")f.age=t.value;else if(id==="pf-height")f.height=t.value;else if(id==="pf-target")f.targetWeight=t.value;else if(id==="pf-work")f.work=t.value;else{const mm=id.match(/^pf-([nm])-(\w+)$/);if(mm){f.sports[mm[2]]=f.sports[mm[2]]||{};f.sports[mm[2]][mm[1]==="n"?"n":"min"]=t.value}}}
   else if(id.startsWith("c-")&&UI.cardio){const map={"c-date":"date","c-h":"h","c-m":"m","c-s":"s","c-km":"km","c-avg":"avgHr","c-max":"maxHr","c-note":"note"};if(map[id])UI.cardio[map[id]]=t.value;saveCardioDraft();const lv=document.getElementById("c-live");if(lv)lv.innerHTML=cardioLive()}
