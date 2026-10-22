@@ -348,6 +348,9 @@ a.btn{text-decoration:none;color:var(--fg);text-align:center;display:grid;place-
 .ptime{font-variant-numeric:tabular-nums}
 .banner{margin-top:12px;background:var(--pr-bg);color:var(--fg);border-radius:8px;padding:10px 12px;font-size:13px}
 
+.pcgrid{display:grid;gap:10px}.pccard{display:grid;gap:6px}.pchead{display:flex;justify-content:space-between;align-items:center;gap:8px}.pchead .pst{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}.pcchart{width:100%;height:auto;display:block}
+@media (min-width:760px){.pcgrid{grid-template-columns:1fr 1fr}}
+.icusteps{margin:0;padding-left:20px;display:grid;gap:6px}.icusteps li>div{color:var(--muted)}.icubox summary{cursor:pointer}
 /* brede schermen: tablet en laptop */
 @media (min-width:760px){
   .wrap,nav.tabs .in{max-width:720px}
@@ -513,7 +516,7 @@ async function reloadData(id){
     if(S.me&&S.me.isAdmin&&!S.people)loadPeople();
     await seedStandard();
     try{const nc=await rpc("kl_current_code",{p_code:code,p_profile:id,p_pin:lsGet(pinKey(id))});if(nc&&nc!==code){code=nc;lsSet(LS_CODE,nc)}}catch(e){}
-    loadPrices();
+    loadPrices();loadSharedFoods();
     await compactOld();
     await migrateGroups();
     loadSocial();
@@ -764,7 +767,7 @@ function viewTrain(){
   if(UI.cardio)return viewCardio();
   if(UI.coach&&S.me&&S.me.isAdmin)return viewCoach();
   let h=socialBanner()+newsBanner()+queueBanner()+wcCard()+viewPlanCard()+`<h2>Training starten</h2>`+trainStartList();
-  if(spCardio().length)h+=`<h2>${spFit()||spRun()||spOn("bike")?"Duurtraining":"Sport"}</h2><div class="btnrow">${spCardio().map(s=>`<button class="btn" data-act="c-new" data-v="${s}">+ ${esc(spCardioLbl(s))}</button>`).join("")}</div>`;
+  if(spCardio().length)h+=`<h2>${spFit()||spRun()||spOn("bike")?"Duurtraining":"Sport"}</h2><div class="btnrow">${spCardio().map(s=>`<button class="btn" data-act="c-new" data-v="${s}">+ ${esc(spCardioLbl(s))}</button>`).join("")}</div><button class="btn block" style="margin-top:8px" data-act="pi-open">Afgeronde training plakken</button>`;
   const recent=sortedSessions().slice(0,6);
   if(recent.length){
     h+=`<h2>Recente trainingen</h2><div class="recgroup">`+recent.map(s=>{const nSets=(s.entries||[]).reduce((t,e)=>t+e.sets.length,0);
@@ -797,7 +800,7 @@ function viewWorkout(){
         <button class="ib" data-act="set-remove" data-i="${i}" data-j="${j}" aria-label="Verwijder set">✕</button></div>`});
     h+=`</div>${last?`<p class="hint">Tik op een setnummer om het resultaat van vorige keer over te nemen. Leeg kg = bodyweight.</p>`:`<p class="hint">Leeg kg = bodyweight.</p>`}<button class="btn block addset" data-act="add-set" data-i="${i}">+ Set</button></article>`;
   });
-  h+=`<button class="btn block" data-act="pick" data-mode="draft">+ Oefening toevoegen</button></div><h2>Afronden</h2><label class="f" style="margin-bottom:10px">Opmerking <i>optioneel</i><textarea id="d-note" rows="2" placeholder="Hoe ging het? Bijv. zware benen, nieuwe techniek geprobeerd.">${esc(draft.note||"")}</textarea></label>`;
+  h+=`<button class="btn block" data-act="pick" data-mode="draft">+ Oefening toevoegen</button></div><h2>Afronden</h2>${togetherRow("d")}<label class="f" style="margin-bottom:10px">Opmerking <i>optioneel</i><textarea id="d-note" rows="2" placeholder="Hoe ging het? Bijv. zware benen, nieuwe techniek geprobeerd.">${esc(draft.note||"")}</textarea></label>`;
   if(UI.confirm==="cancel")h+=`<div class="confirm"><span>Training weggooien? Ingevulde sets gaan verloren.</span><div class="btnrow"><button class="btn danger" data-act="cancel-yes">Weggooien</button><button class="btn" data-act="confirm-no">Doorgaan met trainen</button></div></div>`;
   else h+=`<div class="btnrow"><button class="btn primary" data-act="finish">Training opslaan</button><button class="btn ghost" data-act="cancel">Weggooien</button></div>`;
   return h;
@@ -847,12 +850,13 @@ function viewHelp(){
     ["Vul je sets in","Per set vul je kg en reps in. Leeg kg betekent bodyweight. Grijze getallen zijn je resultaat van vorige keer: tik op het setnummer om ze over te nemen. Met <b>+ Set</b> voeg je een set toe."],
     ["Sla op","Tik op <b>Training opslaan</b>. Sets zonder reps worden overgeslagen. Je training blijft bewaard als je tussendoor de app sluit, tot je opslaat of weggooit. Geen internet bij het opslaan? Dan blijft de training op je telefoon staan en wordt hij automatisch verstuurd zodra je weer verbinding hebt."],
     ["Bekijk je records","In <b>Voortgang → Records</b> staat per spiergroep je zwaarste set. Tik op een oefening voor de volledige geschiedenis, of om de naam of spiergroep aan te passen."],
-    ["Log je duurtraining","Onder <b>Trainen → Duurtraining</b> log je hardlopen of wielrennen: duur, afstand, eventueel hartslag en een toelichting. Snelheid en tempo worden automatisch berekend. Heb je van je sporthorloge of sportapp een GPX-bestand van je activiteit? Dan kun je dat optioneel importeren: alles wordt ingevuld en je echte snelste 5 km, 10 km enzovoort verschijnen onder Records. Zonder bestand vul je duur en afstand gewoon zelf in. Andere sporten zoals voetbal kies je onder Anders."],
+    ["Log je duurtraining","Onder <b>Trainen → Duurtraining</b> log je hardlopen of wielrennen: duur, afstand, eventueel hartslag en een toelichting. Snelheid en tempo worden automatisch berekend. Al gelopen of gefietst met je horloge? Tik op <b>Afgeronde training plakken</b> en plak de samenvatting uit intervals.icu, Garmin Connect, Strava of Apple Fitness: de app vult duur, afstand en hartslag in en koppelt de training aan je planning. Je controleert alles voordat je opslaat. Andere sporten zoals voetbal kies je onder Anders."],
     ["Eerdere resultaten overzetten","Heb je eerdere resultaten of schema's in je notities, Excel of een andere app? Ga naar <b>Schema's → Oude trainingen of schema's → Inladen</b>. Kies <b>Met een AI</b>: kopieer de opdracht, plak die met je gegevens in ChatGPT, Gemini of Claude, en plak het antwoord terug in de app. Of kies <b>CSV-bestand</b> voor een export uit Strong, Hevy of je eigen tabel. Je ziet eerst wat er wordt ingeladen; dubbele trainingen worden overgeslagen. Tot 7 dagen later kun je het inladen ongedaan maken."],
     ["Voeding","In <b>Voeding</b> zie je je dagdoel op basis van je profiel en sportweek. Je kunt het zelf aanpassen, je voorkeuren voor eten instellen, drie voorbeelddagen met grammen bekijken, je eten registreren in het dagboek en een boodschappenlijst maken."],
     ["Privacy en bewaren","Details van trainingen, je voedingsdagboek en je planning worden 3 maanden bewaard en daarna samengevat; je records blijven altijd staan. Lees de <b>Privacyverklaring</b> onder Profiel. Daar kun je ook je account verwijderen."],
     ["Naar je agenda","Onder <b>Planning → Naar je agenda</b> zet je je trainingen in de agenda van je telefoon, met tijdstip en een herinnering. Op je horloge zetten kan met de hand, maar is wat omslachtig; de stappen staan daar ook."],
     ["Profiel en instellingen","Profiel heeft twee delen: <b>Persoonlijk</b> (je gegevens, beweging en gewicht) en <b>Instellingen</b> (samen trainen, tabbladen en sporten, muziek, je code en account)."],
+    ["Samen gesport","Deden jullie dezelfde training? Kies bij het opslaan <b>Samen gedaan met</b>; de training komt dan ook bij je maatje. Daarvoor moet die persoon je bij Samen trainen toestemming geven voor <b>Een training die we samen deden ook bij mij registreren</b>."],
     ["Tabbladen en sporten kiezen","Bij <b>Profiel → Tabbladen</b> kies je welke onderdelen je onderin ziet, en per tabblad welke onderdelen erin staan (bij Voeding blijft Advies altijd staan). Trainen en Profiel blijven altijd staan. Bij <b>Mijn sporten</b> kies je welke sporten je doet: de andere verdwijnen uit de keuzes bij trainen, schema's, sportschema op maat, de planning en kennis. Wat al gepland staat, blijft staan. Alles zet je zo weer aan."],
     ["Progressie","Bij elke oefening in je training staat onder <b>Vandaag</b> een doel: eerst 1 herhaling meer per set dan vorige keer. Haal je bij alle sets de bovenkant van de reeks (bijv. 12 bij 8-12), dan stelt de app een hoger gewicht voor. Een rustigere week staat er ook bij. Gaf je aan dat het te zwaar of te licht was, dan past het doel zich daarop aan."],
     ["Kennis","Onder <b>Kennis</b> vind je per sport (kracht, HIIT, calisthenics, hardlopen, wielrennen, zwemmen, duathlon, triathlon, trailrunnen en ultrarunnen) uitleg over materiaal, voeding en supplementen, techniek, blessures, opbouw per doel en het combineren van kracht en duur. Let op: dit is een test en nog niet gecontroleerd op juistheid."],
@@ -923,11 +927,11 @@ function viewProfile(){
     <button class="btn" data-act="w-add">Gewicht toevoegen</button><details class="privdet"><summary>Tips voor wegen</summary><p class="hp small" style="margin:8px 0 0">${WEIGH_TIP}</p><p class="hp small muted" style="margin:6px 0 0">${WEIGH_CALM}</p></details>
     ${wl.length?`<div class="wlist">${wl.slice(-8).reverse().map(x=>`<div class="wrow"><span>${dateTxt(x.date)}</span><b>${fmt1(x.kg)} kg</b><button class="ib" data-act="w-del" data-id="${x.date}" aria-label="Verwijder meting ${dateTxt(x.date)}">✕</button></div>`).join("")}</div>`:""}
   </div>
-  <!--pf-set-->${tabsCard()}${musicCard()}<h2>Persoonlijke code</h2><div class="card stack">
+  <!--pf-set-->${tabsCard()}${icuCard()}${musicCard()}<h2>Persoonlijke code</h2><div class="card stack">
     ${UI.pinOpen?`<label class="f">Huidige code<input type="password" id="cp-old" autocomplete="current-password"></label><label class="f">Nieuwe code<input type="password" id="cp-new" autocomplete="new-password"></label><label class="f">Herhaal nieuwe code<input type="password" id="cp-new2" autocomplete="new-password"></label><div class="btnrow"><button class="btn primary" data-act="cp-save">Code wijzigen</button><button class="btn" data-act="cp-toggle">Annuleren</button></div>`
     :`<p class="hp">Met je naam en persoonlijke code log je in. Vergeten? Jitse kan hem als beheerder opnieuw instellen.</p>${(myPin()||"").length<6?`<p class="hp small" style="color:var(--warn)">Je code is korter dan 6 tekens. Kies voor extra veiligheid een langere code.</p>`:""}<button class="btn" data-act="cp-toggle">Code wijzigen</button>`}
   </div>`;
-  if(p.isAdmin)h+=viewAdmin()+adminToolsV5();
+  if(p.isAdmin)h+=viewAdmin()+adminToolsV5()+adminFoodShare();
   h+=`<h2>Account verwijderen</h2><div class="card stack">${UI.confirm==="self-del"?selfDelBox():`<p class="hp">Hiermee verwijder je je account en al je gegevens. Daarmee trek je ook je toestemming in.</p><button class="btn ghost danger" data-act="self-del">Account verwijderen</button>`}</div>`;
   h+=`<div class="stack" style="margin-top:16px">${installCard()}<button class="btn block" data-act="go-news">Wat is er nieuw · suggesties</button><button class="btn block" data-act="go-privacy">Privacyverklaring</button><button class="btn block" data-act="go-help">Uitleg en back-up</button><button class="btn block" data-act="logout">Uitloggen</button></div>`;
   return h;
@@ -1182,7 +1186,7 @@ function viewDiary(n){
   <div class="card stack" style="margin-top:10px">${bar("Calorieën",tot.k,n.kcal,"kcal")}${bar("Eiwit",tot.p,n.protein,"g")}${bar("Koolhydraten",tot.c,n.carbs,"g")}${bar("Vet",tot.f,n.fat,"g")}
     <p class="small muted" style="margin:0">${tot.k?`Nog ${nl(Math.max(0,n.kcal-tot.k))} kcal en ${Math.max(0,Math.round(n.protein-tot.p))} g eiwit te gaan.`:"Nog niets geregistreerd voor deze dag."}</p></div>`;
   for(const [m,l] of MEALS){const its=items.map((it,i)=>({...it,i})).filter(it=>it.meal===m),mt=sumM(its);
-    h+=`<h2>${l}${its.length?` · ${nl(mt.k)} kcal`:""}</h2><div class="recgroup">${its.map(it=>`<div class="row logrow"><span class="n">${esc(it.name)}</span><span class="b none">${it.g} g</span><span class="l">${nl(it.k)} kcal · ${fmt1(it.p)} E · ${fmt1(it.c)} K · ${fmt1(it.f)} V <button class="linkbtn danger" data-act="n-log-del" data-v="${it.i}">verwijderen</button></span></div>`).join("")}<button class="row addrow" data-act="n-add" data-v="${m}"><span class="n">+ Toevoegen</span></button>${its.length?`<button class="row addrow" data-act="sm-open" data-v="${m}"><span class="n">☆ Opslaan als vaste maaltijd</span></button>`:""}</div>`}
+    h+=`<h2>${l}${its.length?` · ${nl(mt.k)} kcal`:""}</h2><div class="recgroup">${its.map(it=>`<div class="row logrow"><span class="n">${esc(it.name)}</span><span class="b none">${it.g} ${uTxt(it)}</span><span class="l">${nl(it.k)} kcal · ${fmt1(it.p)} E · ${fmt1(it.c)} K · ${fmt1(it.f)} V <button class="linkbtn danger" data-act="n-log-del" data-v="${it.i}">verwijderen</button></span></div>`).join("")}<button class="row addrow" data-act="n-add" data-v="${m}"><span class="n">+ Toevoegen</span></button>${its.length?`<button class="row addrow" data-act="sm-open" data-v="${m}"><span class="n">☆ Opslaan als vaste maaltijd</span></button>`:""}</div>`}
   return h+`<p class="small muted" style="margin-top:12px">Producten uit Open Food Facts: gegevens © <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a>-bijdragers, beschikbaar onder de <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">Open Database License</a>. Deze gegevens worden door vrijwilligers ingevoerd en kunnen fouten bevatten; controleer bij twijfel de verpakking.</p>`;
 }
 async function logAdd(d,entry){
@@ -1192,16 +1196,16 @@ function foodAddSheet(sh){
   const q=norm(sh.q||"");
   if(sh.pick){const f=sh.pick,g=num(sh.g)||f.por||100,m={k:f.k*g/100,p:f.p*g/100,c:f.c*g/100,f:f.f*g/100};
     return `<div class="sh"><h2>${esc(f.n)}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card stack">
-      <span class="small muted">Per 100 g: ${nl(f.k)} kcal · ${fmt1(f.p)} g eiwit · ${fmt1(f.c)} g koolh. · ${fmt1(f.f)} g vet${f.brand?` · ${esc(f.brand)}`:""}</span>
-      <label class="f">Hoeveel gram?<input type="text" inputmode="decimal" id="fa-g" value="${esc(sh.g??(f.por||100))}"></label>
-      ${f.u?`<div class="chips">${[1,2,3].map(x=>`<button class="chipb" data-act="n-fa-q" data-v="${f.u*x}">${x} × ${f.u} g</button>`).join("")}</div>`:f.por?`<div class="chips">${[0.5,1,1.5,2].map(x=>`<button class="chipb" data-act="n-fa-q" data-v="${Math.round(f.por*x)}">${Math.round(f.por*x)} g</button>`).join("")}</div>`:""}
+      <span class="small muted">Per 100 ${faUnit(sh)}: ${nl(f.k)} kcal · ${fmt1(f.p)} g eiwit · ${fmt1(f.c)} g koolh. · ${fmt1(f.f)} g vet${f.brand?` · ${esc(f.brand)}`:""}</span>${faUnitSeg(faUnit(sh))}
+      <label class="f">Hoeveel ${faUnit(sh)==="ml"?"ml":"gram"}?<input type="text" inputmode="decimal" id="fa-g" value="${esc(sh.g??(f.por||100))}"></label>
+      ${f.u?`<div class="chips">${[1,2,3].map(x=>`<button class="chipb" data-act="n-fa-q" data-v="${f.u*x}">${x} × ${f.u} g</button>`).join("")}</div>`:f.por?`<div class="chips">${[0.5,1,1.5,2].map(x=>`<button class="chipb" data-act="n-fa-q" data-v="${Math.round(f.por*x)}">${Math.round(f.por*x)} ${faUnit(sh)}</button>`).join("")}</div>`:""}
       <div class="livespeed" id="fa-live">${mTxt(m)}</div>
       <button class="btn primary" data-act="n-fa-add">Toevoegen aan ${esc((MEALS.find(x=>x[0]===sh.meal)||MEALS[0])[1].toLowerCase())}</button>
       ${f.off?`<span class="small muted">Wordt automatisch onthouden bij je producten.</span>`:""}
       <button class="linkbtn" data-act="n-fa-back">← Ander product</button></div>`}
   if(sh.custom)return `<div class="sh"><h2>Eigen product</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card stack">
     <label class="f">Naam<input type="text" id="cf-n" value="${esc(sh.custom.n||"")}" placeholder="Bijv. proteïnepudding vanille"></label>
-    <span class="hintline">Voedingswaarden per 100 g, staan op de verpakking</span>
+    ${faUnitSeg(sh.custom.ml?"ml":"g")}<span class="hintline" id="cf-unit-h">Voedingswaarden per 100 ${sh.custom.ml?"ml":"g"}, staan op de verpakking</span>
     <div class="grid2"><label class="f">Kcal<input type="text" inputmode="decimal" id="cf-k" value="${esc(sh.custom.k||"")}"></label><label class="f">Eiwit g<input type="text" inputmode="decimal" id="cf-p" value="${esc(sh.custom.p||"")}"></label><label class="f">Koolhydraten g<input type="text" inputmode="decimal" id="cf-c" value="${esc(sh.custom.c||"")}"></label><label class="f">Vet g<input type="text" inputmode="decimal" id="cf-f" value="${esc(sh.custom.f||"")}"></label></div>
     <label class="f">Normale portie <i>optioneel</i><input type="text" inputmode="decimal" id="cf-por" value="${esc(sh.custom.por||"")}" placeholder="g"></label>
     <button class="btn primary" data-act="n-cf-save">Opslaan en kiezen</button><button class="linkbtn" data-act="n-fa-back">← Terug</button></div>`;
@@ -1212,9 +1216,9 @@ function foodAddSheet(sh){
   let h=`<div class="sh"><h2>${esc((MEALS.find(x=>x[0]===sh.meal)||MEALS[0])[1])} · toevoegen</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>
     <input type="search" id="fa-q" placeholder="Zoek een product" value="${esc(sh.q||"")}" autocomplete="off">`;
   if(!q){
-    if(recent.length)h+=`<h2>Laatst gebruikt</h2><div class="card" style="padding:4px 12px">${recent.map((it,i)=>`<button class="pickitem" data-act="n-fa-recent" data-v="${i}"><span>${esc(it.name)}</span><span class="small muted">${it.g} g · ${nl(it.k)} kcal</span></button>`).join("")}</div>`;
+    if(recent.length)h+=`<h2>Laatst gebruikt</h2><div class="card" style="padding:4px 12px">${recent.map((it,i)=>`<button class="pickitem" data-act="n-fa-recent" data-v="${i}"><span>${esc(it.name)}</span><span class="small muted">${it.g} ${uTxt(it)} · ${nl(it.k)} kcal</span></button>`).join("")}</div>`;
     h+=`<p class="small muted">Typ om te zoeken in ${FOODS.length} basisproducten${myFoods().length?` en je ${myFoods().length} eigen producten`:""}. Niet gevonden? Zoek in Open Food Facts of voeg zelf een product toe.</p>`;
-  }else h+=`<div class="card" style="margin-top:10px;padding:4px 12px">${res.length?res.map(f=>`<button class="pickitem" data-act="n-fa-pick" data-v="${f.id}"><span>${esc(f.n)}</span><span class="small muted">${nl(f.k)} kcal /100 g</span></button>`).join(""):`<p class="muted small" style="padding:10px 0;margin:0">Niet in de lijst.</p>`}</div>`;
+  }else h+=`<div class="card" style="margin-top:10px;padding:4px 12px">${res.length?res.map(f=>`<button class="pickitem" data-act="n-fa-pick" data-v="${f.id}"><span>${esc(f.n)}</span><span class="small muted">${nl(f.k)} kcal /100 ${isMl(f)?"ml":"g"}</span></button>`).join(""):`<p class="muted small" style="padding:10px 0;margin:0">Niet in de lijst.</p>`}</div>`;
   if(sh.off)h+=`<h2>Open Food Facts</h2><div class="card" style="padding:4px 12px">${sh.off==="loading"?`<p class="muted small" style="padding:10px 0;margin:0">Zoeken…</p>`:sh.off==="error"?`<p class="muted small" style="padding:10px 0;margin:0">Zoeken lukte niet. Controleer je internet of probeer het later opnieuw.</p>`:sh.off.length?sh.off.map((f,i)=>`<button class="pickitem" data-act="n-fa-offpick" data-v="${i}"><span>${esc(f.n)}${f.brand?` <span class="muted small">· ${esc(f.brand)}</span>`:""}</span><span class="small muted">${nl(f.k)} kcal</span></button>`).join(""):`<p class="muted small" style="padding:10px 0;margin:0">Niets gevonden.</p>`}</div>`;
   h+=`<div class="btnrow" style="margin-top:10px">${q.length>=3?`<button class="btn" data-act="n-off">Zoek in Open Food Facts</button>`:""}<button class="btn" data-act="n-custom">+ Eigen product</button></div>`;
   return h;
@@ -1288,7 +1292,8 @@ function viewCardio(){
   const list=spOtherList();if(c.other&&!list.includes(c.other)&&OTHER_SPORTS.includes(c.other))list.push(c.other);
   return `<div class="wohead"><div class="title">${rb?"Duurtraining loggen":"Sport loggen"}</div></div>${pl?`<div class="card plan" style="margin-top:12px"><span class="ml">Geplande training · ${esc(dayLabel(pl.date))}</span><strong>${esc(planTitle({id:c.planId,...pl}))}</strong>${planTargets(pl)?`<span class="muted small">${planTargets(pl)}</span>`:""}${pl.desc||pl.note?`<p class="pdesc">${esc(pl.desc||pl.note)}</p>`:""}</div>`:""}<div class="card stack" style="margin-top:12px">
     <div class="f">Sport${spCardioSeg("c-sport",c.sport)}</div>
-    ${rb?`<div class="gpxbox"><button class="btn" data-act="c-gpx">GPX-bestand importeren (optioneel)</button><span class="small muted">${c.gpx?`✓ ${esc(c.gpx)}`:"Heb je een GPX-bestand van je sporthorloge of sportapp? Dan vult de app alles in en berekent hij je snelste afstanden."}</span><input type="file" id="gpx-file" accept=".gpx,application/gpx+xml,application/xml,text/xml" hidden></div>`
+    <button class="btn block" data-act="pi-open">Afgeronde training plakken (optioneel)</button><span class="small muted">Uit intervals.icu, Garmin Connect, Strava of Apple Fitness: dan vult de app alles in.</span>
+    ${rb?``
       :`<div class="f">Welke sport?<div class="chips">${list.map(s=>`<button class="chipb" data-act="c-other" data-v="${esc(s)}" aria-pressed="${c.other===s}">${esc(s)}</button>`).join("")}</div></div>
       ${spOn("other")||(c.other&&!OTHER_SPORTS.includes(c.other))?`<label class="f">Andere sport <i>vrij invullen</i><input type="text" id="c-other" value="${esc(list.includes(c.other)&&OTHER_SPORTS.includes(c.other)?"":c.other)}" placeholder="Bijv. klimmen, schaatsen, dansen" autocomplete="off"></label>`:""}`}
     <label class="f">Datum<input type="date" id="c-date" value="${esc(c.date)}"></label>
@@ -1298,7 +1303,7 @@ function viewCardio(){
     <div class="grid2"><label class="f">Gem. hartslag <i>optioneel</i><input type="text" inputmode="numeric" id="c-avg" value="${esc(c.avgHr)}" placeholder="bpm"></label><label class="f">Max. hartslag <i>optioneel</i><input type="text" inputmode="numeric" id="c-max" value="${esc(c.maxHr)}" placeholder="bpm"></label></div>
     <div class="f">Soort training<div class="chips">${PURPOSES.map(p=>`<button class="chipb" data-act="c-purpose" data-v="${p}" aria-pressed="${c.purpose===p}">${p}</button>`).join("")}</div></div>
     <label class="f">Toelichting<textarea id="c-note" rows="3" placeholder="Hoe ging het? Wat was het doel? Bijv. rustig ritje met vrienden, zware benen na beendag.">${esc(c.note)}</textarea></label>
-    <div class="btnrow"><button class="btn primary" data-act="c-save">Opslaan</button><button class="btn" data-act="c-cancel">Annuleren</button></div></div>`;
+    ${togetherRow("c")}<div class="btnrow"><button class="btn primary" data-act="c-save">Opslaan</button><button class="btn" data-act="c-cancel">Annuleren</button></div></div>`;
 }
 async function saveCardio(){
   const c=UI.cardio,min=cardioDraftMin(c),km=num(c.km);
@@ -1372,7 +1377,7 @@ function viewCardioRecords(){
     h+=`<h2>${sp}</h2><div class="recgroup"><div class="row" style="cursor:default"><span class="n">Deze maand</span><span class="b">${fmt1(kmMonth)} km</span><span class="l">${l.length} ${l.length===1?"training":"trainingen"} totaal · langste ${fmt1(Math.max(...l.map(s=>s.km||0)))} km</span></div>`+
       recs.map(r=>`<button class="row" data-act="open-session" data-id="${r.id}"><span class="n">${distLbl(r.d)}</span><span class="b">${r.est?"≈ ":""}${durTxt(r.sec/60)}</span><span class="l">${sp==="Hardlopen"?paceTxt(r.sec/60,r.d):fmt1(r.d/(r.sec/3600))+" km/u"} · ${dateTxt(r.date)}${r.est?" · o.b.v. gemiddeld tempo":""}</span></button>`).join("")+`</div>`;
   }
-  if(cardioSessions("Hardlopen").length||cardioSessions("Wielrennen").length)h+=`<p class="small muted">≈ = berekend met het gemiddelde tempo van een langere training. Importeer een GPX-bestand voor je echte snelste tijd binnen een training.</p>`;
+  if(cardioSessions("Hardlopen").length||cardioSessions("Wielrennen").length)h+=`<p class="small muted">≈ = berekend met het gemiddelde tempo van een langere training.</p>`;
   const others={};for(const s of all)if(!isRunBike(s.sport))(others[s.sport]=others[s.sport]||[]).push(s);
   const names=Object.keys(others).sort();
   if(names.length){
@@ -1649,7 +1654,7 @@ function plAddSheet(sh){
   if(sh.kind==="routine")h+=hasR?`<label class="f">Schema${routineSelect("pa-routine",sh.routineId)}</label>`:`<p class="muted" style="margin:0">Je hebt nog geen schema's. Maak er eerst een onder Schema's.</p>`;
   if(sh.kind==="cardio")h+=`<div class="f">Sport${spCardioSeg("pa-sport",sh.sport)}</div>
     <label class="f">Omschrijving <i>optioneel</i><input type="text" id="pa-title" value="${esc(sh.title)}" placeholder="Bijv. Rustige duurloop"></label>
-    <div class="grid2"><label class="f">Duur <i>optioneel</i><input type="text" inputmode="numeric" id="pa-dur" value="${esc(sh.durMin)}" placeholder="min"></label><label class="f">Afstand <i>optioneel</i><input type="text" inputmode="decimal" id="pa-km" value="${esc(sh.km)}" placeholder="km"></label></div>`;
+    <div class="grid2"><label class="f">Duur <i>optioneel</i><input type="text" inputmode="numeric" id="pa-dur" value="${esc(sh.durMin)}" placeholder="min"></label><label class="f">Afstand <i>optioneel</i><input type="text" inputmode="decimal" id="pa-km" value="${esc(sh.km)}" placeholder="km"></label></div>${icuField(sh)}`;
   if(sh.kind==="other")h+=`<label class="f">Wat ga je doen?<input type="text" id="pa-title" value="${esc(sh.title)}" placeholder="Bijv. Voetbal, zwemmen, padel"></label>`;
   if(sh.kind!=="rest")h+=`<label class="f">Notitie <i>optioneel</i><textarea id="pa-note" rows="2" placeholder="Bijv. samen met een vriend, of: rustig aan na beendag">${esc(sh.note)}</textarea></label>`;
   h+=`<label class="f">Tijdstip <i>optioneel, handig voor je agenda</i><input type="time" id="pa-time" value="${esc(sh.time||"")}"></label><label class="f">Herhalen<select id="pa-rep">${[["1","Alleen deze dag"],["2","2 weken, elke week"],["4","4 weken, elke week"],["8","8 weken, elke week"],["12","12 weken, elke week"]].map(([v,l])=>`<option value="${v}" ${sh.repeat===v?"selected":""}>${l}</option>`).join("")}</select></label>
@@ -1661,7 +1666,7 @@ async function planAddSave(){
   {const tm=document.getElementById("pa-time")?.value||sh.time;if(tm)base.time=tm}
   if(k!=="rest"&&(sh.note||"").trim())base.note=sh.note.trim();
   if(k==="routine"){const rid=document.getElementById("pa-routine")?.value;if(!rid||!S.routines[rid]){toast("Kies een schema.");return}Object.assign(base,{routineId:rid,routineName:S.routines[rid].name})}
-  if(k==="cardio")Object.assign(base,{sport:sh.sport||"Hardlopen",title:(sh.title||"").trim()||sh.sport||"Hardlopen",durMin:num(sh.durMin),km:num(sh.km)});
+  if(k==="cardio"){Object.assign(base,{sport:sh.sport||"Hardlopen",title:(sh.title||"").trim()||sh.sport||"Hardlopen",durMin:num(sh.durMin),km:num(sh.km)});const sc=(sh.steps||"").trim();if(sc){const P=icuParse(sc);if(P.blocks.length){base.steps=sc.slice(0,3000);const T=icuTotals(P);if(!base.durMin&&T.min)base.durMin=Math.round(T.min);if(!base.km&&T.km)base.km=Math.round(T.km*10)/10;if(!(sh.title||"").trim()&&P.title)base.title=P.title.slice(0,60)}}}
   if(k==="other"){if(!(sh.title||"").trim()){toast("Vul in wat je gaat doen, bijvoorbeeld Voetbal.");document.getElementById("pa-title")?.focus();return}base.title=sh.title.trim()}
   const n=Math.max(1,parseInt(sh.repeat)||1),stem=uid();
   if(sh.forLink){if(!sh.date){toast("Kies een datum.");return}const pl={...base};delete pl.own;delete pl.updated;delete pl.routineId;
@@ -1676,7 +1681,7 @@ function plItemSheet(sh){
   const tg=k==="cardio"?planTargets(p):"",txt=p.desc||p.note||"";
   let h=`<div class="sh"><h2>${esc(dayName(p.date))}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card plan k-${k}${done?" done":""}"><div class="ph"><span class="chip">${esc(planChip(p))}</span>${p.coach?`<span class="small muted">van ${esc(p.coach)}</span>`:""}</div><strong class="pt">${esc(planTitle(p))}</strong>${tg?`<span class="muted small">${tg}</span>`:""}${txt?`<p class="pdesc">${esc(txt)}</p>`:""}
     ${done?`<div class="pdone">✓ Gedaan: ${sessionSummary(done)}</div>${done.kind==="check"?`<button class="btn ghost" data-act="pl-uncheck" data-id="${p.id}">Toch niet gedaan</button>`:""}`:planItemBtn(p,p.date<t)}</div>
-    <div class="btnrow" style="margin-top:10px"><button class="btn ghost" data-act="wo-copy" data-id="${p.id}">Kopieer training</button><a class="btn ghost" href="${esc(gcalUrl(p))}" target="_blank" rel="noopener">Zet in Google Agenda</a></div><div class="card stack" style="margin-top:10px"><div class="grid2"><label class="f">Datum<input type="date" id="pl-date" value="${esc(p.date)}"></label><label class="f">Tijdstip <i>optioneel</i><input type="time" id="pl-time" value="${esc(p.time||"")}"></label></div><button class="btn" data-act="pl-move" data-id="${p.id}">Datum en tijd opslaan</button></div>`;
+    ${k==="cardio"?icuBox(p):""}<div class="btnrow" style="margin-top:10px"><button class="btn ghost" data-act="wo-copy" data-id="${p.id}">Kopieer training</button><a class="btn ghost" href="${esc(gcalUrl(p))}" target="_blank" rel="noopener">Zet in Google Agenda</a></div><div class="card stack" style="margin-top:10px"><div class="grid2"><label class="f">Datum<input type="date" id="pl-date" value="${esc(p.date)}"></label><label class="f">Tijdstip <i>optioneel</i><input type="time" id="pl-time" value="${esc(p.time||"")}"></label></div><button class="btn" data-act="pl-move" data-id="${p.id}">Datum en tijd opslaan</button></div>`;
   h+=`<div style="margin-top:12px">${UI.confirm==="pl-del"?`<div class="confirm"><span>Uit je planning halen?${done&&done.kind!=="check"?" Je gelogde training blijft bewaard.":""}</span><div class="btnrow"><button class="btn danger" data-act="pl-del-yes" data-id="${p.id}">Verwijderen</button><button class="btn" data-act="confirm-no">Behouden</button></div></div>`:`<button class="btn ghost danger" data-act="pl-del">Uit planning verwijderen</button>`}</div>`;
   return h;
 }
@@ -1710,31 +1715,19 @@ function importSheet(sh){
 const EXTRA_SHEETS={"pl-add":plAddSheet,"pl-item":plItemSheet,"share":shareSheet,"import":importSheet};
 
 /* ---------- wat is er nieuw & suggesties ---------- */
-const APP_VERSION="6.2";
+const APP_VERSION="6.3";
 const CHANGELOG=[
- {v:"6.2",date:"2026-10-21",items:[
-  ["Samen trainen: met jouw toestemming ziet je trainer de hele training (sets, hartslag, hoe het ging en je opmerking), en als je dat aanvinkt ook je voortgang.",""],
-  ["Profiel in twee delen: Persoonlijk en Instellingen. Bij een krachttraining kun je nu een opmerking toevoegen.",""],
-  ["Breder scherm op tablet en laptop, en een rustige achtergrond in de kleuren van Athlevon.",""]]},
- {v:"6.1",date:"2026-10-21",items:[
-  ["Kies bij Profiel welke sporten je doet: andere sporten verdwijnen uit alle keuzes, tot je ze weer aanzet. Wat al gepland staat, blijft staan. Ook de onderdelen binnen Voeding en Voortgang kun je nu aan- en uitzetten.",""]]},
- {v:"6.0",date:"2026-10-20",items:[
-  ["Zelf kiezen welke tabbladen je ziet (bij Profiel), en twee instructievideo's: kort en stap voor stap.",""],
-  ["Nieuwe naam en logo: Athlevon (atleet + evolve). Plus een terugknop (ook terugvegen werkt) en muziek openen tijdens je training.",""],
-  ["Voeding makkelijker: barcode scannen, en een foto van je bord laten inschatten door je eigen AI.",""],
-  ["Sportschema op maat: kies je sporten (ook teamsport) en de verdeling per week, vaste dagen en je beschikbare tijd; de coach maakt een verantwoord plan met genoeg herstel, afgestemd op je profiel, materiaal, blessures en huidige niveau.",""],
-  ["Voortgang: met kleuren zien of je op koers ligt, met uitleg en advies.",""],
-  ["Voeding: maaltijden, maaltijdplannen met kosten, boodschappenlijst om af te vinken, en veel meer producten.",""],
-  ["Progressie en bijsturen: bij elke oefening een doel voor vandaag, elke week een stapje zwaarder, en na elke training en week een korte check waarop het schema zich aanpast. Doelen per duursport, ook voor duathlon en triathlon.",""],
-  ["Kennis (test): per sport (ook duathlon, triathlon, trail en ultra) uitleg over materiaal, voeding, techniek, blessures en opbouw.",""],
-  ["Oude trainingen en schema's zelf inladen: via een AI-opdracht (notities, Excel, foto's) of een CSV uit Strong, Hevy of je eigen tabel.",""],
-  ["Samen trainen: met jouw toestemming trainingen, schema's en maaltijden van elkaar ontvangen.",""],
-  ["Trainingen in je agenda (met tijdstip en herinnering), installeren als app, rondleiding en instructievideo.",""],
-  ["Privacy en beveiliging: toestemming, privacyverklaring, zelf je account verwijderen, sterkere codes.",""]]},
- {v:"5.0",date:"2026-10-19",items:[["Uitgebreid voedingsadvies met voorbeelddagen en dagboek, records per afstand, GPX-import en suggesties doorgeven.",""]]},
- {v:"4.0",date:"2026-10-18",items:[["Mappen voor schema's, schema's delen met een code en een weekplanning.",""]]},
- {v:"3.0",date:"2026-10-18",items:[["Inloggen met naam en persoonlijke code, en trainingen bewaren zonder internet.",""]]},
- {v:"2.0",date:"2026-10-18",items:[["Profiel, gewicht bijhouden, voedingsadvies en duurtraining loggen.",""]]},
+ {v:"6.3",date:"2026-10-23",items:[
+  ["Duurtraining naar je horloge (via intervals.icu) en een afgeronde training terugplakken.",""],
+  ["Voortgang: grafieken per oefening en per duursport. Samen gesport? Registreer het ook voor je maatje.",""],
+  ["Voeding: kiezen tussen gram en ml, en meer producten.",""]]},
+ {v:"6.2",date:"2026-10-21",items:[["Trainer ziet met toestemming de hele training en je voortgang. Profiel in twee delen. Breder scherm op tablet en laptop.",""]]},
+ {v:"6.1",date:"2026-10-21",items:[["Kies welke sporten en onderdelen je ziet.",""]]},
+ {v:"6.0",date:"2026-10-20",items:[["Nieuwe naam Athlevon, sportschema op maat, kennis per sport, samen trainen, voortgang met kleuren en veel meer voeding.",""]]},
+ {v:"5.0",date:"2026-10-19",items:[["Voedingsadvies met voorbeelddagen en dagboek, records per afstand.",""]]},
+ {v:"4.0",date:"2026-10-18",items:[["Mappen voor schema's, delen met een code en een weekplanning.",""]]},
+ {v:"3.0",date:"2026-10-18",items:[["Inloggen met naam en code, en trainingen bewaren zonder internet.",""]]},
+ {v:"2.0",date:"2026-10-18",items:[["Profiel, gewicht, voedingsadvies en duurtraining loggen.",""]]},
  {v:"1.0",date:"2026-10-18",items:[["Eerste versie: schema's, trainingen loggen en records.",""]]}
 ];const FB_STATUS={nieuw:"Nieuw",bekeken:"Bekeken",gepland:"Gepland",opgelost:"Opgelost",niet:"Niet gepland"};
 function newsBanner(){return "";
@@ -1869,14 +1862,14 @@ document.addEventListener("click",async ev=>{
     case "n-fa-back":UI.sheet.pick=null;UI.sheet.custom=null;renderSheet();break;
     case "n-fa-add":{const sh=UI.sheet,f=sh.pick,g=num(document.getElementById("fa-g")?.value)||0;if(g<=0||g>3000){toast("Vul een geldig aantal gram in.");return}
       let fid=f.id&&!f.off?f.id:null;if(f.off){fid=await ensureFood({n:f.n+(f.brand?` (${f.brand})`:""),k:f.k,p:f.p,c:f.c,f:f.f,por:f.por||100})}
-      const d=UI.logDate||today();await logAdd(d,{meal:sh.meal,fid,name:f.n+(f.brand?` (${f.brand})`:""),g,k:Math.round(f.k*g/100),p:+(f.p*g/100).toFixed(1),c:+(f.c*g/100).toFixed(1),f:+(f.f*g/100).toFixed(1)});
+      const d=UI.logDate||today();await logAdd(d,{meal:sh.meal,fid,name:f.n+(f.brand?` (${f.brand})`:""),g,...(faUnit(sh)==="ml"?{ml:true}:{}),k:Math.round(f.k*g/100),p:+(f.p*g/100).toFixed(1),c:+(f.c*g/100).toFixed(1),f:+(f.f*g/100).toFixed(1)});
       UI.sheet=null;toastOk(`${f.n} toegevoegd`);render();break}
     case "n-fa-save":{const f=UI.sheet.pick,id=uid();await put("foods",id,{n:f.n+(f.brand?` (${f.brand})`:""),k:f.k,p:f.p,c:f.c,f:f.f,por:f.por||100});UI.sheet.pick={...f,id:"c:"+id,off:false};toastOk("Bewaard bij je producten");renderSheet();break}
     case "n-off":{const q=(document.getElementById("fa-q")?.value||"").trim();if(q.length<3)return;await offSearch(q);break}
     case "n-custom":UI.sheet.custom={n:UI.sheet.q||""};renderSheet();break;
     case "n-cf-save":{const g=id=>num(document.getElementById(id)?.value);const n_=(document.getElementById("cf-n")?.value||"").trim(),k=g("cf-k");
       if(!n_||!k){toast("Vul minstens de naam en het aantal kcal per 100 g in.");return}
-      const id=uid(),f={n:n_,k,p:g("cf-p")||0,c:g("cf-c")||0,f:g("cf-f")||0,por:g("cf-por")||100};await put("foods",id,f);UI.sheet.custom=null;UI.sheet.pick={...f,id:"c:"+id};UI.sheet.g=null;renderSheet();break}
+      const id=uid(),f={n:n_,k,p:g("cf-p")||0,c:g("cf-c")||0,f:g("cf-f")||0,por:g("cf-por")||100,...(UI.sheet.custom&&UI.sheet.custom.ml?{ml:true}:{})};await put("foods",id,f);UI.sheet.custom=null;UI.sheet.pick={...f,id:"c:"+id};UI.sheet.g=null;renderSheet();break}
     case "n-shop-ck":{const k="krachtlogboek.shop."+pid,d=lsGet(k)||{};d[v]=!d[v];lsSet(k,d);render();break}
     case "n-shop-reset":lsSet("krachtlogboek.shop."+pid,null);render();break;
     case "n-shop-copy":{const rows=(UI.shopRows||[]).filter(r=>!r.have);if(!rows.length){toast("De lijst is leeg.");return}const txt="Boodschappen (Athlevon)\n"+rows.map(r=>`- ${r.f.n}: ${r.packs} × ${r.f.pkg>=1000?fmt1(r.f.pkg/1000)+" kg":r.f.pkg+" g"}`).join("\n");try{await navigator.clipboard.writeText(txt);toast("Lijst gekopieerd. Plak hem in je notities of WhatsApp.")}catch(e){toast("Kopiëren lukte niet op dit apparaat.")}break}
@@ -1924,7 +1917,7 @@ function privacyHtml(){
   <p>Gewicht, hartslag en voeding zijn gezondheidsgegevens. Die worden alleen opgeslagen met je uitdrukkelijke toestemming.</p>
   <h4>Waarvoor?</h4><p>Alleen om de functies van de app te laten werken: je trainingen en voortgang bijhouden, je voedingsadvies berekenen en trainingen inplannen. Er zijn geen advertenties, er wordt niets verkocht of gedeeld met bedrijven, en er wordt niets gevolgd of gemeten.</p><p><b>Voortgang en Sportschema op maat</b> analyseren je eigen gegevens (training, voeding en gewicht) om je feedback en een schema te geven. Dat wordt op je eigen telefoon berekend; er gaat daarvoor niets naar anderen. Het zijn alleen suggesties: de app neemt geen beslissingen over je.</p>
   <h4>Wie ziet wat?</h4><ul><li>Je eigen gegevens zie alleen jij.</li><li>Jitse ziet als beheerder: de namen van de accounts, het aantal trainingen, wanneer iemand laatst actief was en ingestuurde meldingen.</li><li><b>Samen trainen:</b> geef je iemand toestemming, dan mag die persoon alleen wat jij aanvinkt: trainingen in je planning zetten, schema's of maaltijden sturen. Hij of zij ziet van jou alleen de trainingen die hij of zij zelf voor je inplande en of je die gedaan hebt. Alleen als jij dat aanvinkt ziet hij of zij ook de hele training (sets, tijden, hartslag, hoe het ging en je opmerking). Vink je <b>Voortgang zien</b> aan, dan ziet hij of zij ook je voortgang: je trainingen en records, je gewicht en je voedingsdagboek van de afgelopen weken. Dit staat standaard uit. Je kunt toestemming altijd intrekken. Dit geldt ook voor Jitse.</li><li>Als beheerder van de database kan Jitse technisch bij alle gegevens. Hij kijkt daar alleen in als dat nodig is, bijvoorbeeld om een probleem op te lossen of een back-up terug te zetten.</li><li>Andere gebruikers zien verder niets van jou, ook je naam niet, tenzij je met iemand samen traint. Deel je zelf een schema, dan staat je naam als afzender bij dat schema.</li></ul>
-  <h4>Waar staan de gegevens?</h4><ul><li>In een online database bij Supabase.</li><li>De app zelf staat op GitHub Pages.</li><li>Eén keer per week wordt een back-up gemaakt in een afgeschermde, privé GitHub-omgeving waar alleen Jitse bij kan.</li><li>Op je eigen telefoon staat een kopie, zodat de app ook zonder internet werkt. Bij uitloggen wordt die gewist.</li><li>Zoek je in het dagboek in Open Food Facts of scan je een barcode, dan gaat alleen je zoekterm of de barcode naar Open Food Facts. De camera wordt alleen op je telefoon gebruikt om de barcode te lezen; er worden geen beelden verstuurd.</li><li>Gebruik je de foto-functie bij voeding, dan deel je je foto zelf met de AI-dienst die je kiest; Athlevon stuurt niets door. Verder gaan er geen gegevens naar andere partijen; de lettertypes zitten in de app zelf.</li></ul>
+  <h4>Waar staan de gegevens?</h4><ul><li>In een online database bij Supabase.</li><li>De app zelf staat op GitHub Pages.</li><li>Eén keer per week wordt een back-up gemaakt in een afgeschermde, privé GitHub-omgeving waar alleen Jitse bij kan.</li><li>Op je eigen telefoon staat een kopie, zodat de app ook zonder internet werkt. Bij uitloggen wordt die gewist.</li><li>Zoek je in het dagboek in Open Food Facts, dan gaat je zoekterm naar Open Food Facts. Verder gaan er geen gegevens naar andere partijen; de lettertypes zitten in de app zelf.</li></ul>
   <h4>Hoe lang?</h4><ul><li>Trainingen, je voedingsdagboek en je planning worden 3 maanden in detail bewaard. Daarna worden ze samengevat: je records, aantallen en maandtotalen blijven, de details verdwijnen.</li><li>Je profiel, gewicht en schema's blijven tot je ze zelf aanpast of verwijdert.</li><li>Back-ups worden maximaal 3 maanden bewaard.</li><li>Toestemmingen voor Samen trainen blijven staan tot jij of de ander ze intrekt, of tot een van beiden het account verwijdert. Voorstellen verdwijnen zodra je ze toevoegt of weigert; trek je toestemming in, dan vervallen openstaande voorstellen.</li><li>Verwijder je je account, dan worden al je gegevens, meldingen, deelcodes en toestemmingen direct gewist. Uit de back-ups verdwijnen ze binnen 3 maanden.</li></ul>
   <h4>Jouw rechten</h4><p>Je kunt je gegevens altijd inzien en downloaden (Uitleg → Back-up downloaden), aanpassen en zelf verwijderen (Profiel → Account verwijderen). Je toestemming intrekken doe je door je account te verwijderen. Vragen? Stuur Jitse een bericht of gebruik Wat is er nieuw → Suggestie. Ben je het ergens niet mee eens, dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens.</p>
   <h4>Gebruik op eigen risico</h4><p>Jitse biedt de app aan als vriendendienst, zonder lidmaatschap of betaling. Hij doet zijn best om je gegevens zorgvuldig te beveiligen en de app goed te laten werken, maar geeft geen garantie dat de app altijd beschikbaar is, foutloos werkt of dat gegevens nooit verloren gaan. Je gebruikt de app op eigen risico. Voedings- en trainingsadviezen zijn algemene richtlijnen en geen medisch advies; overleg bij twijfel of klachten met een huisarts, diëtist of fysiotherapeut.</p>
@@ -2019,7 +2012,7 @@ function viewCardioRecords(){
     h+=`<h2>${sp}</h2><div class="recgroup"><div class="row" style="cursor:default"><span class="n">Deze maand</span><span class="b">${fmt1(kmMonth)} km</span><span class="l">${n} ${n===1?"training":"trainingen"} totaal · langste ${fmt1(longest)} km</span></div>`+
       recs.map(r=>`<${r.id?`button class="row" data-act="open-session" data-id="${r.id}"`:`div class="row" style="cursor:default"`}><span class="n">${distLbl(r.d)}</span><span class="b">${r.est?"≈ ":""}${durTxt(r.sec/60)}</span><span class="l">${sp==="Hardlopen"?paceTxt(r.sec/60,r.d):fmt1(r.d/(r.sec/3600))+" km/u"} · ${dateTxt(r.date)}${r.est?" · o.b.v. gemiddeld tempo":""}</span></${r.id?"button":"div"}>`).join("")+`</div>`;
   }
-  if(sports.has("Hardlopen")||sports.has("Wielrennen"))h+=`<p class="small muted">≈ = berekend met het gemiddelde tempo van een langere training. Importeer een GPX-bestand voor je echte snelste tijd binnen een training.</p>`;
+  if(sports.has("Hardlopen")||sports.has("Wielrennen"))h+=`<p class="small muted">≈ = berekend met het gemiddelde tempo van een langere training.</p>`;
   const others=[...sports].filter(s=>!isRunBike(s)).sort();
   if(others.length){
     h+=`<h2>Overige sporten</h2><div class="recgroup">`+others.map(nm=>{const l=cardioSessions(nm),n=l.length+archN(nm),mins=l.filter(s=>(s.date||"").startsWith(month)).reduce((t,s)=>t+(s.durMin||0),0);
@@ -2164,7 +2157,7 @@ function pickSheet(sh){
   if(mode==="m"){const ms=mealsAll().filter(m=>(sh.all||mealCats(m).includes(sh.slot))&&(!q||norm(m.n).includes(q)));
     h+=`<div class="card" style="margin-top:10px;padding:4px 12px">${ms.map(m=>{const mm=partsMacros(mealParts(m,1));return `<button class="pickitem" data-act="pk-meal" data-v="${m.id}"><span>${esc(m.n)}${mealAllowed(m)?"":` <span class="muted small">· past niet bij voorkeuren</span>`}</span><span class="small muted">${nl(mm.k)} kcal · ${Math.round(mm.k/n.kcal*100)}%</span></button>`}).join("")||`<p class="muted small" style="padding:10px 0;margin:0">Geen maaltijd gevonden.</p>`}</div>${sh.all?"":`<button class="linkbtn" data-act="pk-all">Ook maaltijden van andere kopjes tonen</button>`}`}
   else{const all=[...myFoods(),...FOODS],res=(q?all.filter(f=>norm(f.n).includes(q)):all.filter(f=>f.cat!=="snacks")).slice(0,q?40:25);
-    h+=`<div class="card" style="margin-top:10px;padding:4px 12px">${res.map(f=>`<button class="pickitem" data-act="pk-prod" data-v="${f.id}"><span>${esc(f.n)}</span><span class="small muted">${nl(f.k)} kcal /100 g</span></button>`).join("")||`<p class="muted small" style="padding:10px 0;margin:0">Niet gevonden. Voeg het via het Dagboek toe als eigen product.</p>`}</div>${q?"":`<p class="small muted">Typ om in alle ${FOODS.length} producten te zoeken.</p>`}`}
+    h+=`<div class="card" style="margin-top:10px;padding:4px 12px">${res.map(f=>`<button class="pickitem" data-act="pk-prod" data-v="${f.id}"><span>${esc(f.n)}</span><span class="small muted">${nl(f.k)} kcal /100 ${isMl(f)?"ml":"g"}</span></button>`).join("")||`<p class="muted small" style="padding:10px 0;margin:0">Niet gevonden. Voeg het via het Dagboek toe als eigen product.</p>`}</div>${q?"":`<p class="small muted">Typ om in alle ${FOODS.length} producten te zoeken.</p>`}`}
   return h;
 }
 EXTRA_SHEETS["plan-pick"]=pickSheet;
@@ -3235,20 +3228,20 @@ function watchSheet(){
   <details class="privdet" style="margin-top:10px"><summary>Toch op je horloge zetten?</summary><div class="stack" style="margin-top:8px">
     <p class="hp small" style="margin:0">Rechtstreeks vanuit de app naar je horloge sturen kan niet. Het kan wel met de hand, maar dat is wat omslachtig:</p>
     <ul class="hl small"><li><b>Garmin:</b> open in de app de training in je planning en tik op <b>Kopieer training</b>. Ga in Garmin Connect naar Training en planning → Trainingen → Maak een training, en neem de stappen over. Daarna synchroniseer je je horloge.</li><li><b>Apple Watch:</b> open de Workout-app → tik op ⋯ bij hardlopen of fietsen → Maak training → Aangepast, en voer de stappen in.</li></ul>
-    <p class="hp small" style="margin:0"><b>Andersom</b> (een gelopen training van je horloge naar de app): exporteer de activiteit als GPX-bestand (in Garmin Connect via ⚙ → Exporteren naar GPX; voor Apple Watch met een app als HealthFit) en importeer het bij Trainen → Hardlopen of Wielrennen → GPX-bestand importeren.</p></div></details>`;
+    <p class="hp small" style="margin:0"><b>Andersom</b> (een gelopen training van je horloge naar de app): open de training in intervals.icu, Garmin Connect, Strava of Apple Fitness, kopieer de samenvatting en kies bij Trainen → <b>Afgeronde training plakken</b>.</p></div></details>`;
 }
 EXTRA_SHEETS["watch"]=watchSheet;
 
 /* ---------- rondleiding, update-melding en video ---------- */
 const INTRO=[
   ["Welkom bij Athlevon","Je houdt hier je trainingen, voeding en voortgang bij, en ziet of je op koers ligt voor je doel. In een paar korte stappen zie je hoe het werkt. Liever kijken? Bekijk de korte instructievideo (± 1½ minuut) of de uitgebreide versie met alle functies."],
-  ["Trainen","Onder <b>Trainen</b> start je een training uit je schema's. Per set vul je kg en herhalingen in; je vorige keer en je record staan erbij. Duurtrainingen log je met duur en afstand, of je importeert een GPX-bestand. Bij elke oefening staat een doel voor vandaag, zodat je elke keer een stapje verder komt."],
+  ["Trainen","Onder <b>Trainen</b> start je een training uit je schema's. Per set vul je kg en herhalingen in; je vorige keer en je record staan erbij. Duurtrainingen log je met duur en afstand, of je plakt de afgeronde training uit je horloge-app. Bij elke oefening staat een doel voor vandaag, zodat je elke keer een stapje verder komt."],
   ["Schema's","Je krijgt automatisch de map <b>Krachttraining 3 dagen split</b>. Je kunt schema's zelf maken, aanpassen en met anderen delen."],
   ["Planning","Plan je week vooruit. Met <b>Sportschema op maat</b> maakt de coach een plan voor al je sporten (fitness, duursport, teamsport) dat bij je wensen en agenda past, met genoeg herstel. Met <b>Naar je agenda</b> zet je trainingen in de agenda van je telefoon."],
   ["Voeding","Vul eerst je <b>Profiel</b> in: lengte, gewicht, doel en sportweek. Dan krijg je een dagdoel, kun je maaltijden en maaltijdplannen samenstellen, je eten bijhouden en een boodschappenlijst maken."],
   ["Kennis","Onder <b>Kennis</b> lees je per sport over materiaal, voeding, techniek, blessures en hoe je een schema opbouwt. Dit tabblad is nog in ontwikkeling."],
   ["Voortgang en samen","Onder <b>Voortgang</b> zie je met kleuren of je op koers ligt, met uitleg en advies. Met <b>Samen trainen</b> (onder Profiel) zetten vrienden met jouw toestemming trainingen voor je klaar. Tip: installeer de app op je beginscherm."]];
-const UPDATE_HL=[["Samen trainen","met jouw toestemming ziet je trainer de hele training en eventueel je voortgang."],["Profiel","nu in twee delen: Persoonlijk en Instellingen."],["Mijn sporten","(Profiel): kies welke sporten je doet, de rest verdwijnt uit de keuzes. Ook onderdelen van Voeding en Voortgang zet je aan of uit."],["Tabbladen kiezen","(Profiel): laat alleen de onderdelen zien die je gebruikt."],["Athlevon","de app heeft een nieuwe naam: atleet + evolve, elke week een stap sterker."],["Voeding","scan een barcode, of laat een foto van je bord inschatten door je eigen AI."],["Terugknop en muziek","ga makkelijk terug met de knop linksboven of terugvegen, en open je playlist tijdens het trainen."],["Kennis","(nieuw tabblad, test): per sport materiaal, voeding, techniek, blessures en opbouw."],["Progressie","bij elke oefening een doel voor vandaag; je sportschema wordt elke week een stapje zwaarder."],["Oude trainingen inladen","(Schema's): zet eerdere resultaten en schema's zelf in je account, met een AI of een CSV-bestand."],["Sportschema op maat","(Planning): al je sporten in één verantwoord weekplan, met je eigen verdeling, vaste dagen en genoeg herstel."],["Voortgang","zie met kleuren of je op koers ligt, met uitleg en advies."],["Maaltijden en maaltijdplannen","stel je dag samen en zie direct wat je nog nodig hebt, met kosten."],["Boodschappenlijst","maak je lijst thuis en vink af in de winkel."],["Samen trainen","(Profiel): laat een vriend met jouw toestemming trainingen voor je klaarzetten."],["Naar je agenda","zet je trainingen met tijdstip in de agenda van je telefoon."],["Als app installeren","met eigen icoon op je beginscherm."]];
+const UPDATE_HL=[["Horloge","zet een duurtraining via intervals.icu op je Garmin of Apple Watch, en plak een afgeronde training terug."],["Voortgang","grafieken per oefening, en per duursport je kilometers, snelheid en hartslag."],["Samen gesport?","registreer de training ook voor je maatje (met toestemming)."],["Voeding","kies tussen gram en ml."]];
 function introSheet(sh){
   if(sh.mode==="update"){const c=CHANGELOG[0];
     return `<div class="sh"><h2>Nieuw in versie ${esc(c.v)}</h2><button class="ib" data-act="intro-done" aria-label="Sluiten">✕</button></div><div class="card"><ul class="hl">${UPDATE_HL.map(([t,x])=>`<li><b>${esc(t)}</b> ${esc(x)}</li>`).join("")}</ul><p class="small muted" style="margin:6px 0 0">Ook verbeterd: privacy en beveiliging. Bekijk ook wat er in eerdere versies kwam.</p></div>
@@ -4540,112 +4533,6 @@ const _renderTabs=render;render=function(){
   if(pid&&S.ready){if(UI.foodTab&&UI.foodTab!=="advies"&&!subOn("food",UI.foodTab==="dagen"?"plannen":UI.foodTab))UI.foodTab="advies";if(UI.recTab==="records"&&!subOn("records","records"))UI.recTab="voortgang"}
   const r=_renderTabs.apply(this,arguments);try{tabsApply()}catch(e){}return r};
 
-/* ---------- voeding makkelijker: barcode scannen en foto van je maaltijd (via je eigen AI) ---------- */
-const _foodAddSheet2=EXTRA_SHEETS["food-add"];
-EXTRA_SHEETS["food-add"]=function(sh){
-  let h=_foodAddSheet2(sh);
-  if(!sh.pick&&!sh.custom&&!sh.pickMeal&&!(sh.q||"").trim())
-    h=h.replace(/(<input type="search" id="fa-q"[^>]*>)/,`<div class="btnrow fqbtns"><button class="btn" data-act="fx-scan">▦ Barcode scannen</button><button class="btn" data-act="fx-photo">◉ Foto van je bord</button></div>$1`);
-  return h;
-};
-function offMap(p){const m=p.nutriments||{};const k=m["energy-kcal_100g"]??(m["energy_100g"]?m["energy_100g"]/4.184:null);
-  return{n:(p.product_name_nl||p.product_name||"").trim(),brand:(p.brands||"").split(",")[0].trim(),k:+k,p:+(m.proteins_100g||0),c:+(m.carbohydrates_100g||0),f:+(m.fat_100g||0),por:p.serving_quantity?Math.round(+p.serving_quantity):100,off:true}}
-async function offBarcode(code){
-  const r=await fetch(`https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(code)}.json?fields=product_name,product_name_nl,brands,nutriments,serving_quantity`);
-  if(r.status===404)return null;if(!r.ok)throw new Error("net");const j=await r.json();if(!j||j.status===0||!j.product)return null;
-  const f=offMap(j.product);return f.n&&isFinite(f.k)&&f.k>=0?f:null;
-}
-/* scanner: ingebouwde BarcodeDetector als die er is, anders ZXing (barcode.js, alleen geladen als je scant) */
-let scanStop=null;
-function loadZX(){return window.ZXing?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement("script");s.src="barcode.js";s.onload=ok;s.onerror=()=>no(new Error("lib"));document.head.appendChild(s)})}
-async function scanStart(){
-  const v=document.getElementById("scan-v");if(!v)return;scanStop&&scanStop();
-  const done=code=>{scanStop&&scanStop();scanFound(code)};
-  try{
-    if("BarcodeDetector" in window){
-      const det=new BarcodeDetector({formats:["ean_13","ean_8","upc_a","upc_e"]});
-      const st=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});v.srcObject=st;await v.play();
-      let on=true;scanStop=()=>{on=false;st.getTracks().forEach(t=>t.stop());scanStop=null};
-      const tick=async()=>{if(!on)return;try{const r=await det.detect(v);if(r&&r[0]&&r[0].rawValue)return done(r[0].rawValue)}catch(e){}setTimeout(tick,180)};tick();return}
-    await loadZX();
-    const hints=new Map();hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS,[ZXing.BarcodeFormat.EAN_13,ZXing.BarcodeFormat.EAN_8,ZXing.BarcodeFormat.UPC_A,ZXing.BarcodeFormat.UPC_E]);
-    const rd=new ZXing.BrowserMultiFormatReader(hints);
-    scanStop=()=>{try{rd.reset()}catch(e){}scanStop=null};
-    await rd.decodeFromConstraints({video:{facingMode:"environment"}},v,(res)=>{if(res)done(res.getText())});
-  }catch(e){const s=document.getElementById("scan-st");if(s)s.textContent=e&&e.message==="lib"?"De scanner kon niet geladen worden. Typ de code hieronder in.":"Geen toegang tot de camera. Geef toestemming in je instellingen, of typ de code hieronder in."}
-}
-async function scanFound(code){
-  const sh=UI.sheet;if(!sh||sh.type!=="scan")return;code=String(code).replace(/\D/g,"");if(code.length<8){toast("Dat is geen geldige barcode.");return}
-  sh.status=`Gevonden: ${code}. Product opzoeken…`;renderSheet();
-  try{const f=await offBarcode(code);if(UI.sheet!==sh)return;
-    if(!f){sh.status=`Barcode ${code} staat (nog) niet in Open Food Facts. Voeg het product zelf toe met de waarden van de verpakking.`;sh.miss=true;renderSheet();return}
-    UI.sheet={type:"food-add",meal:sh.meal,q:"",pick:f,g:null};renderSheet()}
-  catch(e){sh.status="Opzoeken lukte niet. Controleer je internet en probeer het opnieuw.";renderSheet()}
-}
-EXTRA_SHEETS["scan"]=function(sh){
-  return `<div class="sh"><h2>Barcode scannen</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card stack">
-    <div class="scanbox"><video id="scan-v" playsinline muted autoplay></video><div class="scanline"></div></div>
-    <p class="small muted" id="scan-st" style="margin:0">${esc(sh.status||"Richt je camera op de streepjescode op de verpakking.")}</p>
-    <div class="codeinput"><input type="text" inputmode="numeric" id="scan-code" placeholder="Of typ de code (8-13 cijfers)" autocomplete="off"><button class="btn" data-act="fx-code">Zoeken</button></div>
-    ${sh.miss?`<button class="btn" data-act="fx-custom">+ Eigen product invoeren</button>`:""}
-    <p class="small muted" style="margin:0">De barcode wordt opgezocht in Open Food Facts, een vrije database. Er gaat geen persoonlijke informatie mee.</p>
-    <button class="linkbtn" data-act="fx-back">← Terug</button></div>`;
-};
-/* foto van je bord: de app stuurt zelf niets; je gebruikt je eigen AI */
-const PHOTO_PROMPT=`Schat op basis van mijn foto wat er op mijn bord ligt, en hoeveel gram van elk onderdeel. Geef ALLEEN deze JSON terug, zonder uitleg:
-{"items":[{"name":"Gekookte rijst","g":180,"kcal":234,"eiwit":4.7,"koolhydraten":51,"vet":0.5}]}
-Regels:
-- Eén regel per onderdeel (bijv. rijst, kip, groente, saus).
-- "g" is het geschatte gewicht in gram; "kcal", "eiwit", "koolhydraten" en "vet" gelden voor die hoeveelheid (niet per 100 g).
-- Gebruik Nederlandse productnamen.
-- Twijfel je, kies dan een gangbare portie en noem het onderdeel zo specifiek mogelijk.`;
-EXTRA_SHEETS["photo"]=function(sh){
-  const head=`<div class="sh"><h2>Foto van je bord</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>`;
-  if(sh.items){const t=sh.items.reduce((s,x)=>({k:s.k+x.k*x.g/x.g0,p:s.p+x.p*x.g/x.g0,c:s.c+x.c*x.g/x.g0,f:s.f+x.f*x.g/x.g0}),{k:0,p:0,c:0,f:0});
-    return head+`<div class="card stack"><p class="hp" style="margin:0">Dit schatte je AI. Pas de grammen aan als je het beter weet; de waarden rekenen mee.</p>
-      ${sh.items.map((x,i)=>`<div class="phrow"><span class="fn">${esc(x.name)}</span><input type="text" inputmode="decimal" id="ph-g-${i}" value="${Math.round(x.g)}" aria-label="Gram ${esc(x.name)}"><span class="small muted">g · ${nl(x.k*x.g/x.g0)} kcal</span><button class="ib" data-act="fx-ph-rm" data-v="${i}" aria-label="Weghalen">✕</button></div>`).join("")}
-      <div class="livespeed">${mTxt(t)}</div>
-      <button class="btn primary" data-act="fx-ph-add">Toevoegen aan ${esc((MEALS.find(x=>x[0]===sh.meal)||MEALS[0])[1].toLowerCase())}</button>
-      <p class="small muted" style="margin:0">Een schatting van een foto zit er vaak 20-30% naast, vooral bij sauzen, olie en verborgen ingrediënten. Weeg het af en toe na om je oog te trainen.</p>
-      <button class="linkbtn" data-act="fx-photo">← Opnieuw</button></div>`}
-  return head+`<div class="card stack">
-    <p class="hp"><b>1.</b> Maak een foto van je bord en open je AI-chat (bijv. ChatGPT, Gemini of Claude). Kopieer deze opdracht en stuur hem mee met je foto:</p>
-    <button class="btn primary" data-act="fx-ph-copy">Kopieer de opdracht</button>
-    <details class="privdet"><summary>Bekijk de opdracht</summary><pre class="impprompt">${esc(PHOTO_PROMPT)}</pre></details>
-    <p class="hp"><b>2.</b> Plak het antwoord van de AI hier:</p>
-    <textarea id="ph-txt" rows="5" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder='{"items":[...]}'>${esc(sh.txt||"")}</textarea>
-    <button class="btn primary" data-act="fx-ph-check">Controleren</button>
-    <p class="small muted" style="margin:0">Je foto deel je zelf met de AI die je kiest; deze app stuurt niets door.</p>
-    <button class="linkbtn" data-act="fx-back">← Terug</button></div>`;
-};
-function phParse(txt){
-  const o=impExtract(txt),arr=Array.isArray(o)?o:o.items||o.producten||[];
-  const out=[];for(const x of arr.slice(0,25)){const name=String(x.name||x.naam||x.product||"").trim().slice(0,60),g=impNum(x.g??x.gram??x.grams),k=impNum(x.kcal??x.calorieen??x.energie),p=impNum(x.eiwit??x.protein??x.p)||0,c=impNum(x.koolhydraten??x.carbs??x.c)||0,f=impNum(x.vet??x.fat??x.f)||0;
-    if(!name||!(g>0&&g<=2000)||!(k>=0&&k<=4000))continue;out.push({name,g,g0:g,k,p,c,f})}
-  if(!out.length)throw new Error("er staan geen bruikbare onderdelen in");return out;
-}
-document.addEventListener("click",async ev=>{
-  const b=ev.target.closest("[data-act]");if(!b)return;const act=b.dataset.act;if(!act.startsWith("fx-"))return;const sh=UI.sheet;
-  switch(act){
-    case "fx-scan":UI.sheet={type:"scan",meal:sh&&sh.meal||"ontbijt"};renderSheet();setTimeout(scanStart,60);break;
-    case "fx-code":{const v=(document.getElementById("scan-code")?.value||"").trim();scanStop&&scanStop();await scanFound(v);break}
-    case "fx-custom":scanStop&&scanStop();UI.sheet={type:"food-add",meal:sh.meal,q:"",custom:{n:""}};renderSheet();break;
-    case "fx-back":scanStop&&scanStop();UI.sheet={type:"food-add",meal:sh&&sh.meal||"ontbijt",q:""};renderSheet();break;
-    case "fx-photo":UI.sheet={type:"photo",meal:sh&&sh.meal||"ontbijt",txt:sh&&sh.type==="photo"?sh.txt:""};renderSheet();break;
-    case "fx-ph-copy":try{await navigator.clipboard.writeText(PHOTO_PROMPT);toast("Opdracht gekopieerd. Plak hem in je AI-chat, samen met je foto.")}catch(e){toast("Kopiëren lukte niet; open \"Bekijk de opdracht\" en kopieer de tekst zelf.")}break;
-    case "fx-ph-check":{const t=document.getElementById("ph-txt")?.value||"";sh.txt=t;try{sh.items=phParse(t);renderSheet()}catch(e){toast("Dat lukt niet: "+e.message+".")}break}
-    case "fx-ph-rm":{phReadG();sh.items.splice(+b.dataset.v,1);if(!sh.items.length)sh.items=null;renderSheet();break}
-    case "fx-ph-add":{phReadG();const d=UI.logDate||today();let n=0;
-      for(const x of sh.items){const r=x.g/x.g0;if(!(x.g>0))continue;await logAdd(d,{meal:sh.meal,fid:null,name:x.name,g:Math.round(x.g),k:Math.round(x.k*r),p:+(x.p*r).toFixed(1),c:+(x.c*r).toFixed(1),f:+(x.f*r).toFixed(1),est:true});n++}
-      UI.sheet=null;toastOk(`${n} onderde${n===1?"el":"len"} toegevoegd (geschat)`);render();break}
-  }
-});
-function phReadG(){const sh=UI.sheet;if(!sh||!sh.items)return;sh.items.forEach((x,i)=>{const el=document.getElementById("ph-g-"+i);if(el){const g=num(el.value);if(g>0&&g<=2000)x.g=g}})}
-document.addEventListener("input",ev=>{if(/^ph-g-\d+$/.test(ev.target.id||"")&&UI.sheet&&UI.sheet.items){phReadG();const id=ev.target.id;renderSheet();const el=document.getElementById(id);if(el){el.focus();const n=el.value.length;try{el.setSelectionRange(n,n)}catch(e){}}}});
-/* scanner stoppen als het venster sluit */
-const _renderSheetFx=renderSheet;
-renderSheet=function(){if(scanStop&&!(UI.sheet&&UI.sheet.type==="scan"))scanStop();return _renderSheetFx.apply(this,arguments)};
-
 /* ---------- terug-navigatie: telefoon-terug, swipe en de terugknop linksboven ---------- */
 const NAV_SUBS=["sc","edit","cardio","planEdit","mealEdit","cg","ec","coach","folderEdit","permEdit","nutEdit","prefDraft"];
 const navTabKey=()=>[UI.tab,UI.tab==="food"?UI.foodTab||"advies":"",UI.tab==="records"?UI.recTab||"voortgang":""].join("|");
@@ -4737,6 +4624,293 @@ const _viewProfileAll=viewProfile;viewProfile=function(){
 document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="pf-tab"]');if(!b)return;UI.pfTab=b.dataset.v;lsSet("krachtlogboek.pftab",UI.pfTab);render();window.scrollTo(0,0)});
 /* knoppen die naar iets in Instellingen springen */
 document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="go-settings"]');if(!b)return;UI.tab="profile";UI.pfTab="instellingen";lsSet(LS_TAB,"profile");render();window.scrollTo(0,0)},true);
+
+/* ---------- afgeronde training plakken (uit intervals.icu, Garmin Connect, Strava, Apple Fitness) ----------
+   Alles wordt hier op de telefoon gelezen; er gaat niets naar een andere dienst. */
+const PI_MON={jan:1,januari:1,january:1,feb:2,februari:2,february:2,mrt:3,maart:3,mar:3,march:3,apr:4,april:4,mei:5,may:5,jun:6,juni:6,june:6,jul:7,juli:7,july:7,aug:8,augustus:8,august:8,sep:9,sept:9,september:9,okt:10,oktober:10,oct:10,october:10,nov:11,november:11,dec:12,december:12};
+const piNum=s=>parseFloat(String(s).replace(/\s/g,"").replace(",","."));
+function piSecs(t){t=String(t).trim();let m=t.match(/^(\d{1,2}):(\d{2}):(\d{2})$/);if(m)return +m[1]*3600+ +m[2]*60+ +m[3];
+  m=t.match(/^(\d{1,3}):(\d{2})$/);if(m)return +m[1]*60+ +m[2];
+  m=t.match(/^(?:(\d+)\s*(?:h|u|uur|hr)\s*)?(?:(\d+)\s*(?:m|min)\s*)?(?:(\d+)\s*(?:s|sec)\s*)?$/i);if(m&&(m[1]||m[2]||m[3]))return (+m[1]||0)*3600+(+m[2]||0)*60+(+m[3]||0);return 0}
+const PI_DUR="(\\d{1,2}:\\d{2}:\\d{2}|\\d{1,3}:\\d{2}(?!\\s*\\/)|\\d+\\s*(?:h|u|uur)\\s*\\d+\\s*(?:m|min)(?:\\s*\\d+\\s*s)?|\\d+\\s*(?:m|min)\\s*\\d+\\s*s|\\d+\\s*(?:h|u|uur)(?![a-z])|\\d+\\s*min(?![a-z]))";
+/* zoek een waarde bij een label; kopieën hebben "label: waarde", "waarde label", of waarde en label op aparte regels */
+let PI_LINES=[],PI_DIR="before";
+function piNear(_t,labels,valRe){
+  const L=new RegExp("(^|[^a-z])("+labels+")(?![a-z])","i"),A=new RegExp("^[\\s:=\\-–|]*"+valRe,"i"),B=new RegExp(valRe+"[\\s:|]*$","i");
+  for(let i=0;i<PI_LINES.length;i++){const line=PI_LINES[i],m=line.match(L);if(!m)continue;
+    const st=m.index+m[1].length,en=st+m[2].length,af=line.slice(en).match(A),bf=line.slice(0,st).match(B);
+    if(af)return af[1];if(bf)return bf[1];
+    const prev=[PI_LINES[i-2],PI_LINES[i-1]].filter(x=>x!=null).join(" "),next=[PI_LINES[i+1],PI_LINES[i+2]].filter(x=>x!=null).join(" ");
+    const p=prev.match(B),n=next.match(A);
+    if(PI_DIR==="before"){if(p)return p[1];if(n)return n[1]}else{if(n)return n[1];if(p)return p[1]}}
+  return null}
+function piDir(lines){const li=lines.findIndex(l=>/(^|[^a-z])(distance|afstand)(?![a-z])/i.test(l));if(li<0||/\d\s*(km|mi)\b/i.test(lines[li]))return "before";
+  const prev=(lines[li-2]||"")+" "+(lines[li-1]||""),next=(lines[li+1]||"")+" "+(lines[li+2]||"");
+  if(/\d[\d.,]*\s*(km|mi|m)\s*$/i.test(prev))return "before";if(/^\s*\d[\d.,]*\s*(km|mi|m)\b/i.test(next))return "after";return "before"}
+function piParse(raw){
+  const txt=String(raw||"").replace(/ /g," ").replace(/\r/g,"").slice(0,20000),lo=txt.toLowerCase(),r={};
+  PI_LINES=txt.split("\n").map(x=>x.trim()).filter(Boolean);PI_DIR=piDir(PI_LINES);
+  /* sport */
+  if(/\b(trail\s*run|trailrun|trailloop)/.test(lo))r.sport="Hardlopen",r.trail=true;
+  else if(/\b(zwem|swim|baantjes|open water)/.test(lo))r.sport="Zwemmen";
+  else if(/\b(ride|rit\b|fiets|wielren|cycling|bike|virtualride|gravel|mtb|mountainbike)/.test(lo))r.sport="Wielrennen";
+  else if(/\b(run|hardloop|hardlopen|loop|jog|duurloop|interval|tempo\s*run)/.test(lo))r.sport="Hardlopen";
+  /* afstand */
+  let km=piNear(txt,"distance|afstand|dist\\.?","(\\d+(?:[.,]\\d+)?)\\s*(?:km|kilometer)");
+  if(km)r.km=piNum(km);else{const mi=piNear(txt,"distance|afstand","(\\d+(?:[.,]\\d+)?)\\s*mi\\b");if(mi)r.km=piNum(mi)*1.609;
+    else{const any=txt.match(/(\d+(?:[.,]\d+)?)\s*km\b(?!\s*\/\s*u|\/h)/i);if(any)r.km=piNum(any[1])}}
+  if(r.sport==="Zwemmen"&&!r.km){const m=piNear(txt,"distance|afstand","(\\d{1,2}[.,]\\d{3}|\\d{2,5})\\s*m\\b");if(m)r.km=piNum(m.replace(/[.,]/,""))/1000}
+  if(r.km!=null&&!(r.km>0&&r.km<1000))delete r.km;
+  /* duur: liefst bewegingstijd */
+  let d=piNear(txt,"moving time|bewegingstijd|beweegtijd|tijd in beweging",PI_DUR)||piNear(txt,"duration|duur|time|tijd|total time|totale tijd|elapsed time|verstreken tijd",PI_DUR);
+  if(!d){const m=txt.match(/(?:^|\s)(\d{1,2}:\d{2}:\d{2})(?!\s*\/)/);if(m)d=m[1]}
+  if(d){const s=piSecs(d);if(s>=60&&s<86400)r.secs=s}
+  /* hartslag */
+  const hr="(\\d{2,3})\\s*(?:bpm|spm|slagen)?";
+  let a=piNear(txt,"avg hr|average hr|avg heart rate|average heart rate|gem\\.? hartslag|gemiddelde hartslag|hartslag gem\\.?|hr avg|avg bpm",hr);
+  let x=piNear(txt,"max hr|max heart rate|maximum heart rate|max\\.? hartslag|maximale hartslag|hr max",hr);
+  if(a&&+a>=40&&+a<=230)r.avgHr=+a;if(x&&+x>=40&&+x<=240)r.maxHr=+x;
+  if(!r.avgHr){const m=txt.match(/(\d{2,3})\s*bpm/i);if(m&&+m[1]>=40&&+m[1]<=230)r.avgHr=+m[1]}
+  if(r.maxHr&&r.avgHr&&r.maxHr<r.avgHr)delete r.maxHr;
+  /* extra's voor de toelichting */
+  const el=piNear(txt,"elevation gain|elevation|hoogtemeters|stijging|total ascent|totale stijging|klimmen","(\\d{1,5})\\s*m\\b");
+  const pw=piNear(txt,"avg power|average power|gem\\.? vermogen|gemiddeld vermogen|np|normalized power","(\\d{2,4})\\s*w\\b");
+  const cad=piNear(txt,"avg cadence|average cadence|cadans|gem\\.? cadans","(\\d{2,3})\\s*(?:spm|rpm)?");
+  const extra=[];if(el)extra.push(`Hoogtemeters: ${el} m`);if(pw)extra.push(`Gem. vermogen: ${pw} W`);if(cad)extra.push(`Gem. cadans: ${cad}`);r.extra=extra;
+  /* datum */
+  const t=today();let dt=null,m;
+  if((m=txt.match(/\b(20\d{2})-(\d{2})-(\d{2})\b/)))dt=`${m[1]}-${m[2]}-${m[3]}`;
+  else if((m=txt.match(/\b(\d{1,2})[-/.](\d{1,2})[-/.](20\d{2})\b/)))dt=`${m[3]}-${String(m[2]).padStart(2,"0")}-${String(m[1]).padStart(2,"0")}`;
+  else if((m=lo.match(/\b(\d{1,2})\s+(jan|januari|january|feb|februari|february|mrt|maart|mar|march|apr|april|mei|may|jun|juni|june|jul|juli|july|aug|augustus|august|sep|sept|september|okt|oktober|oct|october|nov|november|dec|december)\.?\s*(20\d{2})?/)))dt=`${m[3]||t.slice(0,4)}-${String(PI_MON[m[2]]).padStart(2,"0")}-${String(m[1]).padStart(2,"0")}`;
+  else if((m=lo.match(/\b(jan|january|feb|february|mar|march|apr|april|may|jun|june|jul|july|aug|august|sep|sept|september|oct|october|nov|november|dec|december)\.?\s+(\d{1,2}),?\s*(20\d{2})?/)))dt=`${m[3]||t.slice(0,4)}-${String(PI_MON[m[1]]).padStart(2,"0")}-${String(m[2]).padStart(2,"0")}`;
+  else if(/\b(gisteren|yesterday)\b/.test(lo))dt=addDays(t,-1);
+  if(dt&&!isNaN(Date.parse(dt+"T12:00:00"))&&dt<=t&&dt>=addDays(t,-400))r.date=dt;
+  /* naam: eerste korte regel met letters die geen label of getal is */
+  const LBL=/^(type|sport|activity|activiteit|distance|afstand|duration|duur|time|tijd|moving|beweg|elapsed|pace|tempo|speed|snelheid|avg|average|gem|max|hr|heart|hartslag|elevation|hoogte|calorie|calorieën|kcal|power|vermogen|cadence|cadans|load|training load|intensity|rpe|zone|laps?|splits?|ronde)/i;
+  for(const line of txt.split("\n").map(s=>s.trim()).filter(Boolean).slice(0,8)){if(line.length>2&&line.length<=70&&/[a-zA-Z]{3}/.test(line)&&!LBL.test(line)&&!/^\d/.test(line)&&!/https?:/.test(line)&&!/^[^:]{2,20}:\s/.test(line)){r.name=line;break}}
+  return r;
+}
+function piFound(r){return [r.km!=null?`${fmt1(r.km)} km`:null,r.secs?durTxt(r.secs/60):null,r.avgHr?`gem. ${r.avgHr} bpm`:null,r.maxHr?`max ${r.maxHr} bpm`:null].filter(Boolean)}
+/* geplande duurtraining op die dag, met dezelfde sport, nog niet gedaan */
+function piPlanFor(date,sport){return planList().find(p=>p.date===date&&planKind(p)==="cardio"&&!planDoneFor(p)&&(sport==="Zwemmen"?!isRunBike(p.sport):(p.sport||"Hardlopen")===sport))||null}
+function piApply(r){
+  const sport=r.sport||(UI.cardio&&UI.cardio.sport!=="Anders"?UI.cardio.sport:"Hardlopen"),date=r.date||today();
+  let c=UI.cardio;
+  if(!c){const p=piPlanFor(date,sport);newCardio(sport==="Zwemmen"?"Zwemmen":sport,p?{...p,id:p.id}:null);c=UI.cardio}
+  else if(r.sport&&r.sport!==c.sport&&!(r.sport==="Zwemmen"&&c.sport==="Anders")){if(isRunBike(r.sport)){c.sport=r.sport}else{c.sport="Anders";c.other="Zwemmen"}}
+  c.date=date;
+  if(r.secs){c.h=String(Math.floor(r.secs/3600)||"");c.m=String(Math.floor(r.secs%3600/60));c.s=String(r.secs%60)}
+  if(r.km!=null)c.km=String(Math.round(r.km*100)/100).replace(".",",");
+  if(r.avgHr)c.avgHr=String(r.avgHr);if(r.maxHr)c.maxHr=String(r.maxHr);
+  const add=[r.name&&!/^(hardlopen|wielrennen|run|ride)$/i.test(r.name)?r.name:null,...(r.extra||[])].filter(Boolean).join(" · ");
+  if(add&&!(c.note||"").includes(add))c.note=((c.note||"").trim()?c.note.trim()+"\n":"")+add;
+  saveCardioDraft();
+}
+EXTRA_SHEETS["paste-in"]=function(sh){const r=sh.res;
+  return `<div class="sh"><h2>Afgeronde training plakken</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card stack">
+    <p class="hp small" style="margin:0">Open je training in <b>intervals.icu</b>, Garmin Connect, Strava of Apple Fitness. Selecteer de samenvatting (afstand, tijd, hartslag), kopieer en plak hier. De app leest de getallen eruit; jij controleert alles voordat je opslaat.</p>
+    <textarea id="pi-text" rows="7" placeholder="Plak hier de tekst van je training">${esc(sh.text||"")}</textarea>
+    <div class="btnrow">${navigator.clipboard&&navigator.clipboard.readText?`<button class="btn" data-act="pi-clip">Plakken</button>`:""}<button class="btn primary" data-act="pi-read">Herkennen</button></div>
+    ${r?(piFound(r).length?`<p class="hp small" style="margin:0">Gevonden: <b>${esc(piFound(r).join(" · "))}</b>${r.date?` · ${esc(dateTxt(r.date))}`:""}${r.sport?` · ${esc(r.sport)}`:""}</p>`:`<p class="hp small" style="margin:0;color:var(--warn)">Ik vond geen afstand of tijd. Kopieer het stuk met de samenvatting (de getallen met km, tijd en bpm) en probeer het opnieuw.</p>`):""}
+    <p class="small muted" style="margin:0">Privacy: de tekst wordt alleen op je telefoon gelezen. Er gaat niets naar een andere dienst, en er wordt pas iets bewaard als jij de training opslaat.</p></div>`};
+document.addEventListener("click",async ev=>{const b=ev.target.closest('[data-act^="pi-"]');if(!b)return;const act=b.dataset.act;
+  if(act==="pi-open"){UI.sheet={type:"paste-in",text:"",res:null};renderSheet();setTimeout(()=>document.getElementById("pi-text")?.focus(),50);return}
+  const sh=UI.sheet;if(!sh||sh.type!=="paste-in")return;
+  if(act==="pi-clip"){try{const t=await navigator.clipboard.readText();sh.text=t||"";sh.res=null;renderSheet()}catch(e){toast("Plakken lukt niet automatisch. Houd het tekstvak ingedrukt en kies Plakken.")}return}
+  if(act==="pi-read"){sh.text=document.getElementById("pi-text")?.value||"";const r=piParse(sh.text);
+    if(!piFound(r).length){sh.res=r;renderSheet();return}
+    piApply(r);UI.sheet=null;renderSheet();render();window.scrollTo(0,0);
+    const c=UI.cardio;toast(`Ingevuld: ${piFound(r).join(" · ")}${c&&c.planId?" · gekoppeld aan je planning":""}. Controleer en sla op.`)}
+});
+
+/* ---------- duurtraining als intervals.icu-code (twee kanten op) ----------
+   Athlevon -> code: van een geplande training (sportschema of eigen omschrijving) maakt de app stappen.
+   Code -> Athlevon: een trainer of gebruiker plakt intervals.icu-code; de app leest en toont hem in het Nederlands. */
+const icuClean=t=>String(t||"").replace(/\b\d+(?:[.,]\d+)?\s*(?:min|km|m|s|sec)?\b/gi,"").replace(/×/g,"").replace(/[(),:±]/g," ").replace(/\s+/g," ").trim().replace(/^./,c=>c.toUpperCase());
+const icuDur=min=>{min=Math.round(min*60);const m=Math.floor(min/60),s=min%60;return m&&s?`${m}m${s}`:m?`${m}m`:`${s}s`};
+const icuDist=(v,u)=>{v=piNum(v);if(/^k/i.test(u))return `${String(Math.round(v*100)/100)}km`;return `${Math.round(v)}mtr`};
+/* Athlevon-omschrijving -> intervals.icu-code */
+function nlToIcu(p){
+  if(!p)return null;const run=(p.sport||"Hardlopen")==="Hardlopen",txt=[p.title,p.desc,p.note].filter(Boolean).join(". "),lo=txt.toLowerCase();
+  const pace=s=>{const m=String(s||"").match(/(\d{1,2}:\d{2})\s*(?:min)?\s*\/\s*km/);return run&&m?m[1]:null};
+  const L=[(p.title||"Duurtraining").replace(/[\n\r]/g," ").slice(0,60),""];
+  const wu=lo.match(/(\d+)(?:\s*-\s*(\d+))?\s*min\s*(?:rustig\s*)?(inlopen|infietsen|inzwemmen|warming[- ]?up|opwarmen|losfietsen|warm\s*lopen)/);
+  const cd=lo.match(/(\d+)\s*min\s*(?:rustig\s*)?(uitlopen|uitfietsen|uitzwemmen|cooling[- ]?down|uitwandelen|losfietsen)/);
+  const rep=lo.match(/(\d+)\s*[×x]\s*(\d+(?:[.,]\d+)?)\s*(min|km|m|meter|s|sec)\b([^.]*?)(?:\bmet\b|,|\+)\s*(\d+(?:[.,]\d+)?)\s*(min|s|sec|m)\b\s*([a-zé ]{0,40})/);
+  const tempo=lo.match(/(\d+)\s*min\s*(?:op\s*)?(?:tempo|drempel|threshold)([^.]*)/);
+  const easy=["easy","long"].includes(p.qual)||/rustig|duurloop|duurrit|lange|zone 2|herstel/.test(lo);
+  if(wu||rep||tempo){
+    if(wu)L.push("Warmup",`- ${run?"Inlopen":"Rustig opwarmen"} ${+(wu[2]||wu[1])}m Z2 HR`,"");
+    if(rep){const n=+rep[1],wv=rep[2],wu2=rep[3],pc=pace(rep[4]),rv=piNum(rep[5]),ru=rep[6],rl=icuClean(rep[7].replace(/\bertussen\b/,""))||"Herstel";
+      const work=/^(min)$/.test(wu2)?icuDur(piNum(wv)):/^(s|sec)$/.test(wu2)?`${Math.round(piNum(wv))}s`:icuDist(wv,wu2==="km"?"km":"m");
+      const rest=/^(s|sec)$/.test(ru)?`${Math.round(rv)}s`:/^m$/.test(ru)&&rv>=50?`${Math.round(rv)}mtr`:icuDur(rv);
+      L.push(`Main Set ${n}x`,`- Snel ${work} ${pc?pc+"/km Pace":"Z4 HR"}`,`- ${rl.split(" ").slice(0,3).join(" ")} ${rest} Z1 HR`,"")}
+    else if(tempo){const pc=pace(tempo[2]);L.push("Main Set",`- Tempo ${+tempo[1]}m ${pc?pc+"/km Pace":"Z3 HR"}`,"")}
+    if(cd)L.push("Cooldown",`- ${run?"Uitlopen":"Rustig uitrijden"} ${+cd[1]}m Z1 HR`);
+    return L.join("\n").trim()}
+  const main=p.km?`${String(Math.round(p.km*100)/100)}km`:p.durMin?icuDur(p.durMin):null;if(!main)return null;
+  const pc=pace(txt),tgt=p.qual==="race"?"":pc&&!easy?pc+"/km Pace":easy||!p.qual?"Z2 HR":p.qual==="tempo"?"Z3 HR":"Z2 HR";
+  L.push(`- ${icuClean(p.title)||"Duurtraining"} ${main}${tgt?" "+tgt:""}`);return L.join("\n").trim();
+}
+/* intervals.icu-code lezen */
+function icuParse(code){
+  const out={title:"",blocks:[]};let cur=null;
+  for(const raw of String(code||"").replace(/\r/g,"").split("\n")){const line=raw.trim();if(!line)continue;
+    if(/^-/.test(line)){if(!cur){cur={name:"",reps:1,steps:[]};out.blocks.push(cur)}
+      const s=line.replace(/^-\s*/,""),st={raw:s,secs:0,m:0};
+      const toks=s.split(/\s+/);let fi=-1;
+      toks.forEach((t,i)=>{const mm=t.match(/^(?:(\d+)h)?(?:(\d+)m(\d{1,2})?)?(?:(\d+)s)?$/);
+        if(!st.secs&&mm&&(mm[1]||mm[2]||mm[4])){st.secs=(+mm[1]||0)*3600+(+mm[2]||0)*60+(+mm[3]||0)+(+mm[4]||0);if(fi<0)fi=i;toks[i]="";return}
+        const dm=t.match(/^(\d+(?:\.\d+)?)(km|mtr|mi)$/);if(!st.m&&dm){st.m=dm[2]==="km"?+dm[1]*1000:dm[2]==="mi"?+dm[1]*1609:+dm[1];if(fi<0)fi=i;toks[i]=""}});
+      st.txt=(fi<0?s:toks.slice(0,fi).join(" ")).trim();st.target=fi<0?"":toks.slice(fi).filter(Boolean).join(" ");
+      cur.steps.push(st)}
+    else{const rm=line.match(/^(.*?)\s*(\d+)\s*x$/i);
+      if(!out.blocks.length&&!out.title&&!rm&&!/^(warm ?up|main ?set|cool ?down|intervals?)$/i.test(line)){out.title=line;continue}
+      cur={name:rm?rm[1].trim():line,reps:rm?+rm[2]:1,steps:[]};out.blocks.push(cur)}}
+  out.blocks=out.blocks.filter(b=>b.steps.length);return out;
+}
+function icuTargetNl(t){if(!t)return "";return t.replace(/\bZ(\d)\s*HR\b/gi,"hartslagzone $1").replace(/\bZ(\d)\s*Pace\b/gi,"tempozone $1").replace(/(\d{1,2}:\d{2})(?:-(\d{1,2}:\d{2}))?\/km\s*Pace/gi,(m,a,b)=>`tempo ${a}${b?"-"+b:""} /km`)
+  .replace(/(\d+)(?:-(\d+))?w\b/gi,(m,a,b)=>`${a}${b?"-"+b:""} W`).replace(/\bZ(\d)\b/g,"vermogenszone $1").replace(/(\d+)rpm/gi,"cadans $1").replace(/\bramp\b/gi,"oplopend").replace(/\bLTHR\b/g,"van je drempelhartslag").replace(/\bHR\b/g,"hartslag").replace(/\bPace\b/g,"van je drempeltempo")}
+function icuStepNl(st){const d=st.secs?durTxt(st.secs/60):st.m?(st.m>=1000?`${fmt1(st.m/1000)} km`:`${Math.round(st.m)} m`):"";return [st.txt,d,icuTargetNl(st.target)].filter(Boolean).join(" · ")}
+function icuNameNl(n){return({warmup:"Warming-up","warm up":"Warming-up","main set":"Kern",cooldown:"Cooling-down","cool down":"Cooling-down"})[String(n).toLowerCase()]||n}
+function icuTotals(P){let s=0,m=0;for(const b of P.blocks)for(const st of b.steps){s+=st.secs*b.reps;m+=st.m*b.reps}return{min:s/60,km:m/1000}}
+function icuNlHtml(P){return `<ol class="icusteps">${P.blocks.map(b=>`<li>${b.name?`<b>${esc(icuNameNl(b.name))}</b>`:""}${b.reps>1?` <span class="chip">${b.reps}×</span>`:""}${b.steps.map(st=>`<div class="small">${esc(icuStepNl(st))}</div>`).join("")}</li>`).join("")}</ol>`}
+function planIcu(p){return (p&&p.steps)||nlToIcu(p)}
+function icuBox(p){const code=planIcu(p);if(!code)return "";const P=icuParse(code);if(!P.blocks.length)return "";
+  return `<details class="card icubox" style="margin-top:10px"><summary><b>Op je horloge zetten</b> <span class="small muted">via intervals.icu</span></summary>
+    <div class="stack" style="margin-top:8px">${icuNlHtml(P)}<button class="btn" data-act="icu-copy" data-id="${esc(p.id)}">Kopieer code voor intervals.icu</button>
+    <p class="small muted" style="margin:0">Plak de code in intervals.icu bij een nieuwe workout. Vandaar gaat hij naar je Garmin, of met de app Intervals.icu Companion naar je Apple Watch.${p.steps?"":" De stappen zijn gemaakt uit de omschrijving: kijk ze even na."}</p></div></details>`}
+/* invoer bij plannen: code plakken of schrijven */
+function icuField(sh){const v=sh.steps||"",P=v.trim()?icuParse(v):null;
+  return `<details class="privdet" ${v?"open":""}><summary>Stappen voor je horloge <i class="small muted">optioneel, intervals.icu-code</i></summary><div class="stack" style="margin-top:8px">
+    <textarea id="pa-steps" rows="6" placeholder="Bijv.\nWarmup\n- Inlopen 15m Z2 HR\nMain Set 5x\n- Snel 3m 4:30/km Pace\n- Wandelpas 2m Z1 HR\nCooldown\n- Uitlopen 10m Z1 HR">${esc(v)}</textarea>
+    <div id="pa-steps-pv">${icuPreview(P)}</div>
+    <p class="small muted" style="margin:0">Plak een workout uit intervals.icu, of schrijf hem zelf zo. Duur: 10m, 30s, 1m30. Afstand: 1km, 400mtr. Doel: Z2 HR, 4:30/km Pace, 200w. Herhalen: zet "5x" achter de kop.</p></div></details>`}
+function icuPreview(P){if(!P)return "";if(!P.blocks.length)return `<p class="small" style="margin:0;color:var(--warn)">Nog geen stappen herkend. Begin elke stap met "- ".</p>`;const T=icuTotals(P);
+  return icuNlHtml(P)+`<p class="small muted" style="margin:0">Totaal ± ${[T.min?durTxt(T.min):null,T.km?fmt1(T.km)+" km":null].filter(Boolean).join(" · ")||"–"}</p>`}
+document.addEventListener("input",ev=>{if(ev.target.id!=="pa-steps"||!UI.sheet)return;UI.sheet.steps=ev.target.value;const pv=document.getElementById("pa-steps-pv");if(pv)pv.innerHTML=icuPreview(ev.target.value.trim()?icuParse(ev.target.value):null)});
+document.addEventListener("click",async ev=>{const b=ev.target.closest('[data-act="icu-copy"]');if(!b)return;const p0=S.plan[b.dataset.id];if(!p0)return;const code=planIcu({id:b.dataset.id,...p0});
+  try{await navigator.clipboard.writeText(code);toastOk("Code gekopieerd. Plak hem in intervals.icu.")}catch(e){UI.sheet={type:"icu-show",code};renderSheet()}});
+EXTRA_SHEETS["icu-show"]=sh=>`<div class="sh"><h2>Code voor intervals.icu</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card stack"><p class="hp small" style="margin:0">Houd de tekst ingedrukt, kies Alles selecteren en Kopieer.</p><textarea rows="10" readonly>${esc(sh.code)}</textarea></div>`;
+
+/* ---------- voortgang: grafieken per oefening en per duursport, per week ---------- */
+const PC_WEEKS=8;
+function pcWeeks(){const ws=weekStart(today());return [...Array(PC_WEEKS)].map((_,i)=>addDays(ws,-7*(PC_WEEKS-1-i)))}
+const pcWk=d=>weekStart(d);
+const pcLbl=w=>{const d=new Date(w+"T12:00:00");return d.getDate()+"/"+(d.getMonth()+1)};
+/* klein staaf- of lijndiagram als SVG; lege weken blijven leeg */
+function pcChart(vals,weeks,o={}){
+  const W=320,H=96,pl=4,pr=4,pt=14,pb=16,n=vals.length,have=vals.filter(v=>v!=null);if(!have.length)return "";
+  let mn=o.bar?0:Math.min(...have),mx=Math.max(...have);if(mx===mn){mx+=mx?Math.abs(mx)*0.1:1;mn=o.bar?0:mn-(Math.abs(mn)*0.1||1)}
+  if(o.invert){}
+  const x=i=>pl+(W-pl-pr)*(n===1?0.5:i/(n-1)),bw=(W-pl-pr)/n*0.62,y=v=>{let t=(v-mn)/(mx-mn);if(o.invert)t=1-t;return pt+(H-pt-pb)*(1-t)};
+  let g="";
+  if(o.bar)vals.forEach((v,i)=>{if(v==null||!v)return;const cx=pl+(W-pl-pr)*(i+0.5)/n,yy=y(v);g+=`<rect x="${(cx-bw/2).toFixed(1)}" y="${yy.toFixed(1)}" width="${bw.toFixed(1)}" height="${(H-pb-yy).toFixed(1)}" rx="3" fill="var(--accent)" opacity="${i===n-1?1:.55}"/>`});
+  else{const pts=vals.map((v,i)=>v==null?null:[x(i),y(v)]).filter(Boolean);
+    g+=`<polyline points="${pts.map(p=>p.map(c=>c.toFixed(1)).join(",")).join(" ")}" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>`+pts.map((p,k)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${k===pts.length-1?3.6:2.4}" fill="var(--accent)"/>`).join("")}
+  const li=vals.map((v,i)=>v==null?-1:i).filter(i=>i>=0).pop(),lv=vals[li];
+  const lx=o.bar?pl+(W-pl-pr)*(li+0.5)/n:x(li);
+  g+=`<text x="${Math.min(W-2,Math.max(2,lx)).toFixed(1)}" y="${Math.max(10,y(lv)-5).toFixed(1)}" text-anchor="${li===n-1?"end":"middle"}" font-size="10" font-weight="700" fill="var(--fg)">${esc(o.fmt?o.fmt(lv):String(lv))}</text>`;
+  g+=`<text x="${pl}" y="${H-3}" font-size="9" fill="var(--muted)">${pcLbl(weeks[0])}</text><text x="${W-pr}" y="${H-3}" font-size="9" text-anchor="end" fill="var(--muted)">deze week</text>`;
+  return `<svg class="pcchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(o.label||"")}">${g}</svg>`}
+/* verschil: laatste 2 weken met data tegenover de 4 weken daarvoor */
+function pcTrend(vals,higher=true,done=false){const idx=vals.map((v,i)=>v==null?-1:i).filter(i=>i>=0&&!(done&&i===vals.length-1));if(idx.length<2)return null;
+  const rec=idx.slice(-2).map(i=>vals[i]),old=idx.slice(0,-2).slice(-4).map(i=>vals[i]);if(!old.length)return null;
+  const a=rec.reduce((s,v)=>s+v,0)/rec.length,b=old.reduce((s,v)=>s+v,0)/old.length;if(!b)return null;const d=(a-b)/b*(higher?1:-1);
+  return{pct:d,st:d>0.015?"good":d<-0.03?"bad":"warn"}}
+function pcBadge(t,txt){if(!t)return `<span class="pst">${txt||"Te weinig weken"}</span>`;const s=t.st==="good"?"Vooruit":t.st==="bad"?"Achteruit":"Gelijk";return `<span class="pst ${ST[t.st][1]}">${s} ${t.pct>0?"+":""}${Math.round(t.pct*100)}%</span>`}
+function pcStrength(){
+  const weeks=pcWeeks(),from=weeks[0],ses=sortedSessions().filter(s=>s.kind!=="cardio"&&s.date>=from),by={};
+  for(const s of ses){const w=pcWk(s.date);for(const e of s.entries||[]){const k=entryKey(e);const o=by[k]||(by[k]={name:exName(e.exId,e.name),w:{},n:0,best:null});o.n++;
+    for(const x of e.sets||[]){if(!(x.r>0))continue;const v=e1rm(x);if(!o.w[w]||v>o.w[w])o.w[w]=v;if(!o.best||better(x,o.best))o.best=x}}}
+  const list=Object.values(by).filter(o=>Object.keys(o.w).length>=2).sort((a,b)=>b.n-a.n).slice(0,10);
+  if(!list.length)return `<div class="card empty" style="margin-top:12px"><strong>Nog te weinig krachttrainingen</strong><p class="muted">Doe dezelfde oefening in minstens 2 verschillende weken, dan zie je hier je progressie.</p></div>`;
+  return `<p class="small muted" style="margin:12px 0 8px">Per oefening je sterkste set per week, omgerekend naar één herhaling (zo kun je zware en lichte sets vergelijken). De laatste 2 weken tegenover de 4 weken daarvoor.</p><div class="pcgrid">`+list.map(o=>{const vals=weeks.map(w=>o.w[w]!=null?Math.round(o.w[w]*10)/10:null);
+    return `<div class="card pccard"><div class="pchead"><b>${esc(o.name)}</b>${pcBadge(pcTrend(vals))}</div>${pcChart(vals,weeks,{fmt:v=>fmt1(v)+" kg",label:o.name})}<span class="small muted">Beste set: ${o.best?esc(setTxt(o.best)):"-"}</span></div>`}).join("")+`</div>`}
+const PC_SPORTS=[["Hardlopen","run",s=>s.sport==="Hardlopen"],["Wielrennen","bike",s=>s.sport==="Wielrennen"],["Zwemmen","swim",s=>/zwem/i.test(s.sport||"")]];
+function pcEndu(){
+  const weeks=pcWeeks(),from=weeks[0],all=sortedSessions().filter(s=>s.kind==="cardio"&&s.date>=from);let h="";
+  for(const [name,key,is] of PC_SPORTS){const ss=all.filter(is);if(!ss.length)continue;if(typeof spOn==="function"&&!spOn(key)&&!ss.length)continue;
+    const swim=key==="swim",run=key==="run",W={};for(const s of ss){const w=pcWk(s.date),o=W[w]||(W[w]={km:0,min:0,kmT:0,minT:0,hrS:0,hrM:0,n:0});o.n++;o.km+=+s.km||0;o.min+=+s.durMin||0;if(s.km&&s.durMin){o.kmT+=+s.km;o.minT+=+s.durMin}if(s.avgHr&&s.durMin){o.hrS+=s.avgHr*s.durMin;o.hrM+=+s.durMin}}
+    const km=weeks.map(w=>W[w]?Math.round(W[w].km*10)/10:null),spd=weeks.map(w=>W[w]&&W[w].kmT?(swim?W[w].minT/(W[w].kmT*10):run?W[w].minT/W[w].kmT:W[w].kmT/(W[w].minT/60)):null),hr=weeks.map(w=>W[w]&&W[w].hrM?Math.round(W[w].hrS/W[w].hrM):null);
+    const sp=v=>swim?paceTxt(v,1).replace(" /km","")+" /100 m":run?paceTxt(v,1):fmt1(v)+" km/u";
+    h+=`<h2>${esc(name)}</h2><div class="pcgrid">
+      <div class="card pccard"><div class="pchead"><b>${swim?"Afstand":"Kilometers"} per week</b>${pcBadge(pcTrend(km,true,true))}</div>${pcChart(km.map(v=>v||null),weeks,{bar:true,fmt:v=>fmt1(v)+" km",label:name+" afstand"})}</div>
+      <div class="card pccard"><div class="pchead"><b>${run||swim?"Gemiddeld tempo":"Gemiddelde snelheid"}</b>${pcBadge(pcTrend(spd,!(run||swim)))}</div>${pcChart(spd,weeks,{fmt:sp,invert:run||swim,label:name+" tempo"})||`<p class="small muted">Vul duur én afstand in om je tempo te zien.</p>`}</div>
+      <div class="card pccard"><div class="pchead"><b>Gemiddelde hartslag</b>${pcBadge(null,hr.some(v=>v)?"Ter info":"Nog geen hartslag")}</div>${pcChart(hr,weeks,{fmt:v=>v+" bpm",label:name+" hartslag"})||`<p class="small muted">Vul je gemiddelde hartslag in, of plak je training uit je horloge-app.</p>`}<span class="small muted">Lagere hartslag bij hetzelfde tempo betekent dat je fitter wordt.</span></div></div>`}
+  return h||`<div class="card empty" style="margin-top:12px"><strong>Nog geen duurtrainingen</strong><p class="muted">Log je hardloop-, fiets- of zwemtrainingen, dan zie je hier per week je afstand, tempo en hartslag.</p></div>`}
+const PC_NOTE=`<p class="small muted" style="margin:12px 0 0">Kilometers: de laatste 2 hele weken tegenover de 4 weken daarvoor (deze week telt nog niet mee). Tempo en snelheid: de laatste 2 weken tegenover de 4 weken daarvoor.</p>`;
+const PC_TABS=[["overzicht","Overzicht"],["kracht","Kracht"],["duur","Duursport"]];
+const _viewProgressPc=viewProgress;viewProgress=function(){const t=PC_TABS.some(x=>x[0]===UI.pcTab)?UI.pcTab:"overzicht";
+  return `<div class="seg seg3 pctabs" style="margin-top:12px">${PC_TABS.map(([k,l])=>`<button class="segb" data-act="pc-tab" data-v="${k}" aria-pressed="${t===k}">${l}</button>`).join("")}</div>`+(t==="kracht"?pcStrength():t==="duur"?PC_NOTE+pcEndu():_viewProgressPc())};
+document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="pc-tab"]');if(!b)return;UI.pcTab=b.dataset.v;if(UI.sheet&&UI.sheet.type==="hv-prog")renderSheet();else render()});
+
+/* ---------- 6.3: wedstrijddatum, samen gesport, gedeelde producten, ml, horloge-instelling ---------- */
+/* sportschema: na het invullen van een wedstrijddatum meteen "tot de wedstrijd" kiezen */
+document.addEventListener("change",ev=>{const id=ev.target.id||"";if(!UI.sc||!(/^sc-race-\d+$/.test(id)||id==="sc-mrace"))return;
+  scRead();const c=UI.sc;if(scRaceWeeks(c)&&ev.target.value)c.weeks="race";const y=window.scrollY;render();window.scrollTo(0,y);
+  const w=scRaceWeeks(c);if(w)toast(`Je schema loopt tot je wedstrijd: ${w} ${w===1?"week":"weken"}.`)});
+
+/* samen gesport: dezelfde training ook bij je maatje registreren (met toestemming 'together') */
+PERMS.splice(PERMS.findIndex(p=>p[0]==="direct"),0,["together","Een training die we samen deden ook bij mij registreren"]);
+PERM_SHORT.together="samen gesport";KIND_TXT.session="Training";
+let togPending=[];
+function togetherRow(kind){const ls=linksWith("together");if(!ls.length)return "";const st=kind==="c"?UI.cardio:draft;const w=(st&&st.with)||[];
+  return `<div class="f">Samen gedaan met <i>optioneel: de training komt ook bij hem of haar</i><div class="chips">${ls.map(l=>`<button class="chipb" data-act="tg-with" data-k="${kind}" data-id="${l.id}" aria-pressed="${w.includes(l.id)}">${esc(l.name)}</button>`).join("")}</div></div>`}
+document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="tg-with"]');if(!b)return;const st=b.dataset.k==="c"?UI.cardio:draft;if(!st)return;const id=+b.dataset.id;
+  st.with=(st.with||[]).includes(id)?st.with.filter(x=>x!==id):[...(st.with||[]),id];b.setAttribute("aria-pressed",String(st.with.includes(id)));if(b.dataset.k==="c")saveCardioDraft();else saveDraft()});
+/* vlak voor opslaan onthouden met wie */
+document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="c-save"],[data-act="finish"]');if(!b)return;const st=b.dataset.act==="c-save"?UI.cardio:draft;togPending=(st&&st.with)||[]},true);
+async function togetherSend(rec){const ids=togPending;togPending=[];if(!ids.length)return;
+  const ses={...rec};delete ses.planId;delete ses.routineId;delete ses.efforts;delete ses.feel;delete ses.importAt;
+  const name=rec.kind==="cardio"?(rec.sport||"Duurtraining"):(rec.routineName||"Training");let ok=[];
+  for(const id of ids){const l=soc().outgoing.find(x=>x.id===id);if(!l||!l.perms.together)continue;
+    try{await rpc("kl_send",{p_code:code,p_profile:pid,p_pin:myPin(),p_link:l.id,p_kind:"session",p_data:{name,session:ses}});ok.push(l.name)}catch(e){}}
+  if(ok.length)setTimeout(()=>toast(`Ook geregistreerd voor ${ok.join(" en ")}${ok.length?"":""}.`),1800)}
+const _fbAfterSave63=fbAfterSave;fbAfterSave=function(id,rec){_fbAfterSave63(id,rec);togetherSend(rec)};
+/* ontvanger */
+const _importInbox63=importInbox;importInbox=async function(it){if(it.kind!=="session")return _importInbox63(it);
+  const s={...(it.data&&it.data.session||{})},by=it.name;if(!s.date)throw new Error("leeg");
+  const exMap=new Map(Object.entries(S.exercises).map(([id,x])=>[norm(x.name),id])),ex=[];
+  s.entries=(s.entries||[]).map(e=>{const k=norm(e.name||"");let id=exMap.get(k);if(!id&&k){id=uid();exMap.set(k,id);ex.push(["exercises",id,{name:e.name,group:e.group||"Overig"}])}return{...e,exId:id||e.exId}});
+  await runJobs(ex,put);
+  if(s.kind==="cardio"){const p=piPlanFor(s.date,/zwem/i.test(s.sport||"")?"Zwemmen":s.sport);if(p){s.planId=p.id;s.planTitle=planTitle(p)}}
+  s.note=[`Samen met ${by}.`,s.note].filter(Boolean).join(" ");s.ts=Date.now();s.with=by;
+  await put("sessions",uid(),s);return `training "${it.data.name||"Training"}" van ${dateTxt(s.date)}`};
+const _inboxDetail63=inboxDetail;inboxDetail=function(it){if(it.kind!=="session")return _inboxDetail63(it);const s=(it.data||{}).session||{};
+  return `${s.date?esc(dateTxt(s.date)):""}${s.kind==="cardio"?" · "+esc(cardioSummary(s)):` · ${(s.entries||[]).length} oefeningen`} · samen gesport`};
+
+/* producten die de beheerder heeft nagelezen: voor iedereen */
+S.sharedFoods=[];
+async function loadSharedFoods(){try{const d=await rpc("kl_setting_get",{p_code:code,p_key:"foods"});const items=(d&&d.items)||[];
+  const mine=new Set(Object.values(S.foods||{}).map(f=>norm(f.n)));
+  for(let i=FOODS.length-1;i>=0;i--)if(FOODS[i].cat==="gedeeld"){delete FOOD[FOODS[i].id];FOODS.splice(i,1)}
+  for(const x of items){if(!x||!x.n||mine.has(norm(x.n))||FOODS.some(f=>norm(f.n)===norm(x.n)))continue;const f={id:"g-"+x.id,n:x.n,k:+x.k||0,p:+x.p||0,c:+x.c||0,f:+x.f||0,por:x.por||100,cat:"gedeeld",...(x.ml?{ml:true}:{})};FOODS.push(f);FOOD[f.id]=f}
+  S.sharedFoods=items}catch(e){}}
+function adminFoodShare(){const n=Object.keys(S.foods||{}).length;
+  return `<h2>Producten delen</h2><div class="card stack"><p class="hp small" style="margin:0">Maak je eigen producten (${n}) beschikbaar voor iedereen. Alleen naam en voedingswaarden gaan mee, niet wanneer of hoeveel je ze eet. Voeg je later nieuwe producten toe, tik dan opnieuw.</p>
+    <button class="btn" data-act="fs-share" ${n?"":"disabled"}>Mijn ${n} producten delen met iedereen</button><span class="small muted">Nu gedeeld: ${(S.sharedFoods||[]).length}</span></div>`}
+document.addEventListener("click",async ev=>{const b=ev.target.closest('[data-act="fs-share"]');if(!b)return;
+  const items=Object.entries(S.foods||{}).map(([id,f])=>({id,n:f.n,k:+f.k||0,p:+f.p||0,c:+f.c||0,f:+f.f||0,por:f.por||100,...(f.ml?{ml:true}:{})}));
+  try{await rpc("kl_admin_setting_put",{p_code:code,p_admin:pid,p_admin_pin:myPin(),p_key:"foods",p_data:{items,updated:today()}});await loadSharedFoods();toastOk(`${items.length} producten gedeeld met iedereen`);render()}catch(e){handleErr(e)}});
+
+/* gram of ml */
+const ML_RE=/melk|\bsap\b|sinaasappelsap|appelsap|drink|cola|frisdrank|limonade|\bbier\b|\bwijn\b|\bwater\b|koffie|\bthee\b|shake|smoothie|kefir|karnemelk|bouillon|siroop/i;
+const isMl=f=>!!(f&&(f.ml||(!f.u&&ML_RE.test(f.n||"")&&!/melkchocolade|chocolade(?!melk)|poeder|kaas|reep|koek|ijs\b/i.test(f.n||""))));
+const faUnit=sh=>sh.unit||(isMl(sh.pick)?"ml":"g");
+const uTxt=it=>it&&it.ml?"ml":"g";
+document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="fa-unit"]');if(!b||!UI.sheet)return;const sh=UI.sheet,v=b.dataset.v;
+  if(sh.pick){sh.unit=v;renderSheet();return}
+  if(sh.custom){sh.custom.ml=v==="ml";document.querySelectorAll('[data-act="fa-unit"]').forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.v===v)));const hl=document.getElementById("cf-unit-h");if(hl)hl.textContent=`Voedingswaarden per 100 ${v}, staan op de verpakking`}});
+function faUnitSeg(u){return `<div class="seg seg2" style="margin-top:2px">${[["g","Gram"],["ml","Milliliter"]].map(([k,l])=>`<button class="segb" data-act="fa-unit" data-v="${k}" aria-pressed="${u===k}">${l}</button>`).join("")}</div>`}
+
+/* horloge-code alleen voor wie intervals.icu gebruikt */
+const icuOn=()=>!!(tabsMeta().icu);
+const _icuBox63=icuBox;icuBox=function(p){return icuOn()?_icuBox63(p):""};
+const _icuField63=icuField;icuField=function(sh){return icuOn()||(sh.steps||"").trim()?_icuField63(sh):""};
+function icuCard(){return `<h2>Horloge</h2><div class="card stack"><label class="check"><input type="checkbox" id="icu-on" ${icuOn()?"checked":""}><span><b>Ik gebruik intervals.icu</b> om trainingen op mijn Garmin of Apple Watch te zetten</span></label>
+  <p class="small muted" style="margin:0">Aan: bij elke geplande duurtraining zie je de stappen voor je horloge, met een knop om de code te kopiëren. Een afgeronde training terugplakken kan altijd, ook zonder intervals.icu.</p></div>`}
+document.addEventListener("change",async ev=>{if(ev.target.id!=="icu-on")return;await tabsSave({icu:ev.target.checked});toastOk(ev.target.checked?"Horloge-stappen staan aan":"Horloge-stappen staan uit")});
 
 /* ---------- sheets ---------- */
 function renderSheet(){
