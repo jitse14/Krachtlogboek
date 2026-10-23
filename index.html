@@ -351,6 +351,10 @@ a.btn{text-decoration:none;color:var(--fg);text-align:center;display:grid;place-
 .pcgrid{display:grid;gap:10px}.pccard{display:grid;gap:6px}.pchead{display:flex;justify-content:space-between;align-items:center;gap:8px}.pchead .pst{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}.pcchart{width:100%;height:auto;display:block}
 @media (min-width:760px){.pcgrid{grid-template-columns:1fr 1fr}}
 .icusteps{margin:0;padding-left:20px;display:grid;gap:6px}.icusteps li>div{color:var(--muted)}.icubox summary{cursor:pointer}
+.prow.c-kracht .pk{background:#7B3FE4}.prow.c-hiit .pk{background:#D7263D}.prow.c-cali .pk{background:#F26B1D}.prow.c-run .pk,.prow.c-trail .pk{background:#2E9E5B}.prow.c-bike .pk{background:#E8B400;color:#14171C}.prow.c-swim .pk{background:#1F7AE0}
+.card.plan.c-kracht{border-left-color:#7B3FE4}.card.plan.c-hiit{border-left-color:#D7263D}.card.plan.c-cali{border-left-color:#F26B1D}.card.plan.c-run,.card.plan.c-trail{border-left-color:#2E9E5B}.card.plan.c-bike{border-left-color:#E8B400}.card.plan.c-swim{border-left-color:#1F7AE0}
+.card.plan.c-kracht .ph .chip,.card.plan.c-hiit .ph .chip,.card.plan.c-cali .ph .chip,.card.plan.c-run .ph .chip,.card.plan.c-trail .ph .chip,.card.plan.c-bike .ph .chip,.card.plan.c-swim .ph .chip{color:#fff}
+.card.plan.c-kracht .ph .chip{background:#7B3FE4}.card.plan.c-hiit .ph .chip{background:#D7263D}.card.plan.c-cali .ph .chip{background:#F26B1D}.card.plan.c-run .ph .chip,.card.plan.c-trail .ph .chip{background:#2E9E5B}.card.plan.c-bike .ph .chip{background:#E8B400;color:#14171C}.card.plan.c-swim .ph .chip{background:#1F7AE0}
 /* brede schermen: tablet en laptop */
 @media (min-width:760px){
   .wrap,nav.tabs .in{max-width:720px}
@@ -767,11 +771,11 @@ function viewTrain(){
   if(UI.cardio)return viewCardio();
   if(UI.coach&&S.me&&S.me.isAdmin)return viewCoach();
   let h=socialBanner()+newsBanner()+queueBanner()+wcCard()+viewPlanCard()+`<h2>Training starten</h2>`+trainStartList();
-  if(spCardio().length)h+=`<h2>${spFit()||spRun()||spOn("bike")?"Duurtraining":"Sport"}</h2><div class="btnrow">${spCardio().map(s=>`<button class="btn" data-act="c-new" data-v="${s}">+ ${esc(spCardioLbl(s))}</button>`).join("")}</div><button class="btn block" style="margin-top:8px" data-act="pi-open">Afgeronde training plakken</button>`;
+  if(spCardio().length)h+=`<h2>${spFit()||spRun()||spOn("bike")?"Duurtraining":"Sport"}</h2><div class="btnrow">${spCardio().map(s=>`<button class="btn" data-act="c-new" data-v="${s}">+ ${esc(spCardioLbl(s))}</button>`).join("")}</div>`;
   const recent=sortedSessions().slice(0,6);
   if(recent.length){
     h+=`<h2>Recente trainingen</h2><div class="recgroup">`+recent.map(s=>{const nSets=(s.entries||[]).reduce((t,e)=>t+e.sets.length,0);
-      if(s.kind==="cardio")return `<button class="row" data-act="open-session" data-id="${s.id}"><span class="n">${esc(s.sport)}${s.purpose?` <span class="chip">${esc(s.purpose)}</span>`:""}</span><span class="b none">${dateTxt(s.date)}</span><span class="l">${cardioSummary(s)}</span></button>`;
+      if(s.kind==="cardio")return `<button class="row" data-act="open-session" data-id="${s.id}"><span class="n">${esc(s.trail?"Trailrunnen":s.sport)}${s.purpose?` <span class="chip">${esc(s.purpose)}</span>`:""}</span><span class="b none">${dateTxt(s.date)}</span><span class="l">${cardioSummary(s)}</span></button>`;
       return `<button class="row" data-act="open-session" data-id="${s.id}"><span class="n">${esc(s.routineName||"Training")}</span><span class="b none">${dateTxt(s.date)}</span><span class="l">${(s.entries||[]).length} oefeningen · ${nSets} sets</span></button>`}).join("")+`</div>`;
   }
 
@@ -850,7 +854,7 @@ function viewHelp(){
     ["Vul je sets in","Per set vul je kg en reps in. Leeg kg betekent bodyweight. Grijze getallen zijn je resultaat van vorige keer: tik op het setnummer om ze over te nemen. Met <b>+ Set</b> voeg je een set toe."],
     ["Sla op","Tik op <b>Training opslaan</b>. Sets zonder reps worden overgeslagen. Je training blijft bewaard als je tussendoor de app sluit, tot je opslaat of weggooit. Geen internet bij het opslaan? Dan blijft de training op je telefoon staan en wordt hij automatisch verstuurd zodra je weer verbinding hebt."],
     ["Bekijk je records","In <b>Voortgang → Records</b> staat per spiergroep je zwaarste set. Tik op een oefening voor de volledige geschiedenis, of om de naam of spiergroep aan te passen."],
-    ["Log je duurtraining","Onder <b>Trainen → Duurtraining</b> log je hardlopen of wielrennen: duur, afstand, eventueel hartslag en een toelichting. Snelheid en tempo worden automatisch berekend. Al gelopen of gefietst met je horloge? Tik op <b>Afgeronde training plakken</b> en plak de samenvatting uit intervals.icu, Garmin Connect, Strava of Apple Fitness: de app vult duur, afstand en hartslag in en koppelt de training aan je planning. Je controleert alles voordat je opslaat. Andere sporten zoals voetbal kies je onder Anders."],
+    ["Log je duurtraining","Onder <b>Trainen → Duurtraining</b> log je hardlopen of wielrennen: duur, afstand, eventueel hartslag en een toelichting. Snelheid en tempo worden automatisch berekend. Neem duur, afstand en eventueel hartslag over uit je horloge-app. Bij hardlopen kies je ook of het een trail was. Andere sporten zoals voetbal kies je onder Anders."],
     ["Eerdere resultaten overzetten","Heb je eerdere resultaten of schema's in je notities, Excel of een andere app? Ga naar <b>Schema's → Oude trainingen of schema's → Inladen</b>. Kies <b>Met een AI</b>: kopieer de opdracht, plak die met je gegevens in ChatGPT, Gemini of Claude, en plak het antwoord terug in de app. Of kies <b>CSV-bestand</b> voor een export uit Strong, Hevy of je eigen tabel. Je ziet eerst wat er wordt ingeladen; dubbele trainingen worden overgeslagen. Tot 7 dagen later kun je het inladen ongedaan maken."],
     ["Voeding","In <b>Voeding</b> zie je je dagdoel op basis van je profiel en sportweek. Je kunt het zelf aanpassen, je voorkeuren voor eten instellen, drie voorbeelddagen met grammen bekijken, je eten registreren in het dagboek en een boodschappenlijst maken."],
     ["Privacy en bewaren","Details van trainingen, je voedingsdagboek en je planning worden 3 maanden bewaard en daarna samengevat; je records blijven altijd staan. Lees de <b>Privacyverklaring</b> onder Profiel. Daar kun je ook je account verwijderen."],
@@ -1210,7 +1214,7 @@ function foodAddSheet(sh){
     <label class="f">Normale portie <i>optioneel</i><input type="text" inputmode="decimal" id="cf-por" value="${esc(sh.custom.por||"")}" placeholder="g"></label>
     <button class="btn primary" data-act="n-cf-save">Opslaan en kiezen</button><button class="linkbtn" data-act="n-fa-back">← Terug</button></div>`;
   const recent=[];const seen=new Set();
-  for(const d of Object.keys(S.foodlog).sort().reverse())for(const it of logDay(d).slice().reverse()){if(recent.length>=8)break;const k=it.fid||it.name;if(seen.has(k))continue;seen.add(k);recent.push(it)}
+  for(const d of Object.keys(S.foodlog).sort().reverse())for(const it of logDay(d).slice().reverse()){if(recent.length>=8)break;if(UI.sheet&&UI.sheet.meal&&it.meal!==UI.sheet.meal)continue;const k=it.fid||it.name;if(seen.has(k))continue;seen.add(k);recent.push(it)}
   const all=[...myFoods(),...FOODS];
   const res=q?all.filter(f=>norm(f.n).includes(q)).slice(0,30):[];
   let h=`<div class="sh"><h2>${esc((MEALS.find(x=>x[0]===sh.meal)||MEALS[0])[1])} · toevoegen</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>
@@ -1292,7 +1296,7 @@ function viewCardio(){
   const list=spOtherList();if(c.other&&!list.includes(c.other)&&OTHER_SPORTS.includes(c.other))list.push(c.other);
   return `<div class="wohead"><div class="title">${rb?"Duurtraining loggen":"Sport loggen"}</div></div>${pl?`<div class="card plan" style="margin-top:12px"><span class="ml">Geplande training · ${esc(dayLabel(pl.date))}</span><strong>${esc(planTitle({id:c.planId,...pl}))}</strong>${planTargets(pl)?`<span class="muted small">${planTargets(pl)}</span>`:""}${pl.desc||pl.note?`<p class="pdesc">${esc(pl.desc||pl.note)}</p>`:""}</div>`:""}<div class="card stack" style="margin-top:12px">
     <div class="f">Sport${spCardioSeg("c-sport",c.sport)}</div>
-    <button class="btn block" data-act="pi-open">Afgeronde training plakken (optioneel)</button><span class="small muted">Uit intervals.icu, Garmin Connect, Strava of Apple Fitness: dan vult de app alles in.</span>
+    ${trailSeg(c)}
     ${rb?``
       :`<div class="f">Welke sport?<div class="chips">${list.map(s=>`<button class="chipb" data-act="c-other" data-v="${esc(s)}" aria-pressed="${c.other===s}">${esc(s)}</button>`).join("")}</div></div>
       ${spOn("other")||(c.other&&!OTHER_SPORTS.includes(c.other))?`<label class="f">Andere sport <i>vrij invullen</i><input type="text" id="c-other" value="${esc(list.includes(c.other)&&OTHER_SPORTS.includes(c.other)?"":c.other)}" placeholder="Bijv. klimmen, schaatsen, dansen" autocomplete="off"></label>`:""}`}
@@ -1310,7 +1314,7 @@ async function saveCardio(){
   if(!min){toast("Vul de duur in.");return}
   const sport=isRunBike(c.sport)?c.sport:((c.other||"").trim()||"Anders");
   const id=uid();
-  const rec={kind:"cardio",sport,date:c.date||today(),ts:Date.now(),routineName:sport,durMin:Math.round(min*100)/100,km:km||null,avgHr:num(c.avgHr),maxHr:num(c.maxHr),purpose:c.purpose||null,note:(c.note||"").trim(),entries:[]};
+  const rec={kind:"cardio",sport,date:c.date||today(),ts:Date.now(),routineName:c.trail&&sport==="Hardlopen"?"Trailrunnen":sport,...(c.trail&&sport==="Hardlopen"?{trail:true}:{}),durMin:Math.round(min*100)/100,km:km||null,avgHr:num(c.avgHr),maxHr:num(c.maxHr),purpose:c.purpose||null,note:(c.note||"").trim(),entries:[]};
   if(c.efforts&&isRunBike(sport)){rec.efforts=c.efforts;rec.source="gpx"}
   if(c.planId&&S.plan[c.planId]){rec.planId=c.planId;rec.planTitle=planTitle({id:c.planId,...S.plan[c.planId]})}
   UI.cardio=null;saveCardioDraft();const ok=await put("sessions",id,rec);
@@ -1612,7 +1616,7 @@ function viewPlanCard(){
   return `<h2>Op je planning</h2><div class="stack">${show.map(p=>{
     const done=planDoneFor(p),late=!done&&p.date<t,k=planKind(p);
     const tg=k==="cardio"?planTargets(p):"",txt=p.desc||p.note||"";
-    return `<article class="card plan k-${k}${done?" done":""}${late?" late":""}"><div class="ph"><span class="pd">${esc(dayLabel(p.date))}${p.time?` · ${esc(p.time)}`:""}</span><span class="chip">${esc(planChip(p))}</span></div>
+    return `<article class="card plan k-${k} c-${planCat(p)}${done?" done":""}${late?" late":""}"><div class="ph"><span class="pd">${esc(dayLabel(p.date))}${p.time?` · ${esc(p.time)}`:""}</span><span class="chip">${esc(planChip(p))}</span></div>
       <strong class="pt">${esc(planTitle(p))}</strong>${tg?`<span class="muted small">${tg}</span>`:""}
       ${txt?`<p class="pdesc">${esc(txt)}</p>`:""}
       ${done?`<div class="pdone">✓ Gedaan: ${sessionSummary(done)}</div>`:planItemBtn(p,late)}
@@ -1642,7 +1646,7 @@ function viewPlan(){
 function planRow(p,past){
   const done=planDoneFor(p),k=planKind(p);
   const st=done?`✓ ${sessionSummary(done)}`:k==="rest"?"":past?"Niet gedaan":"Gepland";
-  return `<button class="prow k-${k}${done?" done":""}${!done&&past&&k!=="rest"?" miss":""}" data-act="pl-open" data-id="${p.id}"><span class="pk">${esc(planChip(p))}</span><span class="pn">${p.time?`<b class="ptime">${esc(p.time)}</b> `:""}${esc(planTitle(p))}${p.coach?` <span class="muted small">· van ${esc(p.coach)}</span>`:""}</span>${st?`<span class="ps">${st}</span>`:""}</button>`;
+  return `<button class="prow k-${k} c-${planCat(p)}${done?" done":""}${!done&&past&&k!=="rest"?" miss":""}" data-act="pl-open" data-id="${p.id}"><span class="pk">${esc(planChip(p))}</span><span class="pn">${p.time?`<b class="ptime">${esc(p.time)}</b> `:""}${esc(planTitle(p))}${p.coach?` <span class="muted small">· van ${esc(p.coach)}</span>`:""}</span>${st?`<span class="ps">${st}</span>`:""}</button>`;
 }
 function plAddSheet(sh){
   const kinds=[["routine","Schema"],["cardio","Duur"],["rest","Rust"],["other","Anders"]].filter(([k])=>k!=="cardio"||spCardio().length||sh.kind==="cardio");
@@ -1679,7 +1683,7 @@ function plItemSheet(sh){
   const p0=S.plan[sh.id];if(!p0)return null;
   const p={id:sh.id,...p0},k=planKind(p),done=planDoneFor(p),t=today();
   const tg=k==="cardio"?planTargets(p):"",txt=p.desc||p.note||"";
-  let h=`<div class="sh"><h2>${esc(dayName(p.date))}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card plan k-${k}${done?" done":""}"><div class="ph"><span class="chip">${esc(planChip(p))}</span>${p.coach?`<span class="small muted">van ${esc(p.coach)}</span>`:""}</div><strong class="pt">${esc(planTitle(p))}</strong>${tg?`<span class="muted small">${tg}</span>`:""}${txt?`<p class="pdesc">${esc(txt)}</p>`:""}
+  let h=`<div class="sh"><h2>${esc(dayName(p.date))}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="card plan k-${k} c-${planCat(p)}${done?" done":""}"><div class="ph"><span class="chip">${esc(planChip(p))}</span>${p.coach?`<span class="small muted">van ${esc(p.coach)}</span>`:""}</div><strong class="pt">${esc(planTitle(p))}</strong>${tg?`<span class="muted small">${tg}</span>`:""}${txt?`<p class="pdesc">${esc(txt)}</p>`:""}
     ${done?`<div class="pdone">✓ Gedaan: ${sessionSummary(done)}</div>${done.kind==="check"?`<button class="btn ghost" data-act="pl-uncheck" data-id="${p.id}">Toch niet gedaan</button>`:""}`:planItemBtn(p,p.date<t)}</div>
     ${k==="cardio"?icuBox(p):""}<div class="btnrow" style="margin-top:10px"><button class="btn ghost" data-act="wo-copy" data-id="${p.id}">Kopieer training</button><a class="btn ghost" href="${esc(gcalUrl(p))}" target="_blank" rel="noopener">Zet in Google Agenda</a></div><div class="card stack" style="margin-top:10px"><div class="grid2"><label class="f">Datum<input type="date" id="pl-date" value="${esc(p.date)}"></label><label class="f">Tijdstip <i>optioneel</i><input type="time" id="pl-time" value="${esc(p.time||"")}"></label></div><button class="btn" data-act="pl-move" data-id="${p.id}">Datum en tijd opslaan</button></div>`;
   h+=`<div style="margin-top:12px">${UI.confirm==="pl-del"?`<div class="confirm"><span>Uit je planning halen?${done&&done.kind!=="check"?" Je gelogde training blijft bewaard.":""}</span><div class="btnrow"><button class="btn danger" data-act="pl-del-yes" data-id="${p.id}">Verwijderen</button><button class="btn" data-act="confirm-no">Behouden</button></div></div>`:`<button class="btn ghost danger" data-act="pl-del">Uit planning verwijderen</button>`}</div>`;
@@ -1715,10 +1719,13 @@ function importSheet(sh){
 const EXTRA_SHEETS={"pl-add":plAddSheet,"pl-item":plItemSheet,"share":shareSheet,"import":importSheet};
 
 /* ---------- wat is er nieuw & suggesties ---------- */
-const APP_VERSION="6.3";
+const APP_VERSION="6.4";
 const CHANGELOG=[
+ {v:"6.4",date:"2026-10-23",items:[
+  ["Kleur per sport in je planning, de juiste emoji in je agenda, en trail bij hardlopen.",""],
+  ["Wedstrijd kiezen staat nu bovenaan bij Sportschema op maat. Voorgestelde producten passen bij de maaltijd.",""]]},
  {v:"6.3",date:"2026-10-23",items:[
-  ["Duurtraining naar je horloge (via intervals.icu) en een afgeronde training terugplakken.",""],
+  ["Duurtraining naar je horloge, via intervals.icu.",""],
   ["Voortgang: grafieken per oefening en per duursport. Samen gesport? Registreer het ook voor je maatje.",""],
   ["Voeding: kiezen tussen gram en ml, en meer producten.",""]]},
  {v:"6.2",date:"2026-10-21",items:[["Trainer ziet met toestemming de hele training en je voortgang. Profiel in twee delen. Breder scherm op tablet en laptop.",""]]},
@@ -1856,7 +1863,7 @@ document.addEventListener("click",async ev=>{
     case "n-add":UI.sheet={type:"food-add",meal:v,q:""};render();setTimeout(()=>document.getElementById("fa-q")?.focus(),30);break;
     case "n-fa-pick":{const f=anyFood(v);if(f){UI.sheet.pick={...f};UI.sheet.g=null;renderSheet()}break}
     case "n-fa-offpick":{UI.sheet.pick={...UI.sheet.off[+v]};UI.sheet.g=null;renderSheet();break}
-    case "n-fa-recent":{const recent=[];const seen=new Set();for(const d of Object.keys(S.foodlog).sort().reverse())for(const it of logDay(d).slice().reverse()){if(recent.length>=8)break;const k=it.fid||it.name;if(seen.has(k))continue;seen.add(k);recent.push(it)}
+    case "n-fa-recent":{const recent=[];const seen=new Set();for(const d of Object.keys(S.foodlog).sort().reverse())for(const it of logDay(d).slice().reverse()){if(recent.length>=8)break;if(UI.sheet&&UI.sheet.meal&&it.meal!==UI.sheet.meal)continue;const k=it.fid||it.name;if(seen.has(k))continue;seen.add(k);recent.push(it)}
       const it=recent[+v];if(!it)break;const f=anyFood(it.fid)||{n:it.name,k:it.k/it.g*100,p:it.p/it.g*100,c:it.c/it.g*100,f:it.f/it.g*100,por:it.g};UI.sheet.pick={...f,id:it.fid};UI.sheet.g=String(it.g);renderSheet();break}
     case "n-fa-q":UI.sheet.g=v;renderSheet();break;
     case "n-fa-back":UI.sheet.pick=null;UI.sheet.custom=null;renderSheet();break;
@@ -3200,7 +3207,7 @@ function exportIcs(){
     let when=[`DTSTART;VALUE=DATE:${d}`,`DTEND;VALUE=DATE:${e}`];
     if(p.time&&/^\d\d:\d\d$/.test(p.time)){const [hh,mm]=p.time.split(":").map(Number),dur=Math.max(30,Math.round(p.durMin||(planKind(p)==="routine"?60:45))),endM=hh*60+mm+dur,ed=endM>=1440?addDays(p.date,1):p.date,em=endM%1440;
       const f=(dt,h,m)=>dt.replace(/-/g,"")+"T"+String(h).padStart(2,"0")+String(m).padStart(2,"0")+"00";when=[`DTSTART:${f(p.date,hh,mm)}`,`DTEND:${f(ed,Math.floor(em/60),em%60)}`]}
-    return ["BEGIN:VEVENT",`UID:${p.id}@krachtlogboek`,`DTSTAMP:${st}`,...when,`SUMMARY:${icsEsc("🏋 "+planTitle(p))}`,`DESCRIPTION:${icsEsc(workoutText(p)+"\n\nUit Athlevon")}`,...(p.time?["TRANSP:OPAQUE","BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Training","TRIGGER:-PT30M","END:VALARM"]:["TRANSP:TRANSPARENT"]),"END:VEVENT"].join("\r\n")});
+    return ["BEGIN:VEVENT",`UID:${p.id}@krachtlogboek`,`DTSTAMP:${st}`,...when,`SUMMARY:${icsEsc(planEmoji(p)+" "+planTitle(p))}`,`DESCRIPTION:${icsEsc(workoutText(p)+"\n\nUit Athlevon")}`,...(p.time?["TRANSP:OPAQUE","BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Training","TRIGGER:-PT30M","END:VALARM"]:["TRANSP:TRANSPARENT"]),"END:VEVENT"].join("\r\n")});
   const ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Athlevon//NL","CALSCALE:GREGORIAN","X-WR-CALNAME:Athlevon",...ev,"END:VCALENDAR"].join("\r\n");
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([ics],{type:"text/calendar"}));a.download="krachtlogboek-planning.ics";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000);
   toast(`${items.length} trainingen klaargezet voor je agenda. Open het bestand om ze toe te voegen.`);
@@ -3217,7 +3224,7 @@ function calHelp(){const k=calPref();
 function gcalUrl(p){const d=p.date.replace(/-/g,"");let dates;
   if(p.time&&/^\d\d:\d\d$/.test(p.time)){const [hh,mm]=p.time.split(":").map(Number),dur=Math.max(30,Math.round(p.durMin||(planKind(p)==="routine"?60:45))),e=hh*60+mm+dur,ed=(e>=1440?addDays(p.date,1):p.date).replace(/-/g,""),em=e%1440,f=(x,h,m)=>x+"T"+String(h).padStart(2,"0")+String(m).padStart(2,"0")+"00";dates=f(d,hh,mm)+"/"+f(ed,Math.floor(em/60),em%60)}
   else dates=d+"/"+addDays(p.date,1).replace(/-/g,"");
-  return "https://calendar.google.com/calendar/render?action=TEMPLATE&ctz=Europe/Amsterdam&text="+encodeURIComponent(planTitle(p))+"&dates="+dates+"&details="+encodeURIComponent(workoutText(p)+"\n\nUit Athlevon")}
+  return "https://calendar.google.com/calendar/render?action=TEMPLATE&ctz=Europe/Amsterdam&text="+encodeURIComponent(planEmoji(p)+" "+planTitle(p))+"&dates="+dates+"&details="+encodeURIComponent(workoutText(p)+"\n\nUit Athlevon")}
 function watchSheet(){
   return `<div class="sh"><h2>Naar je agenda</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>
   <div class="card stack"><p class="hp" style="margin:0">Zet je geplande trainingen van de komende 8 weken in je agenda, met de uitleg van de training erbij.</p>
@@ -3228,20 +3235,20 @@ function watchSheet(){
   <details class="privdet" style="margin-top:10px"><summary>Toch op je horloge zetten?</summary><div class="stack" style="margin-top:8px">
     <p class="hp small" style="margin:0">Rechtstreeks vanuit de app naar je horloge sturen kan niet. Het kan wel met de hand, maar dat is wat omslachtig:</p>
     <ul class="hl small"><li><b>Garmin:</b> open in de app de training in je planning en tik op <b>Kopieer training</b>. Ga in Garmin Connect naar Training en planning → Trainingen → Maak een training, en neem de stappen over. Daarna synchroniseer je je horloge.</li><li><b>Apple Watch:</b> open de Workout-app → tik op ⋯ bij hardlopen of fietsen → Maak training → Aangepast, en voer de stappen in.</li></ul>
-    <p class="hp small" style="margin:0"><b>Andersom</b> (een gelopen training van je horloge naar de app): open de training in intervals.icu, Garmin Connect, Strava of Apple Fitness, kopieer de samenvatting en kies bij Trainen → <b>Afgeronde training plakken</b>.</p></div></details>`;
+    <p class="hp small" style="margin:0"><b>Andersom</b> (een gelopen training van je horloge naar de app): neem duur, afstand en hartslag uit je horloge-app over bij Trainen → Hardlopen of Wielrennen.</p></div></details>`;
 }
 EXTRA_SHEETS["watch"]=watchSheet;
 
 /* ---------- rondleiding, update-melding en video ---------- */
 const INTRO=[
   ["Welkom bij Athlevon","Je houdt hier je trainingen, voeding en voortgang bij, en ziet of je op koers ligt voor je doel. In een paar korte stappen zie je hoe het werkt. Liever kijken? Bekijk de korte instructievideo (± 1½ minuut) of de uitgebreide versie met alle functies."],
-  ["Trainen","Onder <b>Trainen</b> start je een training uit je schema's. Per set vul je kg en herhalingen in; je vorige keer en je record staan erbij. Duurtrainingen log je met duur en afstand, of je plakt de afgeronde training uit je horloge-app. Bij elke oefening staat een doel voor vandaag, zodat je elke keer een stapje verder komt."],
+  ["Trainen","Onder <b>Trainen</b> start je een training uit je schema's. Per set vul je kg en herhalingen in; je vorige keer en je record staan erbij. Duurtrainingen log je met duur en afstand. Bij elke oefening staat een doel voor vandaag, zodat je elke keer een stapje verder komt."],
   ["Schema's","Je krijgt automatisch de map <b>Krachttraining 3 dagen split</b>. Je kunt schema's zelf maken, aanpassen en met anderen delen."],
   ["Planning","Plan je week vooruit. Met <b>Sportschema op maat</b> maakt de coach een plan voor al je sporten (fitness, duursport, teamsport) dat bij je wensen en agenda past, met genoeg herstel. Met <b>Naar je agenda</b> zet je trainingen in de agenda van je telefoon."],
   ["Voeding","Vul eerst je <b>Profiel</b> in: lengte, gewicht, doel en sportweek. Dan krijg je een dagdoel, kun je maaltijden en maaltijdplannen samenstellen, je eten bijhouden en een boodschappenlijst maken."],
   ["Kennis","Onder <b>Kennis</b> lees je per sport over materiaal, voeding, techniek, blessures en hoe je een schema opbouwt. Dit tabblad is nog in ontwikkeling."],
   ["Voortgang en samen","Onder <b>Voortgang</b> zie je met kleuren of je op koers ligt, met uitleg en advies. Met <b>Samen trainen</b> (onder Profiel) zetten vrienden met jouw toestemming trainingen voor je klaar. Tip: installeer de app op je beginscherm."]];
-const UPDATE_HL=[["Horloge","zet een duurtraining via intervals.icu op je Garmin of Apple Watch, en plak een afgeronde training terug."],["Voortgang","grafieken per oefening, en per duursport je kilometers, snelheid en hartslag."],["Samen gesport?","registreer de training ook voor je maatje (met toestemming)."],["Voeding","kies tussen gram en ml."]];
+const UPDATE_HL=[["Planning","elke sport een eigen kleur: kracht paars, hardlopen groen, fietsen geel, zwemmen blauw, HIIT rood, calisthenics oranje."],["Agenda","bij elke training de passende emoji, ook bij bijvoorbeeld padel of voetbal."],["Wedstrijd","bij Sportschema op maat kies je nu bovenaan of je voor een wedstrijd traint."],["Trail","telt mee bij hardlopen, maar staat er wel apart bij."]];
 function introSheet(sh){
   if(sh.mode==="update"){const c=CHANGELOG[0];
     return `<div class="sh"><h2>Nieuw in versie ${esc(c.v)}</h2><button class="ib" data-act="intro-done" aria-label="Sluiten">✕</button></div><div class="card"><ul class="hl">${UPDATE_HL.map(([t,x])=>`<li><b>${esc(t)}</b> ${esc(x)}</li>`).join("")}</ul><p class="small muted" style="margin:6px 0 0">Ook verbeterd: privacy en beveiliging. Bekijk ook wat er in eerdere versies kwam.</p></div>
@@ -3522,7 +3529,7 @@ function viewSportCoach(){
     <h2>Wat wil je doen?</h2><div class="card stack"><div class="chips">${all.map(n=>`<button class="chipb" data-act="sc-sport" data-v="${esc(n)}" aria-pressed="${!!(c.sp[n]&&c.sp[n].n>0)}">${esc(scLabel(n))}</button>`).join("")}</div>
       ${spOn("other")?`<div class="codeinput"><input type="text" id="sc-other" placeholder="Andere sport, bijv. squash of boksen" autocomplete="off"><button class="btn" data-act="sc-addsport">Toevoegen</button></div>`:""}</div>
     <h2>Voor hoeveel weken?</h2><div class="card stack"><div class="chips">${SC_WEEKS.map(v=>`<button class="chipb" data-act="sc-set" data-k="weeks" data-v="${v}" aria-pressed="${String(c.weeks)===String(v)}">${v===1?"1 week":v+" weken"}</button>`).join("")}${raceW?`<button class="chipb" data-act="sc-set" data-k="weeks" data-v="race" aria-pressed="${c.weeks==="race"}">Tot de wedstrijd (${raceW} wk)</button>`:""}</div>
-      <p class="small muted" style="margin:0">${raceW&&c.weeks!=="race"?`Je krijgt de eerste ${c.weeks===1?"week":c.weeks+" weken"} van je wedstrijdschema; daarna maak je een nieuw schema met je nieuwe trainingen als basis.`:"Na afloop maak je eenvoudig een nieuw schema; de coach gebruikt dan je nieuwe trainingen als basis."}</p></div>`;
+      <p class="small muted" style="margin:0">${raceW&&c.weeks!=="race"?`Je krijgt de eerste ${c.weeks===1?"week":c.weeks+" weken"} van je wedstrijdschema; daarna maak je een nieuw schema met je nieuwe trainingen als basis.`:"Na afloop maak je eenvoudig een nieuw schema; de coach gebruikt dan je nieuwe trainingen als basis."}</p></div>`+scRaceCard(c);
   if(sel.length)h+=`<h2>Verdeling per week · ${total} training${total===1?"":"en"}</h2><div class="stack">${sel.map(n=>{const s=c.sp[n];return `<div class="card stack sprow"><div class="sphead"><b>${esc(scLabel(n))}</b><span class="stepper"><button class="ib" data-act="sc-n" data-v="${esc(n)}" data-d="-1" aria-label="Minder ${esc(n)}">−</button><b>${s.n}×</b><button class="ib" data-act="sc-n" data-v="${esc(n)}" data-d="1" aria-label="Meer ${esc(n)}">+</button></span></div>
       <div class="f sub">Vaste dagen <i>optioneel${scKind(n)==="t"?", bijv. je trainingen en wedstrijd":""}</i><div class="chips">${DOW_S.map((l,d)=>`<button class="chipb" data-act="sc-day" data-v="${esc(n)}" data-d="${d}" aria-pressed="${(s.days||[]).includes(d)}">${l}</button>`).join("")}</div></div></div>`}).join("")}</div>
     <div class="card stack" style="margin-top:10px"><div class="f">Mag de coach 2 trainingen op één dag zetten?${scChip("dbl",[["nee","Nee"],["nodig","Alleen als het anders niet past"],["ja","Ja, dat vind ik prima"]])}</div></div>`;
@@ -4911,6 +4918,51 @@ const _icuField63=icuField;icuField=function(sh){return icuOn()||(sh.steps||"").
 function icuCard(){return `<h2>Horloge</h2><div class="card stack"><label class="check"><input type="checkbox" id="icu-on" ${icuOn()?"checked":""}><span><b>Ik gebruik intervals.icu</b> om trainingen op mijn Garmin of Apple Watch te zetten</span></label>
   <p class="small muted" style="margin:0">Aan: bij elke geplande duurtraining zie je de stappen voor je horloge, met een knop om de code te kopiëren. Een afgeronde training terugplakken kan altijd, ook zonder intervals.icu.</p></div>`}
 document.addEventListener("change",async ev=>{if(ev.target.id!=="icu-on")return;await tabsSave({icu:ev.target.checked});toastOk(ev.target.checked?"Horloge-stappen staan aan":"Horloge-stappen staan uit")});
+
+/* ---------- 6.4: wedstrijd bovenaan, kleuren per sport, emoji in je agenda, trail ---------- */
+/* sportschema: "Train je voor een wedstrijd?" direct onder het aantal weken */
+function scRaceCard(c){const endu=scEndu(c);
+  if(!endu.length)return `<div class="card stack" style="margin-top:10px"><div class="f">Train je voor een wedstrijd?</div><p class="small muted" style="margin:0">Kies hierboven eerst een duursport, bijvoorbeeld hardlopen of fietsen. Dan kun je een wedstrijddatum invullen en maakt de coach een schema tot die dag.</p></div>`;
+  const on=endu.filter(n=>scGoal(c,n).goal==="wedstrijd");
+  let h=`<div class="card stack" style="margin-top:10px"><div class="f">Train je voor een wedstrijd?<div class="chips"><button class="chipb" data-act="sc-race-pick" data-v="" aria-pressed="${!on.length}">Nee</button>${endu.map(n=>`<button class="chipb" data-act="sc-race-pick" data-v="${esc(n)}" aria-pressed="${on.includes(n)}">${esc(scLabel(n))}</button>`).join("")}</div></div>`;
+  for(const n of on){const g=scGoal(c,n);h+=`<p class="small" style="margin:0">${esc(scLabel(n))}: ${g.race?`wedstrijd op <b>${esc(dateTxt(g.race))}</b>`:"<b>vul de datum en afstand in</b>"} · <button class="linkbtn" data-act="sc-race-go" data-v="${SC_ENDU.indexOf(n)}">${g.race?"wijzigen":"invullen"}</button></p>`}
+  if(on.length)h+=`<p class="small muted" style="margin:0">Het schema loopt dan tot je wedstrijd, met de laatste week rustiger (taperen).</p>`;
+  return h+`</div>`}
+document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="sc-race-pick"],[data-act="sc-race-go"]');if(!b||!UI.sc)return;const c=UI.sc;scRead();
+  if(b.dataset.act==="sc-race-pick"){const v=b.dataset.v;
+    for(const n of scEndu(c)){const g=c.eg[n]||(c.eg[n]={goal:"fit",dist:"",race:""});if(n===v)g.goal="wedstrijd";else if(g.goal==="wedstrijd")g.goal="fit"}
+    if(!v&&c.weeks==="race")c.weeks=4;render();if(v)setTimeout(()=>{const el=document.getElementById("sc-race-"+SC_ENDU.indexOf(v));if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.focus()}},60);return}
+  const el=document.getElementById("sc-race-"+b.dataset.v);if(el){el.scrollIntoView({behavior:"smooth",block:"center"});el.focus()}});
+
+/* soort training per geplande training: kleur, label en emoji */
+function planCat(p){const k=planKind(p);if(k==="rest")return "rest";
+  const t=norm([p.title,p.routineName,p.sport].filter(Boolean).join(" "));
+  if(k==="routine"){const r=S.routines[p.routineId],f=r&&S.folders&&S.folders[r.folderId];const tx=norm([p.routineName,r&&r.name,f&&f.name,f&&f.lib].filter(Boolean).join(" "));
+    if((p.prog&&p.prog.hiit)||/hiit|tabata|circuit/.test(tx))return "hiit";if(/cali/.test(tx))return "cali";return "kracht"}
+  if(k==="cardio"){if(p.sport==="Hardlopen")return /trail/.test(t)?"trail":"run";if(p.sport==="Wielrennen")return "bike";if(/zwem/.test(t))return "swim";if(/hardlo|loop|trail/.test(t))return "run";if(/fiets|wielren|spinning/.test(t))return "bike";return "other"}
+  return /zwem/.test(t)?"swim":/trail/.test(t)?"trail":/hardlo|duurloop/.test(t)?"run":/fiets|wielren/.test(t)?"bike":/hiit/.test(t)?"hiit":/cali/.test(t)?"cali":"other"}
+const PCAT_LBL={kracht:"Kracht",hiit:"HIIT",cali:"Cali",run:"Hardlopen",trail:"Trail",bike:"Fietsen",swim:"Zwemmen",rest:"Rust"};
+const _planChip64=planChip;planChip=function(p){const c=planCat(p);return c==="other"?_planChip64(p):PCAT_LBL[c]};
+const PEMO=[[/padel|tennis|squash/,"🎾"],[/badminton/,"🏸"],[/voetbal|futsal/,"⚽"],[/hockey/,"🏑"],[/basketbal/,"🏀"],[/volleybal/,"🏐"],[/handbal/,"🤾"],[/rugby/,"🏉"],[/golf/,"⛳"],[/box|vecht|mma|judo|karate/,"🥊"],[/yoga|pilates|stretch|mobiliteit|mobility/,"🧘"],[/wandel|hike|hiken/,"🚶"],[/roei/,"🚣"],[/klim|boulder/,"🧗"],[/\bski/,"⛷️"],[/schaats/,"⛸️"],[/dans/,"💃"],[/wedstrijd/,"🏁"]];
+const PCAT_EMO={kracht:"🏋️",hiit:"🔥",cali:"🤸",run:"🏃",trail:"⛰️",bike:"🚴",swim:"🏊",rest:"😴",other:"🏅"};
+function planEmoji(p){const c=planCat(p);if(c!=="kracht"&&c!=="hiit"&&c!=="cali"&&c!=="rest"){const t=norm([p.title,p.sport,p.note].filter(Boolean).join(" "));for(const [re,e] of PEMO)if(re.test(t))return e}return PCAT_EMO[c]||"🏅"}
+
+/* trailrunnen valt onder hardlopen, maar wordt wel apart benoemd */
+document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="c-trail"]');if(!b||!UI.cardio)return;UI.cardio.trail=b.dataset.v==="1";saveCardioDraft();render()});
+function trailSeg(c){if(!c||c.sport!=="Hardlopen")return "";return `<div class="seg seg2" style="margin-top:6px"><button class="segb" data-act="c-trail" data-v="0" aria-pressed="${!c.trail}">Weg / baan</button><button class="segb" data-act="c-trail" data-v="1" aria-pressed="${!!c.trail}">Trailrunnen</button></div>`}
+const _newCardio64=newCardio;newCardio=function(sport,plan){_newCardio64(sport,plan);if(UI.cardio&&plan&&/trail/i.test([plan.title,plan.note].join(" "))&&UI.cardio.sport==="Hardlopen"){UI.cardio.trail=true;saveCardioDraft();render()}};
+/* producten van de beheerder automatisch delen met iedereen, bij elke toevoeging, wijziging of verwijdering */
+let fsTimer=null;
+function fsItems(){return Object.entries(S.foods||{}).filter(([,f])=>f&&f.n).map(([id,f])=>({id,n:f.n,k:+f.k||0,p:+f.p||0,c:+f.c||0,f:+f.f||0,por:f.por||100,...(f.ml?{ml:true}:{})}))}
+function fsAutoShare(){if(!(S.me&&S.me.isAdmin))return;clearTimeout(fsTimer);fsTimer=setTimeout(async()=>{try{const items=fsItems();await rpc("kl_admin_setting_put",{p_code:code,p_admin:pid,p_admin_pin:myPin(),p_key:"foods",p_data:{items,updated:today()}});S.sharedFoods=items}catch(e){}},1500)}
+const _put64=put;put=async function(col,id,data){const r=await _put64.apply(this,arguments);if(col==="foods")fsAutoShare();return r};
+const _del64=del;del=async function(col,id){const r=await _del64.apply(this,arguments);if(col==="foods")fsAutoShare();return r};
+/* bij het opstarten: loopt de gedeelde lijst achter, dan bijwerken */
+const _loadShared64=loadSharedFoods;loadSharedFoods=async function(){await _loadShared64();if(S.me&&S.me.isAdmin&&S.ready){const a=fsItems(),b=S.sharedFoods||[];const sig=l=>l.map(x=>[x.id,x.n,x.k,x.p,x.c,x.f,x.por,!!x.ml].join("|")).sort().join("#");if(sig(a)!==sig(b))fsAutoShare()}};
+adminFoodShare=function(){const n=Object.keys(S.foods||{}).length;
+  return `<h2>Producten delen</h2><div class="card stack"><p class="hp small" style="margin:0">Je eigen producten (${n}) zijn automatisch beschikbaar voor iedereen. Voeg je een product toe, pas je het aan of verwijder je het, dan wordt de lijst meteen bijgewerkt. Alleen naam en voedingswaarden gaan mee, niet wanneer of hoeveel je iets eet.</p>
+    <button class="btn" data-act="fs-share" ${n?"":"disabled"}>Nu opnieuw delen</button><span class="small muted">Nu gedeeld: ${(S.sharedFoods||[]).length}</span></div>`};
+let fsChecked=false;const _render64=render;render=function(){const r=_render64.apply(this,arguments);if(!fsChecked&&pid&&S.ready&&loadedAt&&S.me&&S.me.isAdmin){fsChecked=true;setTimeout(()=>loadSharedFoods(),500)}return r};
 
 /* ---------- sheets ---------- */
 function renderSheet(){
