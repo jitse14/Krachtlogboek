@@ -355,6 +355,8 @@ a.btn{text-decoration:none;color:var(--fg);text-align:center;display:grid;place-
 .card.plan.c-kracht{border-left-color:#7B3FE4}.card.plan.c-hiit{border-left-color:#D7263D}.card.plan.c-cali{border-left-color:#F26B1D}.card.plan.c-run,.card.plan.c-trail{border-left-color:#2E9E5B}.card.plan.c-bike{border-left-color:#E8B400}.card.plan.c-swim{border-left-color:#1F7AE0}
 .card.plan.c-kracht .ph .chip,.card.plan.c-hiit .ph .chip,.card.plan.c-cali .ph .chip,.card.plan.c-run .ph .chip,.card.plan.c-trail .ph .chip,.card.plan.c-bike .ph .chip,.card.plan.c-swim .ph .chip{color:#fff}
 .card.plan.c-kracht .ph .chip{background:#7B3FE4}.card.plan.c-hiit .ph .chip{background:#D7263D}.card.plan.c-cali .ph .chip{background:#F26B1D}.card.plan.c-run .ph .chip,.card.plan.c-trail .ph .chip{background:#2E9E5B}.card.plan.c-bike .ph .chip{background:#E8B400;color:#14171C}.card.plan.c-swim .ph .chip{background:#1F7AE0}
+.folder.fc-kracht{border-left:4px solid #7B3FE4}.folder.fc-hiit{border-left:4px solid #D7263D}.folder.fc-cali{border-left:4px solid #F26B1D}.folder.fc-mix{border-left:4px solid #0E9AA7}
+.folder.fc-kracht .ficon{color:#7B3FE4}.folder.fc-hiit .ficon{color:#D7263D}.folder.fc-cali .ficon{color:#F26B1D}.folder.fc-mix .ficon{color:#0E9AA7}
 /* brede schermen: tablet en laptop */
 @media (min-width:760px){
   .wrap,nav.tabs .in{max-width:720px}
@@ -1554,7 +1556,7 @@ function viewSchemas(){
 }
 function folderCard(f){
   const k="f:"+(f.id||"none"),open=isOpen(k),rs=routinesIn(f.id);
-  let h=`<section class="card folder"><button class="fhead" data-act="fd-toggle" data-id="${k}" aria-expanded="${open}"><span class="ficon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span class="fname">${esc(f.name)}</span><span class="fcount">${rs.length}</span><span class="chev" aria-hidden="true">${open?"▾":"▸"}</span></button>`;
+  let h=`<section class="card folder${f.id?` fc-${folderCat(f.id)}`:""}"><button class="fhead" data-act="fd-toggle" data-id="${k}" aria-expanded="${open}"><span class="ficon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span class="fname">${esc(f.name)}</span><span class="fcount">${rs.length}</span><span class="chev" aria-hidden="true">${open?"▾":"▸"}</span></button>`;
   if(!open)return h+`</section>`;
   h+=`<div class="fbody">`;
   h+=rs.length?rs.map(([id,r])=>`<div class="fitem"><div class="fi-n">${esc(r.name)}</div><div class="fi-x">${(r.items||[]).map(i=>esc(exName(i.exId))).join(" · ")||"Nog geen oefeningen"}</div><div class="btnrow"><button class="btn" data-act="edit-routine" data-id="${id}">Bewerken</button><button class="btn" data-act="share-routine" data-id="${id}">Delen</button><button class="btn primary" data-act="start-from-schema" data-id="${id}">Start</button></div></div>`).join(""):`<p class="muted small" style="margin:8px 0">Nog geen schema's in deze map.</p>`;
@@ -1719,8 +1721,9 @@ function importSheet(sh){
 const EXTRA_SHEETS={"pl-add":plAddSheet,"pl-item":plItemSheet,"share":shareSheet,"import":importSheet};
 
 /* ---------- wat is er nieuw & suggesties ---------- */
-const APP_VERSION="6.4";
+const APP_VERSION="6.5";
 const CHANGELOG=[
+ {v:"6.5",date:"2026-10-23",items:[["Mappen met schema's hebben de kleur van hun sport; een gemengde map is turquoise.",""]]},
  {v:"6.4",date:"2026-10-23",items:[
   ["Kleur per sport in je planning, de juiste emoji in je agenda, en trail bij hardlopen.",""],
   ["Wedstrijd kiezen staat nu bovenaan bij Sportschema op maat. Voorgestelde producten passen bij de maaltijd.",""]]},
@@ -4937,10 +4940,20 @@ document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="sc-
 /* soort training per geplande training: kleur, label en emoji */
 function planCat(p){const k=planKind(p);if(k==="rest")return "rest";
   const t=norm([p.title,p.routineName,p.sport].filter(Boolean).join(" "));
-  if(k==="routine"){const r=S.routines[p.routineId],f=r&&S.folders&&S.folders[r.folderId];const tx=norm([p.routineName,r&&r.name,f&&f.name,f&&f.lib].filter(Boolean).join(" "));
-    if((p.prog&&p.prog.hiit)||/hiit|tabata|circuit/.test(tx))return "hiit";if(/cali/.test(tx))return "cali";return "kracht"}
+  if(k==="routine")return routineCat(p.routineId,p.routineName,p.prog&&p.prog.hiit);
   if(k==="cardio"){if(p.sport==="Hardlopen")return /trail/.test(t)?"trail":"run";if(p.sport==="Wielrennen")return "bike";if(/zwem/.test(t))return "swim";if(/hardlo|loop|trail/.test(t))return "run";if(/fiets|wielren|spinning/.test(t))return "bike";return "other"}
   return /zwem/.test(t)?"swim":/trail/.test(t)?"trail":/hardlo|duurloop/.test(t)?"run":/fiets|wielren/.test(t)?"bike":/hiit/.test(t)?"hiit":/cali/.test(t)?"cali":"other"}
+/* kracht, HIIT of calisthenics: eerst de naam van het schema, dan de map, dan de oefeningen */
+const CALI_RE=/pull[- ]?up|chin[- ]?up|push[- ]?up|opdruk|\bdip|ring|pistol|l[- ]?sit|planche|hollow|muscle[- ]?up|handstand|front lever|back lever|australian|inverted row|pike|bodyweight|eigen gewicht|skin the cat|dragon flag/;
+function routineCat(rid,rname,hiit){const r=S.routines[rid],f=r&&S.folders&&S.folders[r.folderId];
+  const n=norm([rname,r&&r.name].filter(Boolean).join(" ")),fn=norm(f&&f.name||""),lib=String(f&&f.lib||"");
+  if(hiit||/hiit|tabata|circuit/.test(n))return "hiit";if(/kracht|fitness|gym/.test(n))return "kracht";if(/cali/.test(n))return "cali";
+  if(/^cali/.test(lib))return "cali";if(lib)return "kracht";
+  if(/hiit/.test(fn)&&!/kracht|cali|fitness/.test(fn))return "hiit";if(/cali/.test(fn)&&!/kracht|fitness|hiit/.test(fn))return "cali";
+  const ex=(r&&r.items||[]).map(i=>norm(exName(i.exId))).filter(Boolean);if(ex.length&&ex.filter(x=>CALI_RE.test(x)).length/ex.length>=0.6)return "cali";
+  return "kracht"}
+/* kleur van een map: het type van de schema's erin, of "mix" bij verschillende soorten */
+function folderCat(fid){const rs=routinesIn(fid);if(!rs.length)return "";const cs=new Set(rs.map(([id,r])=>routineCat(id,r.name)));return cs.size===1?[...cs][0]:"mix"}
 const PCAT_LBL={kracht:"Kracht",hiit:"HIIT",cali:"Cali",run:"Hardlopen",trail:"Trail",bike:"Fietsen",swim:"Zwemmen",rest:"Rust"};
 const _planChip64=planChip;planChip=function(p){const c=planCat(p);return c==="other"?_planChip64(p):PCAT_LBL[c]};
 const PEMO=[[/padel|tennis|squash/,"🎾"],[/badminton/,"🏸"],[/voetbal|futsal/,"⚽"],[/hockey/,"🏑"],[/basketbal/,"🏀"],[/volleybal/,"🏐"],[/handbal/,"🤾"],[/rugby/,"🏉"],[/golf/,"⛳"],[/box|vecht|mma|judo|karate/,"🥊"],[/yoga|pilates|stretch|mobiliteit|mobility/,"🧘"],[/wandel|hike|hiken/,"🚶"],[/roei/,"🚣"],[/klim|boulder/,"🧗"],[/\bski/,"⛷️"],[/schaats/,"⛸️"],[/dans/,"💃"],[/wedstrijd/,"🏁"]];
