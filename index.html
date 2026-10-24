@@ -357,6 +357,7 @@ a.btn{text-decoration:none;color:var(--fg);text-align:center;display:grid;place-
 .card.plan.c-kracht .ph .chip{background:#7B3FE4}.card.plan.c-hiit .ph .chip{background:#D7263D}.card.plan.c-cali .ph .chip{background:#F26B1D}.card.plan.c-run .ph .chip,.card.plan.c-trail .ph .chip{background:#2E9E5B}.card.plan.c-bike .ph .chip{background:#E8B400;color:#14171C}.card.plan.c-swim .ph .chip{background:#1F7AE0}
 .folder.fc-kracht{border-left:4px solid #7B3FE4}.folder.fc-hiit{border-left:4px solid #D7263D}.folder.fc-cali{border-left:4px solid #F26B1D}.folder.fc-mix{border-left:4px solid #0E9AA7}
 .folder.fc-kracht .ficon{color:#7B3FE4}.folder.fc-hiit .ficon{color:#D7263D}.folder.fc-cali .ficon{color:#F26B1D}.folder.fc-mix .ficon{color:#0E9AA7}
+.exnote-open{margin-top:6px;justify-self:start}.exnote{margin-top:8px}.exnote-v{color:var(--muted);margin-top:3px;white-space:pre-wrap}.archrow{display:flex;justify-content:space-between;gap:10px;align-items:center}
 /* brede schermen: tablet en laptop */
 @media (min-width:760px){
   .wrap,nav.tabs .in{max-width:720px}
@@ -713,7 +714,7 @@ function startWorkout(routineId,plan){
 function placeholderFor(entry,j){const last=lastFor(entry.exId);if(!last)return null;return last.sets[j]||last.sets[last.sets.length-1]}
 function rowIsPR(entry,st){const r=num(st.r);if(!r||r<=0)return false;const k=num(st.k)||0;const b=bestFor(entry.exId);return !b||better({k,r},b.set)}
 async function finishWorkout(){
-  const entries=draft.entries.map(e=>({exId:e.exId,name:exName(e.exId,e.name),group:exGroup(e.exId,e.group),sets:e.sets.map(s=>({k:num(s.k)||0,r:Math.round(num(s.r)||0)})).filter(s=>s.r>0)})).filter(e=>e.sets.length);
+  const entries=draft.entries.map(e=>({exId:e.exId,name:exName(e.exId,e.name),group:exGroup(e.exId,e.group),...((e.note||"").trim()?{note:e.note.trim().slice(0,500)}:{}),sets:e.sets.map(s=>({k:num(s.k)||0,r:Math.round(num(s.r)||0)})).filter(s=>s.r>0)})).filter(e=>e.sets.length);
   if(!entries.length){toast("Vul minstens één set in met herhalingen.");return}
   let prs=0;for(const e of entries){let b=bestFor(e.exId)?.set||null;for(const s of e.sets)if(better(s,b)){prs++;b=s}}
   const id=draft.id||uid();
@@ -804,7 +805,7 @@ function viewWorkout(){
         <input class="num" id="s-${i}-${j}-r" inputmode="numeric" autocomplete="off" placeholder="${ph?ph.r:"reps"}" value="${esc(st.r)}" aria-label="Herhalingen set ${j+1}">
         <span class="flag" id="f-${i}-${j}">${rowIsPR(e,st)?"PR":""}</span>
         <button class="ib" data-act="set-remove" data-i="${i}" data-j="${j}" aria-label="Verwijder set">✕</button></div>`});
-    h+=`</div>${last?`<p class="hint">Tik op een setnummer om het resultaat van vorige keer over te nemen. Leeg kg = bodyweight.</p>`:`<p class="hint">Leeg kg = bodyweight.</p>`}<button class="btn block addset" data-act="add-set" data-i="${i}">+ Set</button></article>`;
+    h+=`</div>${last?`<p class="hint">Tik op een setnummer om het resultaat van vorige keer over te nemen. Leeg kg = bodyweight.</p>`:`<p class="hint">Leeg kg = bodyweight.</p>`}<button class="btn block addset" data-act="add-set" data-i="${i}">+ Set</button>${exNoteUI(e,i)}</article>`;
   });
   h+=`<button class="btn block" data-act="pick" data-mode="draft">+ Oefening toevoegen</button></div><h2>Afronden</h2>${togetherRow("d")}<label class="f" style="margin-bottom:10px">Opmerking <i>optioneel</i><textarea id="d-note" rows="2" placeholder="Hoe ging het? Bijv. zware benen, nieuwe techniek geprobeerd.">${esc(draft.note||"")}</textarea></label>`;
   if(UI.confirm==="cancel")h+=`<div class="confirm"><span>Training weggooien? Ingevulde sets gaan verloren.</span><div class="btnrow"><button class="btn danger" data-act="cancel-yes">Weggooien</button><button class="btn" data-act="confirm-no">Doorgaan met trainen</button></div></div>`;
@@ -814,7 +815,7 @@ function viewWorkout(){
 
 function viewEditor(){
   const e=UI.edit;
-  let h=`<h2>${e.id&&S.routines[e.id]?"Schema bewerken":"Nieuw schema"}</h2><div class="card stack"><label class="f">Naam<input type="text" id="re-name" value="${esc(e.name)}" placeholder="Bijv. Dag 1 — Push"></label><label class="f">Map<select id="re-folder"><option value="">Zonder map</option>${folderList().map(f=>`<option value="${f.id}" ${e.folderId===f.id?"selected":""}>${esc(f.name)}</option>`).join("")}</select></label><div>`;
+  let h=`<h2>${e.id&&S.routines[e.id]?"Schema bewerken":"Nieuw schema"}</h2><div class="card stack"><label class="f">Naam<input type="text" id="re-name" value="${esc(e.name)}" placeholder="Bijv. Dag 1 — Push"></label><label class="f">Map<select id="re-folder"><option value="">Zonder map</option>${folderList().map(f=>`<option value="${f.id}" ${e.folderId===f.id?"selected":""}>${esc(f.name)}</option>`).join("")}</select></label>${catChips("cat-re",e.cat)}<div>`;
   if(!e.items.length)h+=`<p class="muted small" style="margin:4px 0">Voeg je eerste oefening toe.</p>`;
   e.items.forEach((it,i)=>{h+=`<div class="edititem"><div><strong>${esc(exName(it.exId))}</strong> <button class="chip chipbtn" data-act="open-ex" data-id="${it.exId}" aria-label="Spiergroep van ${esc(exName(it.exId))} aanpassen">${esc(exGroup(it.exId))} ✎</button></div><div class="icons">
     <button class="ib" data-act="it-up" data-i="${i}" aria-label="Omhoog" ${i===0?"disabled":""}>↑</button><button class="ib" data-act="it-down" data-i="${i}" aria-label="Omlaag" ${i===e.items.length-1?"disabled":""}>↓</button><button class="ib" data-act="it-remove" data-i="${i}" aria-label="Verwijder">✕</button></div>
@@ -862,6 +863,8 @@ function viewHelp(){
     ["Privacy en bewaren","Details van trainingen, je voedingsdagboek en je planning worden 3 maanden bewaard en daarna samengevat; je records blijven altijd staan. Lees de <b>Privacyverklaring</b> onder Profiel. Daar kun je ook je account verwijderen."],
     ["Naar je agenda","Onder <b>Planning → Naar je agenda</b> zet je je trainingen in de agenda van je telefoon, met tijdstip en een herinnering. Op je horloge zetten kan met de hand, maar is wat omslachtig; de stappen staan daar ook."],
     ["Profiel en instellingen","Profiel heeft twee delen: <b>Persoonlijk</b> (je gegevens, beweging en gewicht) en <b>Instellingen</b> (samen trainen, tabbladen en sporten, muziek, je code en account)."],
+    ["Mappen en schema's beheren","Bij Schema's tik je bij een map op <b>Naam en soort</b> om de naam te wijzigen of te kiezen of het fitness, HIIT of calisthenics is. Bij een schema doe je dat via <b>Bewerken</b>. Met <b>Archiveren</b> haal je een map of schema uit het zicht; onderaan bij <b>Archief</b> zet je het terug. Je trainingen en records blijven altijd bewaard."],
+    ["Toelichting bij een oefening","Tik tijdens je training onder een oefening op <b>+ Toelichting</b>, bijvoorbeeld over je houding, een dropset, of dat reps hier seconden zijn. Je ziet het later terug bij de training."],
     ["Samen gesport","Deden jullie dezelfde training? Kies bij het opslaan <b>Samen gedaan met</b>; de training komt dan ook bij je maatje. Daarvoor moet die persoon je bij Samen trainen toestemming geven voor <b>Een training die we samen deden ook bij mij registreren</b>."],
     ["Tabbladen en sporten kiezen","Bij <b>Profiel → Tabbladen</b> kies je welke onderdelen je onderin ziet, en per tabblad welke onderdelen erin staan (bij Voeding blijft Advies altijd staan). Trainen en Profiel blijven altijd staan. Bij <b>Mijn sporten</b> kies je welke sporten je doet: de andere verdwijnen uit de keuzes bij trainen, schema's, sportschema op maat, de planning en kennis. Wat al gepland staat, blijft staan. Alles zet je zo weer aan."],
     ["Progressie","Bij elke oefening in je training staat onder <b>Vandaag</b> een doel: eerst 1 herhaling meer per set dan vorige keer. Haal je bij alle sets de bovenkant van de reeks (bijv. 12 bij 8-12), dan stelt de app een hoger gewicht voor. Een rustigere week staat er ook bij. Gaf je aan dat het te zwaar of te licht was, dan past het doel zich daarop aan."],
@@ -1544,13 +1547,13 @@ function viewSchemas(){
   if(UI.cg)return viewCoachGen();
   const folders=folderList(),loose=routinesIn(null);
   let h=`<button class="card start" style="margin-top:16px" data-act="sc-open" data-v="f"><span><span class="name">Sportschema op maat</span><br><span class="muted small">Al je sporten in één verantwoord weekplan, met een map met schema's die elke week een stapje zwaarder worden</span></span><span class="go">Start</span></button><h2>Jouw schema's</h2>`;
-  if(UI.folderEdit)h+=`<div class="card stack" style="margin-bottom:10px"><label class="f">${UI.folderEdit.id?"Map hernoemen":"Nieuwe map"}<input type="text" id="fd-name" value="${esc(UI.folderEdit.name)}" placeholder="Bijv. Fitness 4 dagen" autocomplete="off"></label><div class="btnrow"><button class="btn primary" data-act="fd-save">Opslaan</button><button class="btn" data-act="fd-cancel">Annuleren</button></div></div>`;
+  if(UI.folderEdit)h+=`<div class="card stack" style="margin-bottom:10px"><label class="f">${UI.folderEdit.id?"Map hernoemen":"Nieuwe map"}<input type="text" id="fd-name" value="${esc(UI.folderEdit.name)}" placeholder="Bijv. Fitness 4 dagen" autocomplete="off"></label>${catChips("cat-fd",UI.folderEdit.cat)}<div class="btnrow"><button class="btn primary" data-act="fd-save">Opslaan</button><button class="btn" data-act="fd-cancel">Annuleren</button></div></div>`;
   if(!folders.length&&!loose.length)h+=`<div class="card empty"><strong>Nog geen schema's</strong><p class="muted">Maak een map, bijvoorbeeld "Fitness 4 dagen", en zet daar je schema's in. Of voeg hieronder een voorbeeldmap toe.</p></div>`;
   h+=`<div class="stack">`+folders.map(folderCard).join("")+(loose.length?folderCard({id:null,name:"Zonder map"}):"")+`</div>`;
   h+=`<div class="btnrow" style="margin-top:12px"><button class="btn primary" data-act="new-routine">+ Nieuw schema</button><button class="btn" data-act="fd-new">+ Nieuwe map</button></div>`;
   h+=`<h2>Oude trainingen of schema's</h2><button class="card start" data-act="imp-open"><span><span class="name">Inladen in je account</span><br><span class="muted small">Uit je notities, Excel, een andere app of een foto van je schrift</span></span><span class="go">Start</span></button>`;
   h+=`<h2>Gedeeld schema toevoegen</h2><div class="card stack"><p class="hp">Heeft iemand een schema of map met je gedeeld? Vul de deelcode in.</p><div class="codeinput"><input type="text" id="sh-code" placeholder="Bijv. 7KQ2MX" autocapitalize="characters" autocomplete="off" maxlength="8"><button class="btn primary" data-act="sh-lookup">Bekijken</button></div></div>`;
-  if(LIB.some(spLibOk))h+=`<h2>Voorbeeldmappen</h2><div class="stack">`+LIB.filter(spLibOk).map(l=>{const has=folders.some(f=>f.lib===l.id);
+  h+=archiveView();if(LIB.some(spLibOk))h+=`<h2>Voorbeeldmappen</h2><div class="stack">`+LIB.filter(spLibOk).map(l=>{const has=folders.some(f=>f.lib===l.id);
     return `<div class="card libcard"><div><strong>${esc(l.name)}</strong><span class="muted small">${l.routines.length} schema's · ${esc(l.desc)}</span></div><button class="btn ${has?"":"primary"}" data-act="lib-add" data-id="${l.id}" ${has?"disabled":""}>${has?"Toegevoegd ✓":"Toevoegen"}</button></div>`}).join("")+`</div>`;
   return h;
 }
@@ -1559,18 +1562,18 @@ function folderCard(f){
   let h=`<section class="card folder${f.id?` fc-${folderCat(f.id)}`:""}"><button class="fhead" data-act="fd-toggle" data-id="${k}" aria-expanded="${open}"><span class="ficon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span><span class="fname">${esc(f.name)}</span><span class="fcount">${rs.length}</span><span class="chev" aria-hidden="true">${open?"▾":"▸"}</span></button>`;
   if(!open)return h+`</section>`;
   h+=`<div class="fbody">`;
-  h+=rs.length?rs.map(([id,r])=>`<div class="fitem"><div class="fi-n">${esc(r.name)}</div><div class="fi-x">${(r.items||[]).map(i=>esc(exName(i.exId))).join(" · ")||"Nog geen oefeningen"}</div><div class="btnrow"><button class="btn" data-act="edit-routine" data-id="${id}">Bewerken</button><button class="btn" data-act="share-routine" data-id="${id}">Delen</button><button class="btn primary" data-act="start-from-schema" data-id="${id}">Start</button></div></div>`).join(""):`<p class="muted small" style="margin:8px 0">Nog geen schema's in deze map.</p>`;
+  h+=rs.length?rs.map(([id,r])=>`<div class="fitem"><div class="fi-n">${esc(r.name)}</div><div class="fi-x">${(r.items||[]).map(i=>esc(exName(i.exId))).join(" · ")||"Nog geen oefeningen"}</div><div class="btnrow"><button class="btn" data-act="edit-routine" data-id="${id}">Bewerken</button><button class="btn" data-act="share-routine" data-id="${id}">Delen</button><button class="btn primary" data-act="start-from-schema" data-id="${id}">Start</button></div><button class="linkbtn small" style="justify-self:start" data-act="arch-re" data-id="${id}">Archiveren</button></div>`).join(""):`<p class="muted small" style="margin:8px 0">Nog geen schema's in deze map.</p>`;
   if(f.id){
     if(UI.confirm==="fd-del:"+f.id)h+=`<div class="confirm" style="margin-top:10px"><span>Map "${esc(f.name)}" verwijderen? Je gelogde trainingen en records blijven altijd bewaard.</span><div class="stack"><button class="btn danger" data-act="fd-del-all" data-id="${f.id}">Map én ${rs.length} schema's verwijderen</button><button class="btn" data-act="fd-del-keep" data-id="${f.id}">Alleen de map, schema's naar "Zonder map"</button><button class="btn ghost" data-act="confirm-no">Annuleren</button></div></div>`;
-    else h+=`<div class="factions"><button class="linkbtn" data-act="new-routine" data-id="${f.id}">+ Schema in deze map</button><button class="linkbtn" data-act="share-folder" data-id="${f.id}">Map delen</button><button class="linkbtn" data-act="fd-rename" data-id="${f.id}">Hernoemen</button><button class="linkbtn danger" data-act="fd-del" data-id="${f.id}">Verwijderen</button></div>`;
+    else h+=`<div class="factions"><button class="linkbtn" data-act="new-routine" data-id="${f.id}">+ Schema in deze map</button><button class="linkbtn" data-act="share-folder" data-id="${f.id}">Map delen</button><button class="linkbtn" data-act="fd-rename" data-id="${f.id}">Naam en soort</button><button class="linkbtn" data-act="arch-fd" data-id="${f.id}">Archiveren</button><button class="linkbtn danger" data-act="fd-del" data-id="${f.id}">Verwijderen</button></div>`;
   }
   return h+`</div></section>`;
 }
 async function folderSave(){
   const fe=UI.folderEdit,name=(document.getElementById("fd-name")?.value||fe.name||"").trim();
   if(!name){toast("Geef de map een naam.");document.getElementById("fd-name")?.focus();return}
-  if(fe.id)await put("folders",fe.id,{...S.folders[fe.id],name});
-  else{const id="fd-"+uid();await put("folders",id,{name,order:folderList().length,lib:null});UI.open["f:"+id]=true;lsSet(LS_OPEN,UI.open)}
+  if(fe.id)await put("folders",fe.id,{...S.folders[fe.id],name,cat:fe.cat||null});
+  else{const id="fd-"+uid();await put("folders",id,{name,order:folderList().length,lib:null,cat:fe.cat||null});UI.open["f:"+id]=true;lsSet(LS_OPEN,UI.open)}
   UI.folderEdit=null;toastOk(fe.id?"Map hernoemd":"Map aangemaakt");render();
 }
 async function folderDelete(fid,withRoutines){
@@ -1721,8 +1724,9 @@ function importSheet(sh){
 const EXTRA_SHEETS={"pl-add":plAddSheet,"pl-item":plItemSheet,"share":shareSheet,"import":importSheet};
 
 /* ---------- wat is er nieuw & suggesties ---------- */
-const APP_VERSION="6.5";
+const APP_VERSION="6.6";
 const CHANGELOG=[
+ {v:"6.6",date:"2026-10-24",items:[["Toelichting per oefening, mappen en schema's hernoemen, soort kiezen en archiveren, en een startvraag voor nieuwe gebruikers.",""]]},
  {v:"6.5",date:"2026-10-23",items:[["Mappen met schema's hebben de kleur van hun sport; een gemengde map is turquoise.",""]]},
  {v:"6.4",date:"2026-10-23",items:[
   ["Kleur per sport in je planning, de juiste emoji in je agenda, en trail bij hardlopen.",""],
@@ -3251,7 +3255,7 @@ const INTRO=[
   ["Voeding","Vul eerst je <b>Profiel</b> in: lengte, gewicht, doel en sportweek. Dan krijg je een dagdoel, kun je maaltijden en maaltijdplannen samenstellen, je eten bijhouden en een boodschappenlijst maken."],
   ["Kennis","Onder <b>Kennis</b> lees je per sport over materiaal, voeding, techniek, blessures en hoe je een schema opbouwt. Dit tabblad is nog in ontwikkeling."],
   ["Voortgang en samen","Onder <b>Voortgang</b> zie je met kleuren of je op koers ligt, met uitleg en advies. Met <b>Samen trainen</b> (onder Profiel) zetten vrienden met jouw toestemming trainingen voor je klaar. Tip: installeer de app op je beginscherm."]];
-const UPDATE_HL=[["Planning","elke sport een eigen kleur: kracht paars, hardlopen groen, fietsen geel, zwemmen blauw, HIIT rood, calisthenics oranje."],["Agenda","bij elke training de passende emoji, ook bij bijvoorbeeld padel of voetbal."],["Wedstrijd","bij Sportschema op maat kies je nu bovenaan of je voor een wedstrijd traint."],["Trail","telt mee bij hardlopen, maar staat er wel apart bij."]];
+const UPDATE_HL=[["Toelichting","tik tijdens je training onder een oefening op + Toelichting, bijvoorbeeld voor een dropset of je houding."],["Mappen en schema's","wijzig de naam en de soort (fitness, HIIT, calisthenics), of archiveer ze: uit het zicht, maar bewaard."]];
 function introSheet(sh){
   if(sh.mode==="update"){const c=CHANGELOG[0];
     return `<div class="sh"><h2>Nieuw in versie ${esc(c.v)}</h2><button class="ib" data-act="intro-done" aria-label="Sluiten">✕</button></div><div class="card"><ul class="hl">${UPDATE_HL.map(([t,x])=>`<li><b>${esc(t)}</b> ${esc(x)}</li>`).join("")}</ul><p class="small muted" style="margin:6px 0 0">Ook verbeterd: privacy en beveiliging. Bekijk ook wat er in eerdere versies kwam.</p></div>
@@ -4582,7 +4586,7 @@ function sessionFullHtml(s){
   if(s.planTitle)h+=`<p class="small muted" style="margin:0 0 8px">Geplande training: <b>${esc(s.planTitle)}</b></p>`;
   if(s.kind==="cardio"){const min=+s.durMin||0,km=+s.km||0,v=min&&km?speed(min,km):null;
     h+=`<div class="card"><div class="calc">${min?`<div><span>Duur</span><b>${durTxt(min)}</b></div>`:""}${km?`<div><span>Afstand</span><b>${fmt1(km)} km</b></div>`:""}${v?`<div><span>Gem. snelheid</span><b>${fmt1(v)} km/u</b></div>`:""}${v&&s.sport==="Hardlopen"?`<div><span>Tempo</span><b>${paceTxt(min,km)}</b></div>`:""}${s.avgHr?`<div><span>Gem. hartslag</span><b>${esc(s.avgHr)} bpm</b></div>`:""}${s.maxHr?`<div><span>Max. hartslag</span><b>${esc(s.maxHr)} bpm</b></div>`:""}${s.purpose?`<div><span>Soort training</span><b>${esc(s.purpose)}</b></div>`:""}</div></div>`}
-  else h+=`<div class="hist">${(s.entries||[]).map(e=>`<div class="h"><div class="d">${esc(e.name||exName(e.exId))}</div><div class="s">${(e.sets||[]).map(shortSet).join(" · ")}</div></div>`).join("")||`<p class="muted small">Geen sets.</p>`}</div>`;
+  else h+=`<div class="hist">${(s.entries||[]).map(e=>`<div class="h"><div class="d">${esc(e.name||exName(e.exId))}</div><div class="s">${(e.sets||[]).map(shortSet).join(" · ")}</div>${exNoteTxt(e)}</div>`).join("")||`<p class="muted small">Geen sets.</p>`}</div>`;
   if(s.feel)h+=`<p class="hp" style="margin:10px 0 0"><b>Hoe ging het:</b> ${esc(hvFeel(s.feel))}</p>`;
   if(s.note)h+=`<div class="card" style="margin-top:10px"><span class="ml">Opmerking</span><p class="hp" style="margin:4px 0 0;white-space:pre-wrap">${esc(s.note)}</p></div>`;
   return h;
@@ -4977,6 +4981,62 @@ adminFoodShare=function(){const n=Object.keys(S.foods||{}).length;
     <button class="btn" data-act="fs-share" ${n?"":"disabled"}>Nu opnieuw delen</button><span class="small muted">Nu gedeeld: ${(S.sharedFoods||[]).length}</span></div>`};
 let fsChecked=false;const _render64=render;render=function(){const r=_render64.apply(this,arguments);if(!fsChecked&&pid&&S.ready&&loadedAt&&S.me&&S.me.isAdmin){fsChecked=true;setTimeout(()=>loadSharedFoods(),500)}return r};
 
+/* ---------- 6.6: toelichting per oefening, soort en archief voor mappen/schema's, startvraag ---------- */
+/* toelichting bij een oefening tijdens de training (ingeklapt tot je erop tikt) */
+function exNoteUI(e,i){const v=e.note||"";
+  if(!v&&!e._noteOpen)return `<button class="linkbtn exnote-open" data-act="en-open" data-i="${i}">+ Toelichting bij deze oefening</button>`;
+  return `<label class="f exnote">Toelichting <i>optioneel</i><textarea id="en-${i}" rows="2" maxlength="500" placeholder="Bijv. houding, dropset gedaan, eerste set is startgewicht, of: reps zijn seconden">${esc(v)}</textarea></label>`}
+document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="en-open"]');if(!b||!draft)return;const e=draft.entries[+b.dataset.i];if(!e)return;e._noteOpen=true;saveDraft();render();setTimeout(()=>document.getElementById("en-"+b.dataset.i)?.focus(),30)});
+document.addEventListener("input",ev=>{const m=(ev.target.id||"").match(/^en-(\d+)$/);if(!m||!draft)return;const e=draft.entries[+m[1]];if(e){e.note=ev.target.value;saveDraft()}});
+const exNoteTxt=e=>e&&e.note?`<div class="small exnote-v">💬 ${esc(e.note)}</div>`:"";
+
+/* soort van een map of schema zelf kiezen (anders bepaalt de app het) */
+const CAT_OPT=[["","Automatisch"],["kracht","Fitness"],["hiit","HIIT"],["cali","Calisthenics"]];
+function catChips(act,cur){return `<div class="f">Soort <i>bepaalt de kleur in je planning</i><div class="chips">${CAT_OPT.map(([v,l])=>`<button class="chipb" data-act="${act}" data-v="${v}" aria-pressed="${(cur||"")===v}">${l}</button>`).join("")}</div></div>`}
+document.addEventListener("click",ev=>{const b=ev.target.closest('[data-act="cat-fd"],[data-act="cat-re"]');if(!b)return;const o=b.dataset.act==="cat-fd"?UI.folderEdit:UI.edit;if(!o)return;
+  if(b.dataset.act==="cat-fd"){const n=document.getElementById("fd-name");if(n)o.name=n.value}else{const n=document.getElementById("re-name");if(n)o.name=n.value}
+  o.cat=b.dataset.v;b.parentElement.querySelectorAll("[data-act]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)))});
+const _routineCat66=routineCat;routineCat=function(rid,rname,hiit){const r=S.routines[rid],f=r&&S.folders&&S.folders[r.folderId];if(r&&r.cat)return r.cat;if(f&&f.cat)return f.cat;return _routineCat66(rid,rname,hiit)};
+const _folderCat66=folderCat;folderCat=function(fid){const f=S.folders&&S.folders[fid];if(f&&f.cat&&!routinesInAll(fid).some(([,r])=>!r.archived&&r.cat&&r.cat!==f.cat))return f.cat;return _folderCat66(fid)};
+
+/* archief: uit het zicht, maar alles blijft bewaard */
+const _folderListAll=folderList,_routinesInAll=routinesIn;
+function routinesInAll(fid){return _routinesInAll(fid)}
+folderList=function(){return _folderListAll().filter(f=>!f.archived)};
+routinesIn=function(fid){return _routinesInAll(fid).filter(([,r])=>!r.archived)};
+function archiveView(){const fs=_folderListAll().filter(f=>f.archived),rs=Object.entries(S.routines).filter(([,r])=>r.archived&&!(r.folderId&&S.folders[r.folderId]&&S.folders[r.folderId].archived));
+  const n=fs.length+rs.length;if(!n)return "";
+  return `<details class="card archbox" style="margin-top:12px" ${UI.archOpen?"open":""}><summary><b>Archief</b> <span class="small muted">${n} ${n===1?"onderdeel":"onderdelen"} · uit het zicht, maar bewaard</span></summary><div class="stack" style="margin-top:8px">
+    ${fs.map(f=>`<div class="fline archrow"><span class="fn">📁 ${esc(f.name)} <span class="small muted">· ${_routinesInAll(f.id).length} schema's</span></span><button class="linkbtn" data-act="arch-back" data-k="f" data-id="${f.id}">Terugzetten</button></div>`).join("")}
+    ${rs.map(([id,r])=>`<div class="fline archrow"><span class="fn">${esc(r.name)}${r.folderId&&S.folders[r.folderId]?` <span class="small muted">· ${esc(S.folders[r.folderId].name)}</span>`:""}</span><button class="linkbtn" data-act="arch-back" data-k="r" data-id="${id}">Terugzetten</button></div>`).join("")}
+    <p class="small muted" style="margin:0">Gearchiveerde mappen en schema's zie je niet bij Trainen, Planning of Schema's. Je gelogde trainingen en records blijven altijd staan.</p></div></details>`}
+document.addEventListener("toggle",ev=>{if(ev.target.classList&&ev.target.classList.contains("archbox"))UI.archOpen=ev.target.open},true);
+document.addEventListener("click",async ev=>{const b=ev.target.closest('[data-act="arch-fd"],[data-act="arch-re"],[data-act="arch-back"]');if(!b)return;const id=b.dataset.id,y=window.scrollY;
+  if(b.dataset.act==="arch-fd"){const f=S.folders[id];if(!f)return;await put("folders",id,{...f,archived:true});toastOk(`Map "${f.name}" gearchiveerd`)}
+  else if(b.dataset.act==="arch-re"){const r=S.routines[id];if(!r)return;await put("routines",id,{...r,archived:true});toastOk(`"${r.name}" gearchiveerd`)}
+  else{const col=b.dataset.k==="f"?"folders":"routines",o=S[col][id];if(!o)return;const {archived,...rest}=o;await put(col,id,rest);toastOk(`"${o.name}" staat weer bij je schema's`)}
+  render();window.scrollTo(0,y)});
+
+/* nieuwe gebruiker: waarvoor ga je de app gebruiken? */
+const SU_USE=[["train","Trainen en schema's",true],["plan","Planning en sportschema op maat",true],["food","Voeding",true],["records","Voortgang",true],["kennis","Kennis per sport",true]];
+function setupSheet(sh){const a=sh.a;
+  return `<div class="sh"><h2>Waarvoor ga je Athlevon gebruiken?</h2><button class="ib" data-act="su-skip" aria-label="Overslaan">✕</button></div><div class="card stack">
+    <p class="hp small" style="margin:0">Kies wat je wilt zien. Zo blijft de app overzichtelijk. Je kunt dit later altijd aanpassen bij <b>Profiel → Instellingen</b>.</p>
+    <div class="f">Onderdelen<div class="chips">${SU_USE.map(([k,l])=>k==="train"?`<button class="chipb" aria-pressed="true" disabled>${l}</button>`:`<button class="chipb" data-act="su-tab" data-v="${k}" aria-pressed="${!a.hide.includes(k)}">${l}</button>`).join("")}</div></div>
+    <div class="f">Welke sporten doe je?<div class="chips">${SPF.map(([k,l])=>`<button class="chipb" data-act="su-sp" data-v="${k}" aria-pressed="${!a.sports.includes(k)}">${l}</button>`).join("")}</div></div>
+    <button class="btn primary" data-act="su-save">Klaar</button><button class="linkbtn" data-act="su-skip">Alles laten staan</button></div>`}
+EXTRA_SHEETS["setup"]=setupSheet;
+function suDue(){return pid&&S.ready&&loadedAt&&!UI.sheet&&!draft&&!UI.cardio&&!(S.meta&&S.meta.tabs)&&!Object.keys(S.sessions||{}).length&&!(S.me&&S.me.isAdmin)}
+let suShown=false;
+const _render66=render;render=function(){const r=_render66.apply(this,arguments);if(!suShown&&suDue()){setTimeout(()=>{if(!suShown&&suDue()){suShown=true;UI.sheet={type:"setup",a:{hide:[],sports:[]}};renderSheet()}},400)}return r};
+/* na het sluiten van de rondleiding opnieuw kijken */
+document.addEventListener("click",ev=>{if(ev.target.closest('[data-act="intro-done"],[data-act="close-sheet"]'))setTimeout(()=>{if(!suShown&&suDue())render()},300)});
+document.addEventListener("click",async ev=>{const b=ev.target.closest('[data-act^="su-"]');if(!b)return;const sh=UI.sheet;if(!sh||sh.type!=="setup")return;const a=sh.a,v=b.dataset.v;
+  if(b.dataset.act==="su-tab"){a.hide=a.hide.includes(v)?a.hide.filter(x=>x!==v):[...a.hide,v];renderSheet();return}
+  if(b.dataset.act==="su-sp"){if(!a.sports.includes(v)&&SPF.length-a.sports.length<=1){toast("Kies minstens één sport.");return}a.sports=a.sports.includes(v)?a.sports.filter(x=>x!==v):[...a.sports,v];renderSheet();return}
+  if(b.dataset.act==="su-skip"){UI.sheet=null;renderSheet();await put("meta","tabs",{...tabsMeta(),setup:true});render();return}
+  if(b.dataset.act==="su-save"){UI.sheet=null;renderSheet();await put("meta","tabs",{...tabsMeta(),hide:a.hide,sports:a.sports,setup:true});render();toastOk("Ingesteld. Aanpassen kan bij Profiel → Instellingen.")}});
+
 /* ---------- sheets ---------- */
 function renderSheet(){
   const el=document.getElementById("sheet");
@@ -5006,7 +5066,7 @@ function renderSheet(){
       inner=`<div class="sh"><h2>${esc(s.sport)} · ${dateTxt(s.date)}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div>${s.planTitle?`<p class="small muted" style="margin:0 0 8px">Geplande training: <b>${esc(s.planTitle)}</b></p>`:""}<div class="card"><div class="calc">
         <div><span>Duur</span><b>${durTxt(s.durMin)}</b></div>${s.km?`<div><span>Afstand</span><b>${fmt1(s.km)} km</b></div>`:""}${v?`<div><span>Gem. snelheid</span><b>${fmt1(v)} km/u</b></div>`:""}${v&&s.sport==="Hardlopen"?`<div><span>Tempo</span><b>${paceTxt(s.durMin,s.km)}</b></div>`:""}${s.avgHr?`<div><span>Gem. hartslag</span><b>${s.avgHr} bpm</b></div>`:""}${s.maxHr?`<div><span>Max. hartslag</span><b>${s.maxHr} bpm</b></div>`:""}${s.purpose?`<div><span>Soort training</span><b>${esc(s.purpose)}</b></div>`:""}</div>${s.note?`<p class="hp" style="margin-top:10px">${esc(s.note)}</p>`:""}</div>`;
     }else inner=`<div class="sh"><h2>${esc(s.routineName||"Training")} · ${dateTxt(s.date)}</h2><button class="ib" data-act="close-sheet" aria-label="Sluiten">✕</button></div><div class="hist">`+
-      (s.entries||[]).map(e=>`<div class="h"><div class="d">${esc(exName(e.exId,e.name))}</div><div class="s">${e.sets.map(shortSet).join(" · ")}</div></div>`).join("")+`</div>`+(s.feel?`<p class="hp" style="margin:10px 0 0"><b>Hoe ging het:</b> ${esc(hvFeel(s.feel))}</p>`:"")+(s.note?`<div class="card" style="margin-top:10px"><span class="ml">Opmerking</span><p class="hp" style="margin:4px 0 0;white-space:pre-wrap">${esc(s.note)}</p></div>`:"");
+      (s.entries||[]).map(e=>`<div class="h"><div class="d">${esc(exName(e.exId,e.name))}</div><div class="s">${e.sets.map(shortSet).join(" · ")}</div>${exNoteTxt(e)}</div>`).join("")+`</div>`+(s.feel?`<p class="hp" style="margin:10px 0 0"><b>Hoe ging het:</b> ${esc(hvFeel(s.feel))}</p>`:"")+(s.note?`<div class="card" style="margin-top:10px"><span class="ml">Opmerking</span><p class="hp" style="margin:4px 0 0;white-space:pre-wrap">${esc(s.note)}</p></div>`:"");
     inner+=`<div style="margin-top:14px">${UI.confirm==="del-session"?`<div class="confirm"><span>Deze training verwijderen? Records worden opnieuw berekend.</span><div class="btnrow"><button class="btn danger" data-act="del-session-yes">Verwijderen</button><button class="btn" data-act="confirm-no">Behouden</button></div></div>`:`<button class="btn ghost danger" data-act="del-session">Training verwijderen</button>`}</div>`;
   }
   if(EXTRA_SHEETS[sh.type]){inner=EXTRA_SHEETS[sh.type](sh);if(inner==null){UI.sheet=null;el.hidden=true;el.innerHTML="";return}}
@@ -5058,7 +5118,7 @@ document.addEventListener("click",async ev=>{
     case "pl-del-yes":await del("plan",id);UI.sheet=null;UI.confirm=null;toastOk("Uit je planning gehaald");render();break;
     case "fd-toggle":toggleOpen(id);break;
     case "fd-new":UI.folderEdit={id:null,name:""};UI.confirm=null;render();window.scrollTo(0,0);setTimeout(()=>document.getElementById("fd-name")?.focus(),30);break;
-    case "fd-rename":UI.folderEdit={id,name:S.folders[id]?.name||""};UI.confirm=null;render();window.scrollTo(0,0);setTimeout(()=>document.getElementById("fd-name")?.focus(),30);break;
+    case "fd-rename":UI.folderEdit={id,name:S.folders[id]?.name||"",cat:S.folders[id]?.cat||""};UI.confirm=null;render();window.scrollTo(0,0);setTimeout(()=>document.getElementById("fd-name")?.focus(),30);break;
     case "fd-save":await folderSave();break;
     case "fd-cancel":UI.folderEdit=null;render();break;
     case "fd-del":UI.confirm="fd-del:"+id;render();break;
@@ -5120,13 +5180,13 @@ document.addEventListener("click",async ev=>{
     case "create-ex":{const name=UI.pickQ.trim();if(!name)return;const g=document.getElementById("pk-g")?.value||UI.pickG;UI.pickG=g;const nid=uid();await put("exercises",nid,{name,group:g});addExercise(nid);break}
     case "close-sheet":UI.sheet=null;UI.confirm=null;render();break;
     case "new-routine":UI.tab="schemas";lsSet(LS_TAB,"schemas");UI.edit={id:null,name:"",folderId:id||"",items:[]};UI.folderEdit=null;UI.confirm=null;render();window.scrollTo(0,0);break;
-    case "edit-routine":{const r=S.routines[id];UI.edit={id,name:r.name,folderId:r.folderId&&S.folders[r.folderId]?r.folderId:"",items:clone(r.items||[])};UI.folderEdit=null;UI.confirm=null;render();window.scrollTo(0,0);break}
+    case "edit-routine":{const r=S.routines[id];UI.edit={id,name:r.name,cat:r.cat||"",folderId:r.folderId&&S.folders[r.folderId]?r.folderId:"",items:clone(r.items||[])};UI.folderEdit=null;UI.confirm=null;render();window.scrollTo(0,0);break}
     case "it-up":[UI.edit.items[i-1],UI.edit.items[i]]=[UI.edit.items[i],UI.edit.items[i-1]];render();break;
     case "it-down":[UI.edit.items[i+1],UI.edit.items[i]]=[UI.edit.items[i],UI.edit.items[i+1]];render();break;
     case "it-remove":UI.edit.items.splice(i,1);render();break;
     case "save-routine":{const e=UI.edit;if(!e.name.trim()){toast("Geef het schema een naam.");document.getElementById("re-name")?.focus();return}
       const rid=e.id||uid();const fid=e.folderId&&S.folders[e.folderId]?e.folderId:null;const prev=e.id?S.routines[e.id]:null;const order=prev&&(prev.folderId||null)===fid?prev.order??0:routinesIn(fid).length;
-      await put("routines",rid,{name:e.name.trim(),folderId:fid,order,items:e.items.map(it=>({exId:it.exId,sets:String(it.sets||""),reps:String(it.reps||""),note:String(it.note||"")}))});
+      await put("routines",rid,{...(prev||{}),name:e.name.trim(),folderId:fid,order,cat:e.cat||null,items:e.items.map(it=>({exId:it.exId,sets:String(it.sets||""),reps:String(it.reps||""),note:String(it.note||"")}))});
       if(fid){UI.open["f:"+fid]=true;lsSet(LS_OPEN,UI.open)}
       UI.edit=null;UI.confirm=null;toastOk("Schema opgeslagen");render();break}
     case "close-editor":UI.edit=null;UI.confirm=null;render();break;
