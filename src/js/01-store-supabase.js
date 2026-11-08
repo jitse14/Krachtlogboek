@@ -4,6 +4,13 @@ const CFG={url:"__SUPABASE_URL__",key:"__SUPABASE_KEY__"};
 const LS_CODE="krachtlogboek.code",LS_ME="krachtlogboek.me";
 const COLLS=["exercises","routines","sessions","meta","weights","plan","folders","foodlog","foods","archive","meals","mealplans"];
 let code=lsGet(LS_CODE),loadedAt=0,flushing=false;
+// Verhuizing: het oude adres geeft de groepscode mee na # in de link (zie 49-verhuisd.js).
+// Wat na # staat gaat niet naar de server. Direct uit de adresbalk halen.
+(function codeFromLink(){
+  const m=location.hash.match(/^#groepscode=([^&]+)$/);if(!m)return;
+  if(!code){code=decodeURIComponent(m[1]);lsSet(LS_CODE,code)}
+  history.replaceState(null,"",location.pathname+location.search);
+})();
 const pinKey=id=>"krachtlogboek.pin."+id;
 const qKey=id=>"krachtlogboek.queue."+id;
 const cacheKey=id=>"krachtlogboek.cache."+id;

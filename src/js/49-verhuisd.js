@@ -15,8 +15,11 @@ const MOVED_TO="__MOVED_TO__";
     const card=document.createElement("div");card.className="card stack";card.style.maxWidth="420px";
     const h=document.createElement("h3");h.textContent="Athlevon heeft een nieuw adres";
     const p=document.createElement("p");p.textContent="Je gegevens zijn veilig opgeslagen. Op het nieuwe adres log je één keer opnieuw in met je naam en je persoonlijke code. Zet daarna de nieuwe app op je beginscherm en verwijder deze.";
-    const a=document.createElement("a");a.className="btn primary";a.href=target.href;a.textContent="Naar het nieuwe adres";
-    card.append(h,p,a);wrap.append(card);document.body.append(wrap);
+    // De groepscode gaat mee in de link, en staat er ook bij voor als je hem toch moet intypen.
+    const a=document.createElement("a");a.className="btn primary";a.href=target.href+(code?"#groepscode="+encodeURIComponent(code):"");a.textContent="Naar het nieuwe adres";
+    card.append(h,p);
+    if(code){const c=document.createElement("p");c.className="small muted";c.textContent="Vraagt de app om de groepscode? Die is: "+code;card.append(c)}
+    card.append(a);wrap.append(card);document.body.append(wrap);
   }
   function check(){
     // Niet ingelogd: niets te versturen. Ingelogd: pas tonen als de wachtrij leeg is.
