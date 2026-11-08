@@ -1,6 +1,7 @@
 /* ---------- wat is er nieuw & suggesties ---------- */
-const APP_VERSION="6.6";
+const APP_VERSION="7.0";
 const CHANGELOG=[
+ {v:"7.0",date:"2026-11-08",items:[["Samen trainen: laat een trainer of maatje al je trainingen en je agenda zien, en kies snel een rol zoals Trainer of Trainingsmaatje.",""]]},
  {v:"6.6",date:"2026-10-24",items:[["Toelichting per oefening, mappen en schema's hernoemen, soort kiezen en archiveren, en een startvraag voor nieuwe gebruikers.",""]]},
  {v:"6.5",date:"2026-10-23",items:[["Mappen met schema's hebben de kleur van hun sport; een gemengde map is turquoise.",""]]},
  {v:"6.4",date:"2026-10-23",items:[
