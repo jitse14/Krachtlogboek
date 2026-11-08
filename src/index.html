@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F4F1EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171A1F" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Athlevon">
+<style data-src="styles/reset.css"></style>
+<title>Athlevon</title>
+<style data-src="styles/fonts.css"></style>
+<style data-src="styles/app.css"></style>
+</head>
+<body>
+<div class="scene" aria-hidden="true"><svg viewBox="0 0 1000 480" preserveAspectRatio="xMidYMax slice">
+<defs><radialGradient id="scg" cx=".82" cy=".92" r=".62"><stop offset="0" style="stop-color:var(--glow);stop-opacity:.75"/><stop offset="1" style="stop-color:var(--glow);stop-opacity:0"/></radialGradient>
+<linearGradient id="scl" x1="0" x2="1"><stop offset="0" style="stop-color:var(--hex);stop-opacity:0"/><stop offset="1" style="stop-color:var(--hex);stop-opacity:.5"/></linearGradient></defs>
+<rect width="1000" height="480" fill="url(#scg)"/>
+<g fill="none" style="stroke:var(--hex)" stroke-linejoin="round">
+ <polygon points="820.0,177.0 1006.2,284.5 1006.2,499.5 820.0,607.0 633.8,499.5 633.8,284.5" stroke-width="3" opacity=".22"/>
+ <polygon points="820.0,212.0 975.9,302.0 975.9,482.0 820.0,572.0 664.1,482.0 664.1,302.0" stroke-width="1.2" opacity=".14"/>
+ <polygon points="130.0,334.0 232.2,393.0 232.2,511.0 130.0,570.0 27.8,511.0 27.8,393.0" stroke-width="2" opacity=".14"/>
+ <polygon points="470.0,412.0 520.2,441.0 520.2,499.0 470.0,528.0 419.8,499.0 419.8,441.0" stroke-width="1.4" opacity=".12"/>
+</g>
+<polygon points="948.0,124.0 970.5,137.0 970.5,163.0 948.0,176.0 925.5,163.0 925.5,137.0" style="fill:var(--hex)" opacity=".10"/>
+<path d="M842 300L790 400H826L806 476L872 368H834L856 300Z" style="fill:var(--hex)" opacity=".07"/>
+<g stroke-linecap="round" style="stroke:url(#scl)"><path d="M470 352H585" stroke-width="5"/><path d="M500 378H600" stroke-width="3.5"/><path d="M450 404H590" stroke-width="2.5"/></g>
+</svg>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <h1 class="brand"><button id="navback" class="navback" hidden aria-label="Terug">‹</button><img src="icon-192.png" alt="" class="brandic"><span>Athle<span class="bf">von</span></span></h1>
+    <div class="status" id="status"><span class="dot"></span><span>Laden…</span></div>
+  </header>
+  <main id="view"><div class="card empty" style="margin-top:16px"><strong>Logboek laden</strong><p class="muted">Zo kun je kiezen wie er traint: een bestaand account of een nieuw account.</p></div></main>
+</div>
+<nav class="tabs" aria-label="Onderdelen" hidden><div class="in">
+  <button data-tab="train" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9v6M6 6v12M18 6v12M21 9v6M6 12h12"/></svg>Trainen</button>
+  <button data-tab="plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h2M14 14h2M8 17h2"/></svg>Planning</button>
+  <button data-tab="schemas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Schema's</button>
+  <button data-tab="records"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V5M16 20v-6M22 20H2"/></svg>Voortgang</button>
+  <button data-tab="food"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c-2-3-7-2.5-7 2.5C5 16 9 21 12 21s7-5 7-10.5C19 5.5 14 5 12 8z"/><path d="M12 8c0-2.5 1.5-4.5 4-5"/></svg>Voeding</button>
+  <button data-tab="kennis"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M19 19v2H6"/><path d="M9 8h6M9 11h4"/></svg>Kennis</button>
+  <button data-tab="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Profiel</button>
+</div></nav>
+<div id="sheet" hidden></div>
+<div id="toast" class="toast" hidden></div>
+
+<script data-src="js"></script>
+
+</body>
+</html>
