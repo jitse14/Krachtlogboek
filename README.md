@@ -15,7 +15,7 @@ npm run build   # productieversie maken in dist/
 
 ## Meer lezen
 
-- [DEPLOY.md](DEPLOY.md): een wijziging online zetten, en de verhuizing naar Cloudflare
+- [DEPLOY.md](DEPLOY.md): een wijziging online zetten, en de verhuizing naar Cloudflare Workers
 - [DATABASE.md](DATABASE.md): hoe de beveiliging in Supabase werkt, en een testdatabase gebruiken
 - [PRIVACY.md](PRIVACY.md): wat de AVG vraagt, en wat je doet bij een verzoek of datalek
 

@@ -1,0 +1,12 @@
+// Instellingen voor Cloudflare Workers: de app is een verzameling vaste bestanden uit dist/.
+// Cloudflare bouwt eerst met `npm run build` en zet daarna dist/ online.
+// "name" moet gelijk zijn aan de naam van de Worker in het Cloudflare-dashboard.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "athlevon",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

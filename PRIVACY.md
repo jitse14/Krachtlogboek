@@ -20,7 +20,7 @@ De privacyverklaring die gebruikers zien staat in `privacyHtml()` in `src/js/21-
 | Partij | Wat | Waarom | Afspraak |
 | --- | --- | --- | --- |
 | Supabase | Alle gegevens in de app | Database | [Verwerkersovereenkomst (DPA)](https://supabase.com/legal/dpa): ondertekenen via het Supabase-dashboard. Controleer dat het project in een **EU-regio** staat (*Project Settings* → *General*). |
-| Cloudflare | IP-adres en technische gegevens van bezoekers | Hosting | [DPA](https://www.cloudflare.com/cloudflare-customer-dpa/) geldt automatisch. Cloudflare is Amerikaans en valt onder het EU-VS Data Privacy Framework. |
+| Cloudflare (Workers) | IP-adres en technische gegevens van bezoekers | Hosting | [DPA](https://www.cloudflare.com/cloudflare-customer-dpa/) geldt automatisch. Cloudflare is Amerikaans en valt onder het EU-VS Data Privacy Framework. |
 | Open Food Facts | Alleen de zoekterm | Producten zoeken | Geen persoonsgegevens |
 | GitHub | Wekelijkse back-up (zie privacyverklaring) | Back-up | Nagaan waar die draait en dat de repository privé is |
 

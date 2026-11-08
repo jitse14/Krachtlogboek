@@ -33,7 +33,7 @@ function fillConfig(js) {
 
 const sha256 = (text) => `'sha256-${createHash("sha256").update(text).digest("base64")}'`;
 
-// Beveiligingsheaders voor de hosting (Cloudflare Pages en Netlify lezen _headers).
+// Beveiligingsheaders voor de hosting (Cloudflare leest _headers).
 // De Content-Security-Policy staat alleen ons eigen script toe (via de hash),
 // en laat de app alleen praten met Supabase en Open Food Facts.
 // Wil je een nieuwe externe dienst gebruiken? Voeg hem dan hier toe.
@@ -61,6 +61,9 @@ function headers(script) {
   Strict-Transport-Security: max-age=31536000; includeSubDomains
 
 /sw.js
+  Cache-Control: no-cache
+
+/
   Cache-Control: no-cache
 
 /index.html
