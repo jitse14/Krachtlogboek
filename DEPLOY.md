@@ -1,6 +1,6 @@
 # Online zetten
 
-De app staat bij [Cloudflare Workers](https://developers.cloudflare.com/workers/static-assets/), op **https://athlevon.jort-ottenheijm.workers.dev/**. Cloudflare bouwt de app zelf uit deze repository. Je hoeft dus nooit bestanden te uploaden. De instellingen staan in `wrangler.jsonc`.
+De app staat bij [Cloudflare Workers](https://developers.cloudflare.com/workers/static-assets/), op **https://athlevon.nl**. Cloudflare bouwt de app zelf uit deze repository. Je hoeft dus nooit bestanden te uploaden. De instellingen staan in `wrangler.jsonc`.
 
 ## Zo werkt het elke dag
 
@@ -41,7 +41,17 @@ Dit is al gedaan. Het staat hier voor het geval het opnieuw moet. Het Cloudflare
    - **Deploy command:** `npx wrangler deploy`
    - **Non-production branch deploy command:** `npx wrangler versions upload`
 3. Onder *Settings* → *Build* → *Branch control*: **Production branch** `main`, en zet **builds for non-production branches** aan. Dan krijgt elke pull request een previewlink.
-4. Wil je een eigen domeinnaam? Dat kan later onder *Settings* → *Domains & Routes*. Werk dan ook `MOVED_TO` bij (zie hieronder).
+4. *Settings* → *Domains & Routes*: `athlevon.nl` is gekoppeld als **Custom domain**. Het `workers.dev`-adres voor productie staat uit, zodat er maar één adres is (elk adres heeft zijn eigen inlog). De previewlinks blijven werken.
+
+### Het domein
+
+`athlevon.nl` is gekocht bij **TransIP** (op naam van Jort, verlengt elk jaar automatisch in november). De nameservers wijzen naar Cloudflare, dus alle DNS-instellingen doe je in Cloudflare, niet bij TransIP. In Cloudflare staan bij dit domein:
+
+- **Redirect Rule:** `www.athlevon.nl` → `athlevon.nl`.
+- **SSL/TLS:** *Full (strict)* en *Always Use HTTPS*.
+- **DNSSEC** aan. De DS-record staat ook bij TransIP.
+- **E-mail:** het domein verstuurt geen mail. De records `v=spf1 -all` en `_dmarc` met `p=reject` voorkomen dat anderen mail versturen die van `@athlevon.nl` lijkt te komen.
+- **Laat uit:** Email Address Obfuscation, Rocket Loader, Bot Fight Mode, Zaraz en Web Analytics. Die veranderen de pagina, en dan blokkeert de Content-Security-Policy de app.
 
 Cloudflare verwerkt technische gegevens van bezoekers (zoals IP-adressen). Hun verwerkersovereenkomst geldt automatisch voor elk account; zie [PRIVACY.md](PRIVACY.md).
 
@@ -50,7 +60,7 @@ Cloudflare verwerkt technische gegevens van bezoekers (zoals IP-adressen). Hun v
 De app stond eerst op `jitse14.github.io/Krachtlogboek`. Alles wat de app in de browser bewaart (de groepscode, je persoonlijke code, en wijzigingen die offline zijn gedaan en nog niet zijn verstuurd) hoort bij dat adres. Op het nieuwe adres is dat er dus niet. Daarom gaat de verhuizing in deze volgorde:
 
 1. **Cloudflare instellen** (hierboven) en de previewlink van de pull request `restructure/split-source` goed testen.
-2. **Het nieuwe adres doorgeven aan GitHub.** In de repository op GitHub: *Settings* → *Secrets and variables* → *Actions* → tab *Variables* → *New repository variable*. Naam `MOVED_TO`, waarde het nieuwe adres: `https://athlevon.jort-ottenheijm.workers.dev/`.
+2. **Het nieuwe adres doorgeven aan GitHub.** In de repository op GitHub: *Settings* → *Secrets and variables* → *Actions* → tab *Variables* → *New repository variable*. Naam `MOVED_TO`, waarde het nieuwe adres: `https://athlevon.nl/`.
 3. **GitHub Pages omzetten.** *Settings* → *Pages* → bij *Source* kies **GitHub Actions**.
 4. **De production branch in Cloudflare terugzetten op `main`** (*Settings* → *Build* → *Branch control*). Tijdens het testen stond die op `restructure/split-source`.
 5. **De pull request mergen.** Cloudflare zet de app live op het nieuwe adres. Tegelijk zet `.github/workflows/oud-adres.yml` op het oude adres een versie die eerst nog niet-verstuurde wijzigingen verstuurt en dan zegt: *Athlevon heeft een nieuw adres*, met een knop erheen.
