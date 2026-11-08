@@ -1,0 +1,40 @@
+# Tijdelijk, alleen voor de verhuizing (zie DEPLOY.md, stap "Verhuizen").
+# Zet op het oude adres (jitse14.github.io/Krachtlogboek) een versie van de app
+# die eerst nog niet-verstuurde wijzigingen verstuurt en dan naar het nieuwe adres verwijst.
+# Verwijder dit bestand zodra de repository privé is.
+name: Oud adres (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: vars.MOVED_TO != ''
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+      - run: npm run build
+        env:
+          MOVED_TO: ${{ vars.MOVED_TO }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4

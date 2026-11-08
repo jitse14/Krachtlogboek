@@ -20,6 +20,20 @@ const types = {
 
 build();
 
+// Dezelfde beveiligingsheaders als bij de hosting (het /*-blok uit dist/_headers),
+// zodat je een geblokkeerd script of verzoek al lokaal in de console ziet.
+async function siteHeaders() {
+  const text = await readFile(join(dist, "_headers"), "utf8");
+  const block = text.split(/\n(?=\S)/)[0];
+  return Object.fromEntries(
+    block
+      .split("\n")
+      .slice(1)
+      .map((line) => line.trim().split(/:\s(.*)/s).slice(0, 2))
+      .filter(([name]) => name && name !== "Strict-Transport-Security"),
+  );
+}
+
 let timer = null;
 for (const dir of ["src", "public"]) {
   watch(join(root, dir), { recursive: true }, () => {
@@ -44,7 +58,9 @@ createServer(async (req, res) => {
   }
   try {
     const body = await readFile(file);
-    res.writeHead(200, { "Content-Type": types[extname(file)] ?? "application/octet-stream" }).end(body);
+    res
+      .writeHead(200, { ...(await siteHeaders()), "Content-Type": types[extname(file)] ?? "application/octet-stream" })
+      .end(body);
   } catch {
     res.writeHead(404).end("Niet gevonden");
   }

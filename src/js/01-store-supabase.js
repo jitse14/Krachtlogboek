@@ -1,5 +1,6 @@
 /* ---------- store (Supabase) ---------- */
-const CFG={url:"https://vxmdbjtuuvrryazrnkfx.supabase.co",key:"sb_publishable_RhOl_un8Ik35a73T3QLThA_niKqiuTQ"};
+// Wordt bij het bouwen ingevuld vanuit .env of de standaardwaarden in scripts/build.mjs.
+const CFG={url:"__SUPABASE_URL__",key:"__SUPABASE_KEY__"};
 const LS_CODE="krachtlogboek.code",LS_ME="krachtlogboek.me";
 const COLLS=["exercises","routines","sessions","meta","weights","plan","folders","foodlog","foods","archive","meals","mealplans"];
 let code=lsGet(LS_CODE),loadedAt=0,flushing=false;
